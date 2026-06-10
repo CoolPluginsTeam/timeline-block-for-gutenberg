@@ -34,7 +34,7 @@ class CtlbUsersFeedback {
 	*/
 	function enqueue_feedback_scripts() {
 		$screen = get_current_screen();
-		if ( isset( $screen ) && $screen->id == 'plugins' ) {
+		if ( isset( $screen ) && 'plugins' === $screen->id ) {
 			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 			wp_enqueue_script( __NAMESPACE__ . 'feedback-script', $this->plugin_url . 'admin/feedback/js/admin-feedback.js', array( 'jquery' ), $this->plugin_version );
 			wp_enqueue_style( 'cool-plugins-feedback-style', $this->plugin_url . 'admin/feedback/css/admin-feedback.css', null, $this->plugin_version );
@@ -48,7 +48,7 @@ class CtlbUsersFeedback {
 	*/
 	public function show_deactivate_feedback_popup() {
 		$screen = get_current_screen();
-		if ( ! isset( $screen ) || $screen->id != 'plugins' ) {
+		if ( ! isset( $screen ) || $screen->id !== 'plugins' ) {
 			return;
 		}
 		$deactivate_reasons = array(
@@ -183,13 +183,14 @@ class CtlbUsersFeedback {
             $install_date      = get_option('ctlb-install-date') ? get_option('ctlb-install-date'): 'N/A';
 			$unique_key        = '60';
 			$site_id        	= $site_url . '-' . $install_date . '-' . $unique_key;
+			$user_info = \CoolTimelineBlock::ctlb_get_user_info();
 			$response          = wp_remote_post(
 				$feedback_url,
 				array(
 					'timeout' => 30,
 					'body'    => array(
-						'server_info' => serialize(\CoolTimelineBlock::ctlb_get_user_info()['server_info']), 
-						'extra_details' => serialize(\CoolTimelineBlock::ctlb_get_user_info()['extra_details']),
+						'server_info' => wp_json_encode( $user_info['server_info']), 
+						'extra_details' => wp_json_encode( $user_info['extra_details']),
 						'plugin_version' => $this->plugin_version,
 						'plugin_name'    => $this->plugin_name,
 						'plugin_initial' => $plugin_initial,
