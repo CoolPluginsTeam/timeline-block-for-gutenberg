@@ -13,7 +13,7 @@ import SpacingControl from "../component/customComponents/MultipleUnits.js";
 // // Import Web font loader for google fonts.y
 import WebfontLoader from "../component/typography/fontloader.js";
 
-const { Component, Fragment } = wp.element
+const { Component, Fragment, createRef } = wp.element
 
 import React from 'react';
 
@@ -48,6 +48,8 @@ class Edit extends Component {
 	constructor() {
 		super();
 		this.onUpdateOrientation = this.onUpdateOrientation.bind(this);
+		this.timelineWrpRef = React.createRef();
+		this.ref =createRef();
 	}
 
 	addBlock(e){
@@ -94,6 +96,11 @@ class Edit extends Component {
 		const blocks = select("core/block-editor").getBlock(this.props.clientId).innerBlocks
 		blocks.forEach((block, index) => {block.attributes.headingTag=e});
 	};
+	getDocument(){
+		if(this.ref.current && this.ref.current.ownerDocument){
+		return this.ref.current.ownerDocument;
+		}
+		}
 	
 	render() {
 		// Setup the attributes.
@@ -167,10 +174,14 @@ class Edit extends Component {
 				timelineNavItems
 			},
 		} = this.props
-		var element = document.getElementById("cool-vertical-timeline-style-" + this.props.clientId)
-		if( element ) {
-			element.innerHTML = contentTimelineStyle( this.props )
+		if(this.getDocument()){
+			var element = this.getDocument().getElementById("cool-vertical-timeline-style-" + this.props.clientId)
+			
+			if( element ) {
+			element.textContent = contentTimelineStyle( this.props )
 		}
+		}
+		
 		const orientation_setting = ((timelineLayout == "vertical" && timelineDesign == 'one-sided') || (timelineLayout == "vertical" && timelineDesign == 'both-sided' && OrientationCheckBox)) ?
 			<Fragment><SelectControl
 			label={ timelineDesign == "both-sided" ? __("first story Based","timeline-block") : __( "Alignment","timeline-block" ) }
@@ -629,7 +640,7 @@ class Edit extends Component {
 			{settingTabs}
 			{loadDateGoogleFonts }
 		
-			<div className={"cool-timeline-block-" + this.props.clientId + " cool-timeline-block"}>
+			<div className={"cool-timeline-block-" + this.props.clientId + " cool-timeline-block"} ref={this.ref}>
 							<div className={`cool-${timelineLayout}-timeline-body ctlb-wrapper ${timelineDesign} ${Orientation}`}>
 								<div className="cool-timeline-block-list">
 									<InnerBlocks
@@ -653,10 +664,14 @@ class Edit extends Component {
 	componentDidMount() {
 		// //Store client id.
 		this.props.setAttributes( { block_id: this.props.clientId } )
+		
 		// Pushing Style tag for this block css.
-		const $style = document.createElement( "style" )
-		$style.setAttribute( "id", "cool-vertical-timeline-style-" + this.props.clientId )
-		document.head.appendChild( $style )
+		if(this.getDocument()){
+			const $style = this.getDocument().createElement( "style");
+		$style.setAttribute( "id", "cool-vertical-timeline-style-" + this.props.clientId)
+		this.getDocument().head.appendChild( $style )
+		}
+		 
 	}
 } export default
 	(Edit)

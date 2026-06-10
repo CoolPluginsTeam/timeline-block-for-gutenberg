@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 
-add_action( 'enqueue_block_editor_assets', 'cltb_editor_side_css' );
+add_action( 'enqueue_block_assets', 'cltb_editor_side_css' );
 function cltb_editor_side_css() {
 		// Common Editor style.
 		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
