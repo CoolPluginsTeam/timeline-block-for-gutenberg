@@ -52,3 +52,4 @@ includes/cool-timeline-block/src/story-timeline-child/  export-ignore
 includes/cool-timeline-block/src/*.css  export-ignore
 includes/cool-timeline-block/src/*.json  export-ignore
 includes/cool-timeline-block/src/*.js  export-ignore
+.claude export-ignore
