@@ -189,8 +189,8 @@ class CtlbUsersFeedback {
 				array(
 					'timeout' => 30,
 					'body'    => array(
-						'server_info' => wp_json_encode( $user_info['server_info']), 
-						'extra_details' => wp_json_encode( $user_info['extra_details']),
+						'server_info' => wp_json_encode( $user_info['server_info'] ), 
+						'extra_details' => wp_json_encode( $user_info['extra_details'] ),
 						'plugin_version' => $this->plugin_version,
 						'plugin_name'    => $this->plugin_name,
 						'plugin_initial' => $plugin_initial,
@@ -202,6 +202,10 @@ class CtlbUsersFeedback {
 					),
 				)
 			);
+
+			if ( is_wp_error( $response ) ) {
+				wp_send_json_error( array( 'message' => __( 'Feedback submission failed.', 'timeline-block' ) ) );
+			}
 
 			$safe_response = wp_remote_retrieve_response_code( $response );
 			wp_send_json_success( array( 'response_code' => $safe_response ) );
