@@ -27,8 +27,7 @@ function cltb_editor_side_css() {
 		// Common Editor style.
 		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 		wp_enqueue_style(
-			'timeline-block
-		-block-common-editor-css', // Handle.
+		   'timeline-block-common-editor-css', // Handle.
 			plugin_dir_url( __FILE__ ) . '../assets/common-block-editor.css', // Block editor CSS.
 			array( 'wp-edit-blocks' )// Dependency to include the CSS after it.
 		);
