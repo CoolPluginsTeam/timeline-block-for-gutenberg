@@ -108,7 +108,7 @@ class CtlbUsersFeedback {
 									$twae_plugin_url = 'https://wordpress.org/plugins/timeline-widget-addon-for-elementor/';
 									?>
 								  <div class="cool-plugins-extra-links">
-									<?php echo esc_html__( 'Please try ', 'timeline-block' ); ?><a href="<?php echo esc_url( $twae_plugin_url ); ?>" target="_blank"><?php echo esc_html__( 'Timeline Widget For Elementor', 'timeline-block' ); ?></a> <?php echo esc_html__( 'plugin.', 'timeline-block' ); ?>
+									<?php echo esc_html__( 'Please try ', 'timeline-block' ); ?><a href="<?php echo esc_url( $twae_plugin_url ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html__( 'Timeline Widget For Elementor', 'timeline-block' ); ?></a> <?php echo esc_html__( 'plugin.', 'timeline-block' ); ?>
 									</div>
 									<?php
 								}
@@ -202,7 +202,8 @@ class CtlbUsersFeedback {
 				)
 			);
 
-			die( json_encode( array( 'response' => $response ) ) );
+			$safe_response = wp_remote_retrieve_response_code( $response );
+			wp_send_json_success( array( 'response_code' => $safe_response ) );
 		}
 
 	}

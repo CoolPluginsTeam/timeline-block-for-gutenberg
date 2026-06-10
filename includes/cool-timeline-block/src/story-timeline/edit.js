@@ -447,7 +447,7 @@ class Edit extends Component {
 		/>
 	</CardBody>
 		const rating_box = <PanelBody title={__("Please Share Your Valuable Feedback.", "timeline-block")}>
-			<CardBody className={"cool-timeline-gt-block-review-tab"}>{__("We hope you liked our plugin created timelines. Please share your valuable feedback.", "timeline-block")}<br></br><a href="https://wordpress.org/support/plugin/timeline-block/reviews/#new-post" className="components-button is-primary is-small" target="_blank" >Rate Us<span> ★★★★★</span></a>
+			<CardBody className={"cool-timeline-gt-block-review-tab"}>{__("We hope you liked our plugin created timelines. Please share your valuable feedback.", "timeline-block")}<br></br><a href="https://wordpress.org/support/plugin/timeline-block/reviews/#new-post" className="components-button is-primary is-small" target="_blank" rel="noopener noreferrer" >Rate Us<span> ★★★★★</span></a>
 			</CardBody>
 		</PanelBody>
 		const timeline_setting = <CardBody>
@@ -554,8 +554,8 @@ class Edit extends Component {
 			{/* demo video link button */}
 			<PanelBody title={__("View Timeline Demos","timeline-block")} initialOpen={false}>
 				<CardBody className="cp-timeline-block-demo-button">
-					<a target="_blank" className="button button-primary" href="https://cooltimeline.com/demo/gutenberg-timeline-block?utm_source=tbg_plugin&utm_medium=inside&utm_campaign=demo&utm_content=timeline_block">View Demos</a>
-					<a target="_blank" className="button button-primary" href="https://cooltimeline.com/docs/timeline-block-pro/video-tutorials/free-plugin-video/?utm_source=tbg_plugin&utm_medium=inside&utm_campaign=docs&utm_content=timeline_block">Watch Videos</a>
+					<a target="_blank" rel="noopener noreferrer" className="button button-primary" href="https://cooltimeline.com/demo/gutenberg-timeline-block?utm_source=tbg_plugin&utm_medium=inside&utm_campaign=demo&utm_content=timeline_block">View Demos</a>
+					<a target="_blank" rel="noopener noreferrer" className="button button-primary" href="https://cooltimeline.com/docs/timeline-block-pro/video-tutorials/free-plugin-video/?utm_source=tbg_plugin&utm_medium=inside&utm_campaign=docs&utm_content=timeline_block">Watch Videos</a>
 				</CardBody>
 			</PanelBody>
 			{rating_box}
