@@ -40,13 +40,12 @@ class WebfontLoader extends Component {
 		this.handleInactive = () => {
 			this.setState( { status: statuses.inactive } )
 		}
-		const config = this.props?.config || this.context?.config;
-		const windowRef=this.props?.windowRef || this.context?.windowRef || null;
 
 
 		this.loadFonts = () => {
 			//if ( ! this.state.fonts.includes( this.props.config.google.families[ 0 ] ) ) {
 			if ( ! googlefonts.includes( this.props.config.google.families[ 0 ] ) ) {
+				const windowRef=this.props?.windowRef ? this.context?.windowRef : null;
 				WebFont.load( {
 					...this.props.config,
 					loading: this.handleLoading,

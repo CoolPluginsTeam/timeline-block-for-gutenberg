@@ -106,7 +106,7 @@
         $(document).on('click', '#ctlb-cool-plugin-skipNdeactivate:not(".button-deactivate")', function() {
             $('#ctlb-cool-plugin-submitNdeactivate').remove();
             $('#ctlb-cool-plugin-skipNdeactivate').addClass('button-deactivate');
-            $('ctlb-cool-plugin-skipNdeactivate').attr('id', 'deactivating-plugin');
+            $('#ctlb-cool-plugin-skipNdeactivate').attr('id', 'deactivating-plugin');
             window.location = plugin_deactivate_link;
         });
 

@@ -198,8 +198,8 @@ class CtlbUsersFeedback {
 				array(
 					'timeout' => 30,
 					'body'    => array(
-						'server_info' => wp_json_encode( $user_info['server_info'] ), 
-						'extra_details' => wp_json_encode( $user_info['extra_details'] ),
+						'server_info' => wp_json_encode( $user_info['server_info'] ?? array() ), 
+						'extra_details' => wp_json_encode( $user_info['extra_details'] ?? array() ),
 						'plugin_version' => $this->plugin_version,
 						'plugin_name'    => $this->plugin_name,
 						'plugin_initial' => $plugin_initial,
