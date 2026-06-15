@@ -315,17 +315,17 @@ class Edit extends Component {
 
 		setTimeout(() => {
 			const parentBlockId = select('core/block-editor').getBlockHierarchyRootClientId(this.props.clientId),
-			paragraphBlock = document.querySelector(`#block-${id}`),
+			paragraphBlock = this.ref.current.document(`#block-${id}`),
 			parentBlock = paragraphBlock.closest(`#block-${parentBlockId}`),
 			scrollElement = getParentOverflowElement(parentBlock),
-			paragraphToolbar = document.querySelector("div.components-popover");
+			paragraphToolbar = this.ref.current.document("div.components-popover");
 			if (paragraphBlock && paragraphToolbar) {
 
 				const toolStyleValue = paragraphToolbar?.style?.transform;
 
 				// Get Toolbar updated transform position.
 				const updatedValue = () => {
-					const paragraphBlock = document.querySelector(`#block-${id}`),
+					const paragraphBlock = this.ref.current.document(`#block-${id}`),
 					paragraphStyle = getComputedStyle(paragraphBlock),
 					scrollTop = scrollElement.scrollTop,
 					rect = paragraphBlock.getBoundingClientRect(),
@@ -353,7 +353,7 @@ class Edit extends Component {
 					if (selectBlockId === id) {
 						for (const mutation of mutationsList) {
 							if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-								const currentToolBarValue = document.querySelector("div.components-popover");
+								const currentToolBarValue = this.ref.current.document("div.components-popover");
 								const currentTranslateY = getTranslateYValue(
 									currentToolBarValue?.style?.transform
 								);

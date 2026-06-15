@@ -577,38 +577,38 @@ class Edit extends Component {
 		let loadHeadGoogleFonts
 		let loadSubHeadGoogleFonts
 		let loadDateGoogleFonts
-		if (headLoadGoogleFonts == true) {
+		if (headLoadGoogleFonts == true && this.ref.current) {
 			const headconfig = {
 				google: {
 					families: [headFontFamily + (headFontWeight ? ":" + headFontWeight : "")],
 				},
 			}
 			loadHeadGoogleFonts = (
-				<WebfontLoader config={headconfig}>
+				<WebfontLoader config={headconfig} windowRef={this.ref}>
 				</WebfontLoader>
 			)
 		}
 
-		if (subHeadLoadGoogleFonts == true) {
+		if (subHeadLoadGoogleFonts == true && this.ref.current) {
 			const subHeadconfig = {
 				google: {
 					families: [subHeadFontFamily + (subHeadFontWeight ? ":" + subHeadFontWeight : "")],
 				},
 			}
 			loadSubHeadGoogleFonts = (
-				<WebfontLoader config={subHeadconfig}>
+				<WebfontLoader config={subHeadconfig} windowRef={this.ref}>
 				</WebfontLoader>
 			)
 		}
 
-		if (dateLoadGoogleFonts == true) {
+		if (dateLoadGoogleFonts == true && this.ref.current) {
 			const dateconfig = {
 				google: {
 					families: [dateFontFamily + (dateFontWeight ? ":" + dateFontWeight : "")],
 				},
 			}
 			loadDateGoogleFonts = (
-				<WebfontLoader config={dateconfig}>
+				<WebfontLoader config={dateconfig} windowRef={this.ref}>
 				</WebfontLoader>
 			)
 		}

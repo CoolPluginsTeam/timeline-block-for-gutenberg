@@ -17267,6 +17267,8 @@ class WebfontLoader extends Component {
         status: statuses.inactive
       });
     };
+    const config = this.props?.config || this.context?.config;
+    const windowRef = this.props?.windowRef || this.context?.windowRef || null;
     this.loadFonts = () => {
       //if ( ! this.state.fonts.includes( this.props.config.google.families[ 0 ] ) ) {
       if (!googlefonts.includes(this.props.config.google.families[0])) {
@@ -17274,7 +17276,8 @@ class WebfontLoader extends Component {
           ...this.props.config,
           loading: this.handleLoading,
           active: this.handleActive,
-          inactive: this.handleInactive
+          inactive: this.handleInactive,
+          context: windowRef && windowRef.current?.ownerDocument && windowRef.current?.ownerDocument?.defaultView ? windowRef.current.ownerDocument.defaultView : window
         });
         this.addFont(this.props.config.google.families[0]);
       }
@@ -24483,17 +24486,17 @@ class Edit extends Component {
     };
     setTimeout(() => {
       const parentBlockId = select('core/block-editor').getBlockHierarchyRootClientId(this.props.clientId),
-        paragraphBlock = document.querySelector(`#block-${id}`),
+        paragraphBlock = this.ref.current.document(`#block-${id}`),
         parentBlock = paragraphBlock.closest(`#block-${parentBlockId}`),
         scrollElement = getParentOverflowElement(parentBlock),
-        paragraphToolbar = document.querySelector("div.components-popover");
+        paragraphToolbar = this.ref.current.document("div.components-popover");
       if (paragraphBlock && paragraphToolbar) {
         const toolStyleValue = paragraphToolbar?.style?.transform;
 
         // Get Toolbar updated transform position.
         const updatedValue = () => {
           var _paragraphToolbar$off;
-          const paragraphBlock = document.querySelector(`#block-${id}`),
+          const paragraphBlock = this.ref.current.document(`#block-${id}`),
             paragraphStyle = getComputedStyle(paragraphBlock),
             scrollTop = scrollElement.scrollTop,
             rect = paragraphBlock.getBoundingClientRect(),
@@ -24518,7 +24521,7 @@ class Edit extends Component {
           if (selectBlockId === id) {
             for (const mutation of mutationsList) {
               if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-                const currentToolBarValue = document.querySelector("div.components-popover");
+                const currentToolBarValue = this.ref.current.document("div.components-popover");
                 const currentTranslateY = getTranslateYValue(currentToolBarValue?.style?.transform);
                 const updateValue = updatedValue();
                 if (updateValue > currentTranslateY) {
@@ -26089,34 +26092,37 @@ class Edit extends Component {
     let loadHeadGoogleFonts;
     let loadSubHeadGoogleFonts;
     let loadDateGoogleFonts;
-    if (headLoadGoogleFonts == true) {
+    if (headLoadGoogleFonts == true && this.ref.current) {
       const headconfig = {
         google: {
           families: [headFontFamily + (headFontWeight ? ":" + headFontWeight : "")]
         }
       };
       loadHeadGoogleFonts = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_component_typography_fontloader_js__WEBPACK_IMPORTED_MODULE_7__["default"], {
-        config: headconfig
+        config: headconfig,
+        windowRef: this.ref
       });
     }
-    if (subHeadLoadGoogleFonts == true) {
+    if (subHeadLoadGoogleFonts == true && this.ref.current) {
       const subHeadconfig = {
         google: {
           families: [subHeadFontFamily + (subHeadFontWeight ? ":" + subHeadFontWeight : "")]
         }
       };
       loadSubHeadGoogleFonts = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_component_typography_fontloader_js__WEBPACK_IMPORTED_MODULE_7__["default"], {
-        config: subHeadconfig
+        config: subHeadconfig,
+        windowRef: this.ref
       });
     }
-    if (dateLoadGoogleFonts == true) {
+    if (dateLoadGoogleFonts == true && this.ref.current) {
       const dateconfig = {
         google: {
           families: [dateFontFamily + (dateFontWeight ? ":" + dateFontWeight : "")]
         }
       };
       loadDateGoogleFonts = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_component_typography_fontloader_js__WEBPACK_IMPORTED_MODULE_7__["default"], {
-        config: dateconfig
+        config: dateconfig,
+        windowRef: this.ref
       });
     }
     return isPreview ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {

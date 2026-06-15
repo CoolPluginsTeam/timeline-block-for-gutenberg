@@ -140,9 +140,9 @@ class CtlbUsersFeedback {
 
 	function submit_deactivation_response() {
 		// Check user capabilities
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Unauthorized access.', 'timeline-block' ) ) );
-			wp_die();
+			
 		}
 
 		if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), '_cool-plugins_deactivate_feedback_nonce' ) ) {
@@ -184,6 +184,15 @@ class CtlbUsersFeedback {
 			$unique_key        = '60';
 			$site_id        	= $site_url . '-' . $install_date . '-' . $unique_key;
 			$user_info = \CoolTimelineBlock::ctlb_get_user_info();
+			$consent = isset( $_POST['consent'] ) ? absint( $_POST['consent'] ) : 0;
+
+			if ( ! $consent ) {
+				wp_send_json_error(
+					array(
+						'message' => __( 'Consent is required.', 'timeline-block' ),
+					)
+				);
+			}
 			$response          = wp_remote_post(
 				$feedback_url,
 				array(

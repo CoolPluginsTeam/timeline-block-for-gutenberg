@@ -34,6 +34,24 @@ function cltb_editor_side_css() {
 }
 
 add_action( 'wp_head', 'cltb_timeline_block_load_post_assets' );
+function ctlb_get_all_blocks( $blocks ) {
+	$all_blocks = array();
+
+	foreach ( $blocks as $block ) {
+
+		$all_blocks[] = $block;
+
+		if ( ! empty( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) ) {
+			$all_blocks = array_merge(
+				$all_blocks,
+				ctlb_get_all_blocks( $block['innerBlocks'] )
+			);
+		}
+	}
+
+	return $all_blocks;
+}
+
 function cltb_timeline_block_load_post_assets() {
 	global $post;
 	$this_post = $post;
@@ -53,12 +71,13 @@ function cltb_timeline_block_load_post_assets() {
 	if ( has_blocks( $this_post->ID ) && isset( $this_post->post_content ) ) {
 
 		$blocks      = parse_blocks( $this_post->post_content );
-		$page_blocks = $blocks;
+		$page_blocks = ctlb_get_all_blocks( $blocks );
 
 		if ( ! is_array( $page_blocks ) || empty( $page_blocks ) ) {
 			return;
 		}
 		foreach ( $page_blocks as $i => $block ) {
+			
 
 			if ( is_array( $block ) ) {
 
