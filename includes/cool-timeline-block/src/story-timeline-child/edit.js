@@ -19,6 +19,10 @@ const {
 } = wp.components;
 
 class Edit extends Component {
+	constructor(props) {
+		super(props);
+		this.myRef = React.createRef();
+	}
 	componentDidMount() {
 		//Store client id.
 		this.props.setAttributes( { block_id: this.props.clientId } )
@@ -315,17 +319,18 @@ class Edit extends Component {
 
 		setTimeout(() => {
 			const parentBlockId = select('core/block-editor').getBlockHierarchyRootClientId(this.props.clientId),
-			paragraphBlock = this.ref.current.document(`#block-${id}`),
+			const doc = this.myRef.current?.ownerDocument || document;
+			paragraphBlock = doc.querySelector(`#block-${id}`),
 			parentBlock = paragraphBlock.closest(`#block-${parentBlockId}`),
 			scrollElement = getParentOverflowElement(parentBlock),
-			paragraphToolbar = this.ref.current.document("div.components-popover");
+			paragraphToolbar = doc.querySelector("div.components-popover");
 			if (paragraphBlock && paragraphToolbar) {
 
 				const toolStyleValue = paragraphToolbar?.style?.transform;
 
 				// Get Toolbar updated transform position.
 				const updatedValue = () => {
-					const paragraphBlock = this.ref.current.document(`#block-${id}`),
+					const paragraphBlock = doc.querySelector(`#block-${id}`),
 					paragraphStyle = getComputedStyle(paragraphBlock),
 					scrollTop = scrollElement.scrollTop,
 					rect = paragraphBlock.getBoundingClientRect(),
@@ -353,7 +358,7 @@ class Edit extends Component {
 					if (selectBlockId === id) {
 						for (const mutation of mutationsList) {
 							if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-								const currentToolBarValue = this.ref.current.document("div.components-popover");
+								const currentToolBarValue = doc.querySelector("div.components-popover");
 								const currentTranslateY = getTranslateYValue(
 									currentToolBarValue?.style?.transform
 								);
