@@ -24094,9 +24094,469 @@ registerBlockType("cp-timeline/content-timeline-block-child", {
 /*!******************************************!*\
   !*** ./src/story-timeline-child/edit.js ***!
   \******************************************/
-() {
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\src\\story-timeline-child\\edit.js: Unexpected keyword 'const'. (318:3)\n\n\u001b[0m \u001b[90m 316 |\u001b[39m \t\tsetTimeout(() \u001b[33m=>\u001b[39m {\n \u001b[90m 317 |\u001b[39m \t\t\t\u001b[36mconst\u001b[39m parentBlockId \u001b[33m=\u001b[39m select(\u001b[32m'core/block-editor'\u001b[39m)\u001b[33m.\u001b[39mgetBlockHierarchyRootClientId(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops\u001b[33m.\u001b[39mclientId)\u001b[33m,\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 318 |\u001b[39m \t\t\t\u001b[36mconst\u001b[39m doc \u001b[33m=\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mmyRef\u001b[33m.\u001b[39mcurrent\u001b[33m?\u001b[39m\u001b[33m.\u001b[39mownerDocument \u001b[33m||\u001b[39m document\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m \t\t\t\u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 319 |\u001b[39m \t\t\tparagraphBlock \u001b[33m=\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mref\u001b[33m.\u001b[39mcurrent\u001b[33m.\u001b[39mdocument(\u001b[32m`#block-${id}`\u001b[39m)\u001b[33m,\u001b[39m\n \u001b[90m 320 |\u001b[39m \t\t\tparentBlock \u001b[33m=\u001b[39m paragraphBlock\u001b[33m.\u001b[39mclosest(\u001b[32m`#block-${parentBlockId}`\u001b[39m)\u001b[33m,\u001b[39m\n \u001b[90m 321 |\u001b[39m \t\t\tscrollElement \u001b[33m=\u001b[39m getParentOverflowElement(parentBlock)\u001b[33m,\u001b[39m\u001b[0m\n    at constructor (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:365:19)\n    at JSXParserMixin.raise (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:6616:19)\n    at JSXParserMixin.checkReservedWord (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:12241:12)\n    at JSXParserMixin.parseIdentifierName (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:12228:12)\n    at JSXParserMixin.parseIdentifier (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:12198:23)\n    at JSXParserMixin.parseBindingAtom (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:7373:17)\n    at JSXParserMixin.parseVarId (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:13419:21)\n    at JSXParserMixin.parseVar (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:13400:12)\n    at JSXParserMixin.parseVarStatement (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:13247:10)\n    at JSXParserMixin.parseStatementContent (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:12868:23)\n    at JSXParserMixin.parseStatementLike (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:12784:17)\n    at JSXParserMixin.parseStatementListItem (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:12764:17)\n    at JSXParserMixin.parseBlockOrModuleBlockBody (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:13333:61)\n    at JSXParserMixin.parseBlockBody (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:13326:10)\n    at JSXParserMixin.parseBlock (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:13314:10)\n    at JSXParserMixin.parseFunctionBody (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:12117:24)\n    at JSXParserMixin.parseArrowExpression (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:12092:10)\n    at JSXParserMixin.parseParenAndDistinguishExpression (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:11704:12)\n    at JSXParserMixin.parseExprAtom (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:11348:23)\n    at JSXParserMixin.parseExprAtom (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:4776:20)\n    at JSXParserMixin.parseExprSubscripts (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:11098:23)\n    at JSXParserMixin.parseUpdate (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:11083:21)\n    at JSXParserMixin.parseMaybeUnary (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:11063:23)\n    at JSXParserMixin.parseMaybeUnaryOrPrivate (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:10916:61)\n    at JSXParserMixin.parseExprOps (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:10921:23)\n    at JSXParserMixin.parseMaybeConditional (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:10898:23)\n    at JSXParserMixin.parseMaybeAssign (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:10848:21)\n    at C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:10817:39\n    at JSXParserMixin.allowInAnd (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:12443:12)\n    at JSXParserMixin.parseMaybeAssignAllowIn (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:10817:17)\n    at JSXParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:12510:17)\n    at JSXParserMixin.parseExprListItem (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:12192:18)\n    at JSXParserMixin.parseCallExpressionArguments (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:11269:22)\n    at JSXParserMixin.parseCoverCallAndAsyncArrowHead (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:11203:29)\n    at JSXParserMixin.parseSubscript (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:11137:19)\n    at JSXParserMixin.parseSubscripts (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:11111:19)\n    at JSXParserMixin.parseExprSubscripts (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:11102:17)\n    at JSXParserMixin.parseUpdate (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:11083:21)\n    at JSXParserMixin.parseMaybeUnary (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:11063:23)\n    at JSXParserMixin.parseMaybeUnaryOrPrivate (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:10916:61)\n    at JSXParserMixin.parseExprOps (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:10921:23)\n    at JSXParserMixin.parseMaybeConditional (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:10898:23)\n    at JSXParserMixin.parseMaybeAssign (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:10848:21)\n    at JSXParserMixin.parseExpressionBase (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:10801:23)\n    at C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:10797:39\n    at JSXParserMixin.allowInAnd (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:12438:16)\n    at JSXParserMixin.parseExpression (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:10797:17)\n    at JSXParserMixin.parseStatementContent (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:12912:23)\n    at JSXParserMixin.parseStatementLike (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:12784:17)\n    at JSXParserMixin.parseStatementListItem (C:\\Users\\hr\\Local Sites\\cool-plugins\\app\\public\\wp-content\\plugins\\timeline-block\\includes\\cool-timeline-block\\node_modules\\@babel\\parser\\lib\\index.js:12764:17)");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var _component_Icons_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../component/Icons/index.js */ "./src/component/Icons/index.js");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+
+
+const {
+  Component,
+  Fragment
+} = wp.element;
+
+const {
+  RichText,
+  InspectorControls,
+  BlockControls,
+  InnerBlocks
+} = wp.blockEditor;
+const {
+  dispatch,
+  select
+} = wp.data;
+const {
+  PanelBody,
+  TextControl,
+  Button,
+  ToolbarGroup,
+  ToolbarButton,
+  ButtonGroup
+} = wp.components;
+class Edit extends Component {
+  constructor(props) {
+    super(props);
+    this.myRef = React.createRef();
+  }
+  componentDidMount() {
+    //Store client id.
+    this.props.setAttributes({
+      block_id: this.props.clientId
+    });
+    this.props.setAttributes({
+      wodpressBlock: true
+    });
+    const wordpressBlock = this.props.attributes.wodpressBlock;
+    const mediaBlock = !['none', ''].includes(this.props.attributes.timeLineImage);
+    !wordpressBlock && this.innerBlockTemplate(mediaBlock);
+  }
+  addBlock(e) {
+    const parentBlockId = select('core/block-editor').getBlockHierarchyRootClientId(this.props.clientId);
+    const parentAttribute = select('core/block-editor').getBlockAttributes(parentBlockId);
+    let position = 'one-sided' === parentAttribute.timelineDesign ? parentAttribute.Orientation : 'left' === this.props.attributes.blockPosition ? 'right' : 'left';
+    let index = select('core/block-editor').getBlockIndex(this.props.clientId);
+    let timelineDesign = parentAttribute.timelineDesign;
+    let timelineLayout = parentAttribute.timelineLayout;
+    let name = 'cp-timeline/content-timeline-block-child';
+    let insertedBlock = wp.blocks.createBlock(name, {
+      block_position_active: false,
+      timelineDesign: timelineDesign,
+      timelineLayout: timelineLayout,
+      blockPosition: position,
+      storyPositionHide: !parentAttribute.OrientationCheckBox,
+      headingTag: parentAttribute.headingTag
+    });
+    wp.data.dispatch('core/block-editor').insertBlocks(insertedBlock, index + 1, parentBlockId);
+    this.UpdateOrientation();
+  }
+  UpdateOrientation() {
+    const parentBlockId = select('core/block-editor').getBlockHierarchyRootClientId(this.props.clientId);
+    const parentAttribute = select('core/block-editor').getBlockAttributes(parentBlockId);
+    if (parentAttribute.timelineLayout == "vertical" && parentAttribute.timelineDesign == "both-sided") {
+      const currentIndex = select('core/block-editor').getBlockIndex(this.props.clientId);
+      const currentBlockPostion = 'left' === this.props.attributes.blockPosition ? 'right' : 'left';
+      const parentBlock = select("core/block-editor").getBlock(parentBlockId);
+      const innerBlocks = parentBlock.innerBlocks;
+      const currentPostion = currentIndex % 2;
+      innerBlocks.forEach((block, index) => {
+        if (index > currentIndex + 1) {
+          const blockpostion = index % 2 !== currentPostion ? currentBlockPostion : this.props.attributes.blockPosition;
+          block.attributes.blockPosition = blockpostion, block.attributes.storyPositionHide = !parentAttribute.OrientationCheckBox;
+        }
+      });
+    }
+  }
+  innerBlockTemplate(mediaBlock) {
+    const newBlocks = [];
+    const mediaBlocks = [];
+    let oldBlocks = [];
+    let innerBlocks;
+    const prevInnerBlock = select('core/block-editor').getBlock(this.props.clientId)?.innerBlocks;
+    const prevBlocksName = prevInnerBlock.map(data => {
+      return data.name;
+    });
+    let mediaIndex = prevBlocksName.findIndex(data => ['core/image'].includes(data));
+    mediaIndex = mediaIndex < 0 ? 0 : mediaIndex;
+    const prevMediaBlock = prevInnerBlock.filter(data => {
+      return ['core/image'].includes(data.name);
+    });
+    const headingLevel = () => {
+      const headingLevel = parseInt(this.props.attributes.headingTag.replace('h', ''));
+      return headingLevel;
+    };
+
+    //  retrieve attributes of old paragraph and heading blocks
+    prevInnerBlock && Array.prototype.map.call(prevInnerBlock, block => {
+      if (['core/paragraph', 'core/heading'].includes(block.name)) {
+        oldBlocks.push([block.name, block.attributes]);
+      }
+      ;
+    });
+    // filter out undefined blocks from oldBlocks
+    oldBlocks = Array.prototype.filter.call(oldBlocks, block => {
+      return undefined !== block;
+    });
+
+    // Add media block inside the mediaBlocks.
+    const imageUrl = 'none' === this.props.attributes.timeLineImage ? '' : this.props.attributes.timeLineImage;
+    mediaBlock && mediaBlocks.push(['core/image', {
+      url: imageUrl,
+      className: 'ctlb-block-image',
+      aspectRatio: "4/3",
+      scale: "cover"
+    }]); // Default: Image block with a default image URL
+    newBlocks.push(['core/heading', {
+      level: headingLevel(),
+      content: this.props.attributes.time_heading,
+      className: 'ctlb-block-title',
+      style: {
+        spacing: {
+          padding: {
+            top: '0px',
+            left: '0px',
+            bottom: '0px',
+            right: '0px'
+          }
+        }
+      }
+    }],
+    // Default: Heading block with level 2 and default content
+    ['core/paragraph', {
+      content: this.props.attributes.time_desc,
+      placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Add your description here', 'timeline-block'),
+      className: 'ctlb-block-desc',
+      style: {
+        spacing: {
+          padding: {
+            top: '0px',
+            left: '0px',
+            bottom: '0px',
+            right: '0px'
+          }
+        }
+      }
+    }] // Default: Paragraph block with default content
+    );
+    if (prevMediaBlock.length > 0 && !mediaBlock) {
+      dispatch('core/block-editor').removeBlock(prevInnerBlock[mediaIndex].clientId, true);
+    } else if (mediaBlock && prevBlocksName.length > 0 && !prevBlocksName.includes('core/image')) {
+      const insertedBlock = wp.blocks.createBlock(mediaBlocks[0][0], mediaBlocks[0][1]);
+      dispatch('core/block-editor').insertBlocks(insertedBlock, 0, this.props.clientId);
+    }
+
+    // Spread all blocks in innerBlocks.
+    if (oldBlocks && oldBlocks.length > 0) {
+      innerBlocks = [...mediaBlocks, ...oldBlocks];
+    } else {
+      innerBlocks = [...mediaBlocks, ...newBlocks];
+    }
+    this.props.setAttributes({
+      innerBlockTemplate: innerBlocks,
+      mediaBlock: mediaBlock
+    });
+  }
+  render() {
+    // Setup the attributes.
+    const {
+      setAttributes,
+      attributes: {
+        icon,
+        t_date,
+        iconToggle,
+        iconColor,
+        blockPosition,
+        storyPositionHide,
+        mediaBlock,
+        innerBlockTemplate
+      },
+      context: {
+        'cp-timeline/timelineDesign': timelineDesign,
+        'cp-timeline/timelineLayout': timelineLayout
+      }
+    } = this.props;
+    const StoryDetail = () => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "story-details"
+    }, mediaBlock ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Button, {
+      isSmall: true,
+      isSecondary: true,
+      onClick: () => this.innerBlockTemplate(false),
+      style: {
+        marginBottom: '10px',
+        marginLeft: '9px',
+        marginTop: '9px'
+      }
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Remove Media Block', "timeline-block")) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Button, {
+      isSmall: true,
+      isSecondary: true,
+      onClick: () => {
+        this.innerBlockTemplate(true);
+        setTimeout(() => {
+          const mediaBlock = select('core/block-editor').getBlock(this.props.clientId).innerBlocks[0].clientId;
+          wp.data.dispatch('core/block-editor').selectBlock(mediaBlock);
+        }, 50);
+      },
+      style: {
+        marginBottom: '10px',
+        marginLeft: '9px',
+        marginTop: '9px'
+      }
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Add Media Block', 'timeline-block')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "story-content"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InnerBlocks, {
+      template: innerBlockTemplate,
+      allowedBlocks: ['core/image', 'core/heading', 'core/paragraph', 'core/list', 'core/buttons']
+    })));
+    const StoryTime = () => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(RichText, {
+      tagName: "p",
+      placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Date/Steps', 'timeline-block'),
+      value: t_date === 'ctl_date_undefined' ? '' : t_date // Change undefined to an empty string for controlled input
+      ,
+      onChange: value => {
+        const date = '' === value ? 'ctl_date_undefined' : value;
+        setAttributes({
+          t_date: date
+        });
+      }
+    });
+    const content_control = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      style: {
+        'marginBottom': 15 + 'px',
+        'textAlign': 'center'
+      }
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Button, {
+      isSecondary: true,
+      icon: 'arrow-left-alt',
+      onClick: () => {
+        const parentBlockId = select('core/block-editor').getBlockHierarchyRootClientId(this.props.clientId);
+        wp.data.dispatch('core/block-editor').selectBlock(parentBlockId);
+      }
+    }, "GO TO SETTINGS")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PanelBody, {
+      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)("Story Settings", "timeline-block")
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(TextControl, {
+      label: "Primary Label(Date/Steps)",
+      placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Date/Steps', 'timeline-block'),
+      value: t_date === 'ctl_date_undefined' ? '' : t_date,
+      onChange: value => {
+        const date = '' === value ? 'ctl_date_undefined' : value;
+        setAttributes({
+          t_date: date
+        });
+      },
+      __nextHasNoMarginBottom: true
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("hr", {
+      className: "timeline-block-editor__separator"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "timeline-block-settings-labels"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)("Story Icon", "timeline-block")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ButtonGroup, {
+      className: "cool-timeline-content-alignment-buttons"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Button, {
+      isSmall: true,
+      onClick: e => {
+        setAttributes({
+          iconToggle: 'false'
+        });
+      },
+      className: iconToggle == 'false' ? 'active' : ''
+    }, "DOT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Button, {
+      isSmall: true,
+      onClick: e => {
+        setAttributes({
+          iconToggle: 'true'
+        });
+      },
+      className: iconToggle == 'true' ? 'active' : ''
+    }, "Icon")), iconToggle == "true" ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Fragment, null, "  ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "timeline-block-iconpicker"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_component_Icons_index_js__WEBPACK_IMPORTED_MODULE_1__.IconPicker, {
+      icon: icon,
+      onChange: v => setAttributes({
+        icon: v
+      })
+    }))) : null, timelineLayout == "vertical" && timelineDesign == "both-sided" && storyPositionHide ?
+    //hide story position if alternating sided on
+    (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("hr", {
+      className: "timeline-block-editor__separator"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "timeline-block-settings-labels"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)("Story position", "timeline-block")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ButtonGroup, {
+      className: "cool-timeline-content-alignment-buttons"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Button, {
+      isSmall: true,
+      onClick: e => {
+        setAttributes({
+          blockPosition: 'left',
+          block_position_active: true
+        });
+      },
+      className: blockPosition == 'left' ? 'active' : ''
+    }, "Left"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Button, {
+      isSmall: true,
+      onClick: e => {
+        setAttributes({
+          blockPosition: 'right',
+          block_position_active: true
+        });
+      },
+      className: blockPosition == 'right' ? 'active' : ''
+    }, "Right"))) : null));
+    const icon_div = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "timeline-block-icon"
+    }, icon !== "" && iconToggle == "true" ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "timeline-block-render-icon"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_component_Icons_index_js__WEBPACK_IMPORTED_MODULE_1__.IconPickerItem, {
+      icon: icon,
+      size: 24,
+      color: iconColor
+    })) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+      stroke: "currentColor",
+      fill: "currentColor",
+      strokeWidth: "0",
+      viewBox: "0 0 512 512",
+      height: "1em",
+      width: "1em",
+      xmlns: "http://www.w3.org/2000/svg"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+      d: "M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"
+    })));
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ToolbarGroup, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ToolbarButton, {
+      label: "Delete Block",
+      icon: "trash",
+      onClick: () => dispatch('core/block-editor').removeBlock(this.props.clientId, true)
+    })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ToolbarGroup, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ToolbarButton, {
+      label: "Add Block",
+      icon: "plus",
+      onClick: () => this.addBlock()
+    }))), content_control, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "timeline-content icon-" + iconToggle + "",
+      ref: this.myRef
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: `timeline-block-timeline ctl-row  position-${blockPosition}${t_date == '' ? ' ctl_timeFalse' : ''}`
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "ctl-6 timeline-block-time"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "story-time"
+    }, StoryTime())), icon_div, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "ctl-6 timeline-block-detail"
+    }, StoryDetail()))));
+  }
+  componentDidUpdate() {
+    const childBlocks = select("core/block-editor").getBlock(this.props.clientId)?.innerBlocks;
+    if (childBlocks) {
+      const paragraphBlock = childBlocks.filter(block => {
+        return "core/paragraph" === block.name;
+      })[0];
+      const paragraphBlockId = paragraphBlock?.clientId;
+      const selectBlockId = select('core/block-editor').getSelectedBlockClientId();
+      if (selectBlockId) {
+        if (paragraphBlockId === selectBlockId) {
+          this.paragraphToolBarPosition(selectBlockId);
+        }
+      }
+    }
+  }
+  paragraphToolBarPosition(id) {
+    // Getting the root element for that is a overflow Y axis auto
+    const getParentOverflowElement = parentElement => {
+      let element = parentElement;
+      while (element) {
+        const {
+          overflowY
+        } = getComputedStyle(element);
+        if (overflowY !== 'auto') {
+          if (element.parentElement) {
+            element = element.parentElement;
+          }
+        } else {
+          return element;
+        }
+      }
+      return element;
+    };
+    setTimeout(() => {
+      const parentBlockId = select('core/block-editor').getBlockHierarchyRootClientId(this.props.clientId);
+      const doc = this.myRef.current?.ownerDocument || document;
+      paragraphBlock = doc.querySelector(`#block-${id}`);
+      parentBlock = paragraphBlock.closest(`#block-${parentBlockId}`);
+      scrollElement = getParentOverflowElement(parentBlock);
+      paragraphToolbar = doc.querySelector("div.components-popover");
+      if (paragraphBlock && paragraphToolbar) {
+        const toolStyleValue = paragraphToolbar?.style?.transform;
+
+        // Get Toolbar updated transform position.
+        const updatedValue = () => {
+          var _paragraphToolbar$off;
+          const paragraphBlock = doc.querySelector(`#block-${id}`),
+            paragraphStyle = getComputedStyle(paragraphBlock),
+            scrollTop = scrollElement.scrollTop,
+            rect = paragraphBlock.getBoundingClientRect(),
+            paragraphBlockYAxis = 0 > rect.top ? -Math.abs(rect.top) : Math.abs(rect.top),
+            paragraphTopSpacing = parseInt(paragraphStyle.marginTop.match(/\d+\.\d+|\d+/g)[0]),
+            toolbarParentOffsetTop = (_paragraphToolbar$off = paragraphToolbar.offsetParent?.offsetTop) !== null && _paragraphToolbar$off !== void 0 ? _paragraphToolbar$off : 0,
+            parentYPosition = Math.floor(scrollTop + paragraphBlockYAxis + paragraphBlock.clientHeight - paragraphTopSpacing - paragraphToolbar.clientHeight - toolbarParentOffsetTop + 40);
+          return parentYPosition;
+        };
+
+        // Update ToolBar transform position.
+        const updateToolBarStyle = newTranslateY => {
+          if (toolStyleValue) {
+            const style = toolStyleValue.replace(/translateY\(\d+px\)/, `translateY(${newTranslateY}px)`);
+            paragraphToolbar.style.transform = style;
+          }
+        };
+
+        // ToolBar Observer.
+        const observerCallback = mutationsList => {
+          const selectBlockId = select('core/editor').getSelectedBlockClientId();
+          if (selectBlockId === id) {
+            for (const mutation of mutationsList) {
+              if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                const currentToolBarValue = doc.querySelector("div.components-popover");
+                const currentTranslateY = getTranslateYValue(currentToolBarValue?.style?.transform);
+                const updateValue = updatedValue();
+                if (updateValue > currentTranslateY) {
+                  // update toolbar position
+                  updateToolBarStyle(updateValue);
+                }
+              }
+            }
+          }
+        };
+        const observerConfig = {
+          attributes: true
+        };
+        const observer = new MutationObserver(observerCallback);
+        // Observer toolBar transform position
+        observer.observe(paragraphToolbar, observerConfig);
+
+        // update toolbar position.
+        updateToolBarStyle(updatedValue());
+
+        // Function to extract translateY value from a transform string.
+        function getTranslateYValue(transform) {
+          const match = transform.match(/translateY\(([-+]?\d+)px\)/);
+          return match ? parseInt(match[1]) : 0;
+        }
+      }
+    }, 10);
+  }
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Edit);
 
 /***/ },
 

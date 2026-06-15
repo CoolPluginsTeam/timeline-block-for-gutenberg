@@ -318,7 +318,7 @@ class Edit extends Component {
 		};
 
 		setTimeout(() => {
-			const parentBlockId = select('core/block-editor').getBlockHierarchyRootClientId(this.props.clientId),
+			const parentBlockId = select('core/block-editor').getBlockHierarchyRootClientId(this.props.clientId);
 			const doc = this.myRef.current?.ownerDocument || document;
 			paragraphBlock = doc.querySelector(`#block-${id}`);
 			parentBlock = paragraphBlock.closest(`#block-${parentBlockId}`);
