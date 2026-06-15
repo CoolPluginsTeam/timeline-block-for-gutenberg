@@ -268,7 +268,7 @@ class Edit extends Component {
 					</ToolbarGroup>
 				</BlockControls>
 				{content_control}
-				<div className={"timeline-content icon-" + iconToggle + ""}>
+				<div className={"timeline-content icon-" + iconToggle + ""} ref={this.myRef} >
 					<div className={`timeline-block-timeline ctl-row  position-${blockPosition}${t_date == '' ? ' ctl_timeFalse' : ''}`}>
 						<div className="ctl-6 timeline-block-time">
 							<div className="story-time">
@@ -320,9 +320,9 @@ class Edit extends Component {
 		setTimeout(() => {
 			const parentBlockId = select('core/block-editor').getBlockHierarchyRootClientId(this.props.clientId),
 			const doc = this.myRef.current?.ownerDocument || document;
-			paragraphBlock = doc.querySelector(`#block-${id}`),
-			parentBlock = paragraphBlock.closest(`#block-${parentBlockId}`),
-			scrollElement = getParentOverflowElement(parentBlock),
+			paragraphBlock = doc.querySelector(`#block-${id}`);
+			parentBlock = paragraphBlock.closest(`#block-${parentBlockId}`);
+			scrollElement = getParentOverflowElement(parentBlock);
 			paragraphToolbar = doc.querySelector("div.components-popover");
 			if (paragraphBlock && paragraphToolbar) {
 

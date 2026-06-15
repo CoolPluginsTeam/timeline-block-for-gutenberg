@@ -17270,7 +17270,7 @@ class WebfontLoader extends Component {
     this.loadFonts = () => {
       //if ( ! this.state.fonts.includes( this.props.config.google.families[ 0 ] ) ) {
       if (!googlefonts.includes(this.props.config.google.families[0])) {
-        const windowRef = this.props?.windowRef ? this.context?.windowRef : null;
+        const windowRef = this.props?.windowRef ? this.props?.windowRef : null;
         webfontloader__WEBPACK_IMPORTED_MODULE_1__.load({
           ...this.props.config,
           loading: this.handleLoading,
