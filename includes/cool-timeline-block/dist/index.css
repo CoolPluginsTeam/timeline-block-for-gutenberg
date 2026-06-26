@@ -1,25 +1,2 @@
-/*!*********************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/@wordpress/scripts/node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/component/typography/editor.scss ***!
-  \*********************************************************************************************************************************************************************************************************************************************************************************************/
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
-.timeline-block-typography-advanced,
-.timeline-block-box-shadow-advanced {
-  box-shadow: 0 3px 30px rgba(25, 30, 35, 0.1);
-  border: 1px solid #e2e4e7;
-  background: #fff;
-  padding: 10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  position: relative;
-}
-/*!****************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/@wordpress/scripts/node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/component/customComponents/styling.scss ***!
-  \****************************************************************************************************************************************************************************************************************************************************************************************************/
+.timeline-block-box-shadow-advanced,.timeline-block-typography-advanced{background:#fff;border:1px solid #e2e4e7;box-shadow:0 3px 30px rgba(25,30,35,.1);margin-bottom:10px;margin-top:10px;padding:10px;position:relative}
 
-
-/*# sourceMappingURL=index.css.map*/
