@@ -215,6 +215,7 @@ class Edit extends Component {
 							setAttributes({t_date:date })
 						}}	
 						__nextHasNoMarginBottom={true}
+						__next40pxDefaultSize={ true }
 					/>
 					<hr className="timeline-block-editor__separator"></hr>
 					<div className="timeline-block-settings-labels">{__("Story Icon", "timeline-block")}</div>

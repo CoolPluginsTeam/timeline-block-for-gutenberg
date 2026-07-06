@@ -192,6 +192,7 @@ class Edit extends Component {
 				{ value: "left", label: __( "Left Sided","timeline-block") },
 			] }
 			__nextHasNoMarginBottom={ true }
+			__next40pxDefaultSize={ true }
 			/>
 			</Fragment>:null;
 		const general_setting=<CardBody>
@@ -237,6 +238,7 @@ class Edit extends Component {
 	allowReset={ true }
 	min={ 0 }
 	max={ 200 }
+	__next40pxDefaultSize={ true }
 	/>
 	<hr className="timeline-block-editor__separator"></hr>
 	<h2 className="timeline-block-settings-labels">Story Description</h2>
@@ -281,6 +283,7 @@ class Edit extends Component {
 	allowReset={ true }
 	min={ 0 }
 	max={ 200 }
+	__next40pxDefaultSize={ true }
 	/>
 	<hr className="timeline-block-editor__separator"></hr>
 	<h2 className="timeline-block-settings-labels">Primary Label(Date/Steps)</h2>
@@ -388,6 +391,7 @@ class Edit extends Component {
 		allowReset={ true }
 		min={ 0 }
 		max={ 200 }
+		__next40pxDefaultSize={ true }
 		/>
 		</Fragment>
 		}
@@ -401,6 +405,7 @@ class Edit extends Component {
 		allowReset={ true }
 		min={ 20 }
 		max={ 100 }
+		__next40pxDefaultSize={ true }
 		/>
 		{/* Icon font size controller */}
 		<h2>{__("Icon Size","timeline-block")}</h2>
@@ -412,6 +417,7 @@ class Edit extends Component {
 		allowReset={ true }
 		min={ 0 }
 		max={ 100 }
+		__next40pxDefaultSize={ true }
 		/>
 		{/* middle line size controller */}
 		<h2>{__("Line Size","timeline-block")}</h2>
@@ -423,6 +429,7 @@ class Edit extends Component {
 		allowReset={ true }
 		min={ 0 }
 		max={ 10 }
+		__next40pxDefaultSize={ true }
 		/>
 
 		{/* contaier box padding controler */}
@@ -479,6 +486,7 @@ class Edit extends Component {
 						// { value: "horizontal", label: __( "Horizontal (PRO)","timeline-block"), disabled: true }
 					] }
 					__nextHasNoMarginBottom={ true }
+					__next40pxDefaultSize={ true }
 					/>
 				{timelineLayout == "vertical" ?
 				<SelectControl
@@ -495,6 +503,7 @@ class Edit extends Component {
 						
 					] }
 					__nextHasNoMarginBottom={ true }
+					__next40pxDefaultSize={ true }
 					/>:
 					<RangeControl
 						label="Slides"
@@ -506,6 +515,7 @@ class Edit extends Component {
 						min={ 1 }
 						max={ 6 }
 						step={ 1 }
+						__next40pxDefaultSize={ true }
 					/>
 				}
 
