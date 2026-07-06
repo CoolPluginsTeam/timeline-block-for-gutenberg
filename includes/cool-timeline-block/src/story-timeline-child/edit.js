@@ -306,10 +306,8 @@ class Edit extends Component {
 			let element = parentElement;
 			while (element) {
 				const { overflowY } = getComputedStyle(element);
-				if (overflowY !== 'auto') {
-					if(element.parentElement){
-						element = element.parentElement;
-					}
+				if (overflowY !== "auto") {
+					element = element.parentElement;
 				} else {
 					return element;
 				}
@@ -319,19 +317,36 @@ class Edit extends Component {
 
 		setTimeout(() => {
 			const parentBlockId = select('core/block-editor').getBlockHierarchyRootClientId(this.props.clientId);
-			const doc = this.myRef.current?.ownerDocument || document;
-			paragraphBlock = doc.querySelector(`#block-${id}`);
-			parentBlock = paragraphBlock.closest(`#block-${parentBlockId}`);
-			scrollElement = getParentOverflowElement(parentBlock);
-			paragraphToolbar = doc.querySelector("div.components-popover");
-			if (paragraphBlock && paragraphToolbar) {
+			const iframe = document.querySelector('iframe[name="editor-canvas"]');
+
+			const doc =
+				this.myRef?.current?.ownerDocument ||
+				iframe?.contentDocument ||
+				document;
+				const paragraphBlock =
+				doc.querySelector(`[data-block="${id}"]`) ||
+				doc.querySelector(`#block-${id}`);
+			if (!paragraphBlock) {
+				return;
+			}	
+			const parentBlock =
+			paragraphBlock.closest(`[data-block="${parentBlockId}"]`) ||
+			paragraphBlock.closest(`#block-${parentBlockId}`);
+			const scrollElement = getParentOverflowElement(parentBlock);
+			const paragraphToolbar = doc.querySelector("div.components-popover");
+			if (paragraphToolbar) {
 
 				const toolStyleValue = paragraphToolbar?.style?.transform;
 
 				// Get Toolbar updated transform position.
 				const updatedValue = () => {
-					const paragraphBlock = doc.querySelector(`#block-${id}`),
-					paragraphStyle = getComputedStyle(paragraphBlock),
+					const paragraphBlock =
+					doc.querySelector(`[data-block="${id}"]`) ||
+					doc.querySelector(`#block-${id}`);
+				if (!paragraphBlock) {
+					return 0;
+				}
+				const paragraphStyle = getComputedStyle(paragraphBlock),
 					scrollTop = scrollElement.scrollTop,
 					rect = paragraphBlock.getBoundingClientRect(),
 					paragraphBlockYAxis = 0 > rect.top ? -Math.abs(rect.top) : Math.abs(rect.top),
