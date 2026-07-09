@@ -60,7 +60,25 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 			// Load plugin textdomain
 			add_action('init', array($this, 'ctlb_load_plugin_textdomain'));
 			register_activation_hook( __FILE__, array( $this, 'ctlb_plugin_activate' ));
-			
+
+			if ( is_admin() && $this->ctlb_should_load_onboarding() ) {
+				add_action( 'enqueue_block_editor_assets', array( $this, 'ctlb_enqueue_onboarding_inserter' ) );
+			}
+		}
+
+		/**
+		 * Whether Timeline Block onboarding should load.
+		 *
+		 * Skip when Cool Timeline (free) is active — it provides its own onboarding.
+		 *
+		 * @return bool
+		 */
+		private function ctlb_should_load_onboarding() {
+			if ( ! function_exists( 'is_plugin_active' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/plugin.php';
+			}
+
+			return ! is_plugin_active( 'cool-timeline/cooltimeline.php' );
 		}
 
 		/**
@@ -83,6 +101,14 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 			if ( ! get_option( 'ctlb-initial-save-version' ) ) {
 				add_option( 'ctlb-initial-save-version', Timeline_Block_Version );
 			}
+
+			$is_new_user = false === get_option( 'ctlb-install-date' );
+
+			if ( $is_new_user && $this->ctlb_should_load_onboarding() ) {
+				update_option( 'ctlb_is_new_user', 'yes' );
+				set_transient( 'ctlb_activation_redirect', 1, 5 * MINUTE_IN_SECONDS );
+			}
+
 			if ( ! get_option( 'ctlb-install-date' ) ) {
 				add_option( 'ctlb-install-date', gmdate( 'Y-m-d H:i:s' ) );
 			}
@@ -99,10 +125,74 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 				$pluginpath= plugin_basename( __FILE__ );
 				require_once Timeline_Block_Dir . 'admin/feedback/ctlb-users-feedback.php'; // Includes the admin feedback functionality file.
 			    add_filter( "plugin_action_links_$pluginpath", array( $this, 'ctlb_settings_link' ) );
+
+				if ( $this->ctlb_should_load_onboarding() ) {
+					require_once Timeline_Block_Dir . 'admin/ctlb-timeline-header.php';
+					require_once Timeline_Block_Dir . 'admin/cp-onboarding/loader.php';
+					cpo_onboarding_register( '1.1.1', Timeline_Block_Dir . 'admin/cp-onboarding' );
+
+					add_action(
+						'cpo_onboarding_loaded',
+						static function () {
+							require_once Timeline_Block_Dir . 'admin/cp-onboarding/onboarding-config.php';
+						}
+					);
+
+					add_action( 'admin_init', array( $this, 'ctlb_maybe_redirect_to_onboarding' ) );
+				}
 			}
 		}
+
+		/**
+		 * Redirect to onboarding after first activation.
+		 *
+		 * @return void
+		 */
+		public function ctlb_maybe_redirect_to_onboarding() {
+			if ( ! get_transient( 'ctlb_activation_redirect' ) ) {
+				return;
+			}
+
+			delete_transient( 'ctlb_activation_redirect' );
+
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only bulk activation check.
+			if ( isset( $_GET['activate-multi'] ) ) {
+				return;
+			}
+
+			wp_safe_redirect( admin_url( 'admin.php?page=ctlb-getting-started&mode=onboarding' ) );
+			exit;
+		}
+
+		/**
+		 * Enqueue block inserter helper for onboarding deep links.
+		 *
+		 * @return void
+		 */
+		public function ctlb_enqueue_onboarding_inserter() {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- display-only query arg.
+			if ( ! isset( $_GET['action'] ) || 'filter-ctlb-blocks' !== $_GET['action'] ) {
+				return;
+			}
+
+			$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+			if ( ! $screen || ! $screen->is_block_editor() ) {
+				return;
+			}
+
+			wp_enqueue_script(
+				'ctlb-block-inserter',
+				Timeline_Block_Url . 'admin/cp-onboarding/assets/inserter.js',
+				array( 'wp-dom-ready', 'wp-blocks', 'wp-data', 'wp-editor', 'wp-block-editor' ),
+				Timeline_Block_Version,
+				true
+			);
+		}
 		   public function ctlb_settings_link( $links ) {
-			
+			if ( $this->ctlb_should_load_onboarding() ) {
+				$links[] = '<a href="admin.php?page=ctlb-getting-started&mode=onboarding">' . esc_html__( 'Getting Started', 'timeline-block' ) . '</a>';
+			}
+
 			$links[] = '<a style="font-weight:bold; color:#852636;" href="https://cooltimeline.com/plugin/timeline-block-pro-for-gutenberg/?utm_source=tbg_plugin&utm_medium=inside&utm_campaign=get_pro&utm_content=plugins_list#pricing">Get Pro</a>';
 
 			return $links;
