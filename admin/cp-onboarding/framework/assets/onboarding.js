@@ -361,6 +361,14 @@
 		if ( labelEl && data.install && data.install.labels ) {
 			labelEl.textContent = data.install.labels.activated;
 		}
+		var setupUrl = btn.getAttribute( 'data-setup-url' );
+		if ( setupUrl ) {
+			if ( labelEl && data.labels && data.labels.redirecting ) {
+				labelEl.textContent = data.labels.redirecting;
+			}
+			window.location.assign( setupUrl );
+			return;
+		}
 		appendSetupGuideLink( btn );
 	}
 

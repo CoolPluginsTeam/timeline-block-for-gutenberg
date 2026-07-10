@@ -125,7 +125,7 @@ final class CTLB_Onboarding_Config {
 			'best_for'      => __( 'Beginners and block-first sites', $td ),
 			'editions'      => array( 'liter', 'full' ),
 			'video'         => array(
-				'id'       => 'oOmuBdssPTc',
+				'id'       => 'WsFekfIL-A8',
 				'title'    => __( 'Create a Timeline with Block Editor', $td ),
 				'duration' => '',
 			),
@@ -208,6 +208,7 @@ final class CTLB_Onboarding_Config {
 					'description'    => __( 'Unlock horizontal layouts, advanced settings, and premium designs.', $td ),
 					'label_text'     => __( 'Timeline Block Pro is installed — activate it to unlock premium features.', $td ),
 					'learn_more'     => 'https://cooltimeline.com/plugin/timeline-block-pro-for-gutenberg/' . $utm_params,
+					'setup_url'      => admin_url( 'admin.php?page=ctlbp-getting-started' ),
 					'show'           => true,
 				),
 			);
