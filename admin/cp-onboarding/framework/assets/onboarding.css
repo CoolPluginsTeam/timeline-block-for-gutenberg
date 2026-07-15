@@ -148,7 +148,7 @@
 
 .wrap.cpo-onboarding-page .cpo-method-top {
 	display: flex;
-	align-items: flex-start;
+	align-items: center;
 	justify-content: space-between;
 	gap: 14px;
 	margin-bottom: 16px;
@@ -507,6 +507,20 @@
 	color: var(--cpo-text-muted);
 	line-height: 1.45;
 	font-size: 14px;
+	display: flex;
+}
+
+.wrap.cpo-onboarding-page .cpo-step-content p svg {
+	fill: currentColor;
+    outline: none;
+    flex-shrink: 0;
+	width: 20px;
+	height: 20px;
+	background: #1e1e1e;
+	color: #fff;
+	flex-direction: row;
+	align-items: center;
+	margin: 0 4px;
 }
 
 .wrap.cpo-onboarding-page .cpo-guide-actions,

@@ -38,6 +38,15 @@ $cpo_content_allowed = array(
 	'li'     => array( 'class' => true ),
 	'a'      => array( 'href' => true, 'target' => true, 'rel' => true, 'class' => true ),
 	'button' => array( 'type' => true, 'class' => true ),
+	'svg'    => array(
+		'xmlns'       => true,
+		'viewbox'     => true,
+		'width'       => true,
+		'height'      => true,
+		'aria-hidden' => true,
+		'focusable'   => true,
+	),
+	'path'   => array( 'd' => true ),
 );
 
 // Resolve cross-sell addons once (drops condition-failing addons) and index by slug,
@@ -339,7 +348,7 @@ else :
 									<div class="cpo-step-content">
 										<strong><?php echo esc_html( $cpo_step['title'] ); ?></strong>
 										<?php if ( ! empty( $cpo_step['desc'] ) ) : ?>
-											<p><?php echo esc_html( $cpo_step['desc'] ); ?></p>
+											<p><?php echo wp_kses( $cpo_step['desc'], $cpo_content_allowed ); ?></p>
 										<?php endif; ?>
 									</div>
 								</div>
