@@ -127,7 +127,7 @@ final class CTLB_Onboarding_Config {
 			'video'         => array(
 				'id'       => 'WsFekfIL-A8',
 				'title'    => __( 'Create a Timeline with Block Editor', $td ),
-				'duration' => '',
+				'duration' => '3.44',
 			),
 			'steps'         => array(
 				array(
@@ -290,7 +290,7 @@ final class CTLB_Onboarding_Config {
 
 		return array(
 			$this->card(
-				'<span class="dashicons dashicons-sos"></span>',
+				'<span class="dashicons dashicons-editor-help"></span>',
 				__( 'Support', $td ),
 				__( 'Need help? Our team can assist with setup and troubleshooting.', $td ),
 				array(

@@ -326,7 +326,7 @@ if ( ! function_exists( 'cp_timeline_header_render' ) ) {
 			<div class="<?php echo esc_attr( $prefix ); ?>-header-right">
 				<?php if ( ! empty( $args['support_url'] ) ) : ?>
 				<a href="<?php echo esc_url( $args['support_url'] ); ?>" target="_blank" rel="noopener" class="<?php echo esc_attr( $prefix ); ?>-btn <?php echo esc_attr( $prefix ); ?>-btn-outline">
-					<span class="dashicons dashicons-sos"></span>
+				<span class="dashicons dashicons-editor-help"></span>
 					<?php echo esc_html( $args['support_label'] ); ?>
 				</a>
 				<?php endif; ?>
