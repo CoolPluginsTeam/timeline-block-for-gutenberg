@@ -43,7 +43,7 @@ export default function Save(props) {
 			{!["none", ""].includes(timeLineImage) && !wodpressBlock ? (
 				<div className={`story-image`}>
 					<img
-						src={timeLineImage}
+						src={/^https?:\/\/[^\s]+$/i.test(String(timeLineImage ?? '')) ? timeLineImage : ''}
 						alt={imageAlt}
 						className={time_image.id ? `wp-image-${time_image.id}` : null}
 					/>
@@ -54,7 +54,7 @@ export default function Save(props) {
 					<>
 						<RichText.Content
 							className="timeline-block_title"
-							tagName={headingTag}
+							tagName={['h2', 'h3', 'h4', 'h5', 'h6'].includes(headingTag) ? headingTag : 'h3'}
 							value={timeline_title}
 						/>
 						<div className="timeline-block_desc">
