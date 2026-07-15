@@ -202,9 +202,15 @@ class CtlbUsersFeedback {
 				)
 			);
 
-			die( json_encode( array( 'response' => $response ) ) );
+			wp_send_json_success(
+				array(
+					'message' => esc_html__(
+						'Feedback submitted.',
+						'timeline-block'
+					),
+				)
+			);
 		}
-
-	}
+}
 }
 new CtlbUsersFeedback();
