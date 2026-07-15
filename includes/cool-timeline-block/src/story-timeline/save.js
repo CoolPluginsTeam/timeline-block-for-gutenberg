@@ -16,7 +16,7 @@ export default function Save(props) {
 	} = props.attributes
 
 	return (
-		<div className = {"cool-timeline-block-"+block_id+""}>
+		<div className={`cool-timeline-block-${String(block_id ?? '').replace(/[^a-zA-Z0-9_-]/g, '')}`}>
 			{'' !== contentTimelineStyle( props ) &&
 			<style dangerouslySetInnerHTML={{ __html: contentTimelineStyle( props ) }}/>
 			}
