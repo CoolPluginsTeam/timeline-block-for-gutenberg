@@ -122,12 +122,9 @@ a.cool-plugins-button:hover {
     background-color: silver;
 }
 
-#cool-plugins-form-wrapper input#cool-plugins-GDPR-data-notice {
+#cool-plugins-form-wrapper input#cool-plugins-GDPR-data-notice-timeline-block {
     float: left;
     margin-top: 4px !important;
-}
-#cool-plugins-deactivate-feedback-dialog-form-body .cool-plugins-deactivate-feedback-dialog-input:not(:checked)~:where(.cool-plugins-feedback-text, .cool-plugins-extra-links) {
-    display: none;
 }
 
 .cool-plugins-extra-links {
