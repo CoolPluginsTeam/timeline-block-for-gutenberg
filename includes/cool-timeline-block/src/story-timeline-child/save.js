@@ -45,7 +45,7 @@ export default function Save(props) {
 					<img
 						src={/^https?:\/\/[^\s]+$/i.test(String(timeLineImage ?? '')) ? timeLineImage : ''}
 						alt={imageAlt}
-						className={time_image.id ? `wp-image-${time_image.id}` : null}
+						className={time_image.id && Number.isInteger(Number(time_image.id)) ? `wp-image-${Number(time_image.id)}` : null}
 					/>
 				</div>
 			) : null}
@@ -103,9 +103,9 @@ export default function Save(props) {
 		</div>
 	);
 	return (
-		<div className={"timeline-content icon-" + iconToggle + " "}>
+		<div className={"timeline-content icon-" + (['true', 'false'].includes(iconToggle) ? iconToggle : 'false') + " "}>
 			<div
-				className={`timeline-block-timeline ctl-row  position-${blockPosition}${
+				className={`timeline-block-timeline ctl-row  position-${['left', 'right'].includes(blockPosition) ? blockPosition : 'left'}${
 					t_date == "" ? " ctl_timeFalse" : ""
 				}`}
 			>
