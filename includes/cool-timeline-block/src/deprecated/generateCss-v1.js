@@ -20,7 +20,7 @@ function generateCSS ( selectors, id, isResponsive = false, responsiveType = "" 
 				continue;
 			}
 
-			if (typeof sel[i] !== 'undefined' && checkString && !/[{};<>]/.test(String(sel[i]))) {
+			if (typeof sel[j] !== 'undefined' && checkString && !/[{};<>]/.test(String(sel[j]))) {
 				if ( 'font-family' === j ) {
 					css += j + ": " + "'" + sel[j] + "'" + ";"
 				} else {
