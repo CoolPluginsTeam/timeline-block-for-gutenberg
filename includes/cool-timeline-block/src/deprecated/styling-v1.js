@@ -225,7 +225,7 @@ function deprContentTimelineStyle( props ) {
        }
 
    var styling_css = ""
-   var id = `.cool-timeline-block-${ block_id }`
+   var id = `.cool-timeline-block-${String(block_id ?? '').replace(/[^a-zA-Z0-9_-]/g, '')}`;
    styling_css = generateCSS( selectors, id )
    return styling_css
 }
