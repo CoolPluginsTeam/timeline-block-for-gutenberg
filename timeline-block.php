@@ -60,33 +60,39 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 			// Load plugin textdomain
 			add_action('init', array($this, 'ctlb_load_plugin_textdomain'));
 			register_activation_hook( __FILE__, array( $this, 'ctlb_plugin_activate' ));
-			
+
+		}
+		/**
+		 * Add initial plugin options.
+		 *
+		 * @return void
+		 */
+		private function ctlb_set_initial_options() {
+			if ( ! get_option( 'ctlb-initial-save-version' ) ) {
+				add_option( 'ctlb-initial-save-version', Timeline_Block_Version );
+			}
+			if ( ! get_option( 'ctlb-install-date' ) ) {
+				add_option( 'ctlb-install-date', gmdate( 'Y-m-d H:i:s' ) );
+			}
 		}
 
 		/**
-		 * Initialize plugin options
-		 * Note: load_plugin_textdomain() is not needed for WordPress.org hosted plugins
-		 * as translations are automatically loaded since WordPress 4.6
+		 * Load plugin text domain and ensure initial options exist.
+		 *
+		 * @return void
 		 */
 		public function ctlb_load_plugin_textdomain() {
-			if ( ! get_option( 'ctlb-initial-save-version' ) ) {
-				add_option( 'ctlb-initial-save-version', Timeline_Block_Version );
-			}
-			if ( ! get_option( 'ctlb-install-date' ) ) {
-				add_option( 'ctlb-install-date', gmdate( 'Y-m-d H:i:s' ) );
-			}
+			$this->ctlb_set_initial_options();
 		}
 
-
-
-		 public function ctlb_plugin_activate() {
-			if ( ! get_option( 'ctlb-initial-save-version' ) ) {
-				add_option( 'ctlb-initial-save-version', Timeline_Block_Version );
-			}
-			if ( ! get_option( 'ctlb-install-date' ) ) {
-				add_option( 'ctlb-install-date', gmdate( 'Y-m-d H:i:s' ) );
-			}
-			}
+		/**
+		 * Run plugin activation tasks.
+		 *
+		 * @return void
+		 */
+		public function ctlb_plugin_activate() {
+			$this->ctlb_set_initial_options();
+		}
 
 		/**
 		 * This method includes all the necessary files for the plugin to function.
