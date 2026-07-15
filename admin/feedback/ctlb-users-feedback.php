@@ -141,7 +141,7 @@ class CtlbUsersFeedback {
 	function submit_deactivation_response() {
 		// Check user capabilities
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Unauthorized access.', 'timeline-block' ) ) );
+			wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized access.', 'timeline-block' ) ) );
 			wp_die();
 		}
 
