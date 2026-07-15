@@ -77,7 +77,7 @@ function contentTimelineStyle(props) {
     }
 
     const selectors = {};
-    selectors[` .cool-${timelineLayout}-timeline-body`] = {
+    selectors[`.cool-${['vertical', 'horizontal'].includes(String(timelineLayout)) ? timelineLayout : 'vertical'}-timeline-body`] = {
         '--ctlb-item-spacing': unitValue(itemSpacing, itemSpacingType,'--ctlb-item-spacing'),
         '--ctlb-content-alignment': sanitizeKeyword(contentAlignment, ['left', 'right', 'center']),
         '--ctlb-icon-color': sanitizeColor(iconColor),
