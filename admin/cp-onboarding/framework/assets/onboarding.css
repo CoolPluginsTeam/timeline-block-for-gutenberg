@@ -699,8 +699,7 @@
 	flex-shrink: 0;
 }
 
-.wrap.cpo-onboarding-page .dashicons-editor-help,
-.cph-header-right a .dashicons-editor-help {
+.wrap.cpo-onboarding-page .dashicons-editor-help {
 	font-size: 28px!important;
 	width: 28px!important;
 	height: 28px!important;

@@ -316,9 +316,6 @@ else :
 								<?php if ( ! empty( $cpo_method['video']['title'] ) ) : ?>
 									<span class="cpo-video-title"><?php echo esc_html( $cpo_method['video']['title'] ); ?></span>
 								<?php endif; ?>
-								<?php if ( ! empty( $cpo_method['video']['duration'] ) ) : ?>
-									<span class="cpo-video-duration"><?php echo esc_html( $cpo_method['video']['duration'] ); ?></span>
-								<?php endif; ?>
 							</span>
 							<?php if ( ! empty( $cpo_method['video']['duration'] ) ) : ?>
 								<span class="cpo-video-duration"><?php echo esc_html( $cpo_method['video']['duration'] ); ?></span>

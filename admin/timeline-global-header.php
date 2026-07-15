@@ -71,7 +71,14 @@ if ( ! function_exists( 'cp_timeline_header_get_css' ) ) {
 	margin-right: 0;
 	flex-shrink: 0;
 }
-
+.cph-header-right a .dashicons-editor-help {
+	font-size: 28px!important;
+	width: 28px!important;
+	height: 28px!important;
+	left: 0!important;
+	top: 0!important;
+	color: var(--cpo-primary)!important;
+}
 .cph-top-header .cph-header-right svg {
 	width: 17px;
 	height: 18px;
