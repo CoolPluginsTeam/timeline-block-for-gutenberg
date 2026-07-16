@@ -6,31 +6,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// add_action( 'enqueue_block_assets', 'cltb_timeline_block_editor_assets' );
-// function cltb_timeline_block_editor_assets() {
-
-// 	$id = get_the_ID();
-
-// 	if ( has_block( 'cp-timeline/content-timeline-block', $id ) ) {
-// 		wp_enqueue_style( 'cltb_cp_timeline-cgb-style' );
-// 	} else {
-// 		// if ( ! is_admin() ) {
-// 			// wp_dequeue_style( 'cltb_cp_timeline-cgb-style' );
-// 		// }
-// 	}
-// }
-
-
-
 add_action( 'enqueue_block_editor_assets', 'cltb_editor_side_css' );
 function cltb_editor_side_css() {
 		// Common Editor style.
 		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 		wp_enqueue_style(
-			'timeline-block
-		-block-common-editor-css', // Handle.
+			'timeline-block-block-common-editor-css', // Handle.
 			plugin_dir_url( __FILE__ ) . '../assets/common-block-editor.css', // Block editor CSS.
-			array( 'wp-edit-blocks' )// Dependency to include the CSS after it.
+			array( 'wp-edit-blocks' ),// Dependency to include the CSS after it.
+			Timeline_Block_Version 
 		);
 }
 
@@ -38,9 +22,7 @@ add_action( 'wp_head', 'cltb_timeline_block_load_post_assets' );
 function cltb_timeline_block_load_post_assets() {
 	global $post;
 	$this_post = $post;
-	if ( ! is_object( $this_post ) ) {
-		return;
-	}
+
 	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 	$this_post = apply_filters( 'timeline-block_post_for_stylesheet', $this_post );
 	if ( ! is_object( $this_post ) ) {
@@ -53,12 +35,13 @@ function cltb_timeline_block_load_post_assets() {
 
 	if ( has_blocks( $this_post->ID ) && isset( $this_post->post_content ) ) {
 
-		$blocks      = parse_blocks( $this_post->post_content );
-		$page_blocks = $blocks;
+		$page_blocks      = parse_blocks( $this_post->post_content );
 
 		if ( ! is_array( $page_blocks ) || empty( $page_blocks ) ) {
 			return;
 		}
+
+		$default_Fonts = array( '', 'Arial', 'Helvetica', 'Times New Roman', 'Georgia' );
 		foreach ( $page_blocks as $i => $block ) {
 
 			if ( is_array( $block ) ) {
@@ -66,9 +49,9 @@ function cltb_timeline_block_load_post_assets() {
 				if ( '' === $block['blockName'] ) {
 					continue;
 				}
-				$default_Fonts = array( '', 'Arial', 'Helvetica', 'Times New Roman', 'Georgia' );
+				
 				if ( isset( $block['attrs']['headFontFamily'] ) ) {
-					if ( ! in_array( $block['attrs']['headFontFamily'], $default_Fonts ) ) {
+					if ( ! in_array( $block['attrs']['headFontFamily'], $default_Fonts,true ) ) {
 						$headFont = array();
 						array_push( $headFont, $block['attrs']['headFontFamily'] );
 						if ( isset( $block['attrs']['headFontWeight'] ) ) {
@@ -85,7 +68,7 @@ function cltb_timeline_block_load_post_assets() {
 					}
 				}
 				if ( isset( $block['attrs']['subHeadFontFamily'] ) ) {
-					if ( ! in_array( $block['attrs']['subHeadFontFamily'], $default_Fonts ) ) {
+					if ( ! in_array( $block['attrs']['subHeadFontFamily'], $default_Fonts,true ) ) {
 						$subheadFont = array();
 						array_push( $subheadFont, $block['attrs']['subHeadFontFamily'] );
 						if ( isset( $block['attrs']['subHeadFontWeight'] ) ) {
