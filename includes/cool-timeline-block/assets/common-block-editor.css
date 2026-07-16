@@ -220,9 +220,6 @@
     justify-content: flex-end;
     margin-bottom: -18px;
 }
-.timeline-block-iconpicker .rfipdropdown {
-background: whitesmoke;
-}
 
 .timeline-block-size-type-field button.components-button.timeline-block-size-btn:first-child {
 	padding-left: 0;
@@ -605,10 +602,6 @@ background: whitesmoke;
   .timeline-block-Orientation_checkbox {
     margin-left: auto;
   }
- 
-.ctl-timeline-media-remove-button{
-	margin-right: 10px;
-}
 
 /* block style tab css start */
 .cooltimeline-tab-settings .ctlb-tabs::before{
