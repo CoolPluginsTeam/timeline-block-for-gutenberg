@@ -141,10 +141,6 @@
 	margin-top: 20px;
 }
 
-.timeline-block-size-type-field-tabs{
-    margin-bottom: -20px;
-}
-
 .timeline-block-size-type-field-tabs .components-tab-panel__tabs {
 	border-bottom: 0;
 	text-align: right;
@@ -168,7 +164,6 @@
     padding: 3px 3px 0px 0px;
     margin-bottom: 0;
     outline: 0;
-    width: auto;
     font-size: 8px;
 	background: transparent;
     color: #999;
@@ -340,10 +335,6 @@ background: whitesmoke;
     text-transform: uppercase;
   }
 
-  .cp-timeline-block-style-settings button{
-	display: block;
-  }
-
   .cp-timeline-typography_apply .timeline-block-typography-control-btn,
   .cp-timeline-typography_apply .timeline-block-typography-reset-btn,
   .timeline-color-setting_apply,
@@ -380,6 +371,7 @@ background: whitesmoke;
   }
   
   .cp-timeline-block-style-settings button {
+	display: block;
     width: 28px !important;
     height: 28px !important;
     border-radius: 50%;
@@ -477,11 +469,7 @@ background: whitesmoke;
   .cp-timeline-block-demo-button a{
 	margin-right: 5px !important;
   }
-  
-  .timeline-block-add-story {
-    margin: 10px 0px 20px 0px;
-  }
-  
+ 
   .cooltimeline-tab-settings .active-tab {
     border-width: 1px 1px 0px 1px;
     border-color: #e5e5e5;
