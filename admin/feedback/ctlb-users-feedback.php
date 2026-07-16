@@ -22,9 +22,7 @@ class CtlbUsersFeedback {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_feedback_scripts' ) );
 
 		add_action( 'wp_ajax_' . $this->plugin_slug . '_submit_deactivation_response', array( $this, 'submit_deactivation_response' ) );
-		add_action( 'admin_init', array( $this, 'onInit' ) );
-	}
-	public function onInit() {
+	
 		add_action( 'admin_head', array( $this, 'show_deactivate_feedback_popup' ) );
 	}
 	/*
@@ -32,11 +30,10 @@ class CtlbUsersFeedback {
 	|   Enqueue all scripts and styles to required page only          |
 	|-----------------------------------------------------------------|
 	*/
-	function enqueue_feedback_scripts() {
+	public function enqueue_feedback_scripts() {
 		$screen = get_current_screen();
-		if ( isset( $screen ) && $screen->id == 'plugins' ) {
-			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
-			wp_enqueue_script( __NAMESPACE__ . 'feedback-script', $this->plugin_url . 'admin/feedback/js/admin-feedback.js', array( 'jquery' ), $this->plugin_version );
+		if ( isset( $screen ) && $screen->id === 'plugins' ) {
+			wp_enqueue_script( __NAMESPACE__ . 'feedback-script', $this->plugin_url . 'admin/feedback/js/admin-feedback.js', array( 'jquery' ), $this->plugin_version,true);
 			wp_enqueue_style( 'cool-plugins-feedback-style', $this->plugin_url . 'admin/feedback/css/admin-feedback.css', null, $this->plugin_version );
 		}
 	}
@@ -46,12 +43,9 @@ class CtlbUsersFeedback {
 	|   HTML for creating feedback popup form                         |
 	|-----------------------------------------------------------------|
 	*/
-	public function show_deactivate_feedback_popup() {
-		$screen = get_current_screen();
-		if ( ! isset( $screen ) || $screen->id != 'plugins' ) {
-			return;
-		}
-		$deactivate_reasons = array(
+
+	function get_deactivate_reasons() {
+		return array(
 			'didnt_work_as_expected'         => array(
 				'title'             => esc_html( __( 'The plugin didn\'t work as expected', 'timeline-block' ) ),
 				'input_placeholder' => 'What did you expect?',
@@ -73,7 +67,14 @@ class CtlbUsersFeedback {
 				'input_placeholder' => esc_html( __( 'Please share the reason', 'timeline-block' ) ),
 			),
 		);
+	}
 
+	public function show_deactivate_feedback_popup() {
+		$screen = get_current_screen();
+		if ( ! isset( $screen ) || $screen->id != 'plugins' ) {
+			return;
+		}
+		$deactivate_reasons = $this->get_deactivate_reasons();
 		?>
 		<div id="cool-plugins-deactivate-feedback-dialog-wrapper" class="hide-feedback-popup" data-slug="<?php echo esc_attr( $this->plugin_slug ); ?>">
 						
@@ -138,7 +139,7 @@ class CtlbUsersFeedback {
 	}
 
 
-	function submit_deactivation_response() {
+	public function submit_deactivation_response() {
 		// Check user capabilities
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized access.', 'timeline-block' ) ) );
@@ -150,30 +151,9 @@ class CtlbUsersFeedback {
 		} else {
 			$reason             = isset( $_POST['reason'] ) ? sanitize_text_field( wp_unslash( $_POST['reason'] ) ) : ''; // Sanitize reason input
 			$message            = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : ''; // Sanitize message input
-			$deactivate_reasons = array(
-				'didnt_work_as_expected'         => array(
-					'title'             => esc_html( __( 'The plugin didn\'t work as expected', 'timeline-block' ) ),
-					'input_placeholder' => 'What did you expect?',
-				),
-				'found_a_better_plugin'          => array(
-					'title'             => esc_html( __( 'I found a better plugin', 'timeline-block' ) ),
-					'input_placeholder' => esc_html( __( 'Please share which plugin', 'timeline-block' ) ),
-				),
-				'couldnt_get_the_plugin_to_work' => array(
-					'title'             => esc_html( __( 'The plugin is not working', 'timeline-block' ) ),
-					'input_placeholder' => 'Please share your issue. So we can fix that for other users.',
-				),
-				'temporary_deactivation'         => array(
-					'title'             => esc_html( __( 'It\'s a temporary deactivation', 'timeline-block' ) ),
-					'input_placeholder' => '',
-				),
-				'other'                          => array(
-					'title'             => esc_html( __( 'Other', 'timeline-block' ) ),
-					'input_placeholder' => esc_html( __( 'Please share the reason', 'timeline-block' ) ),
-				),
-			);
+			$deactivate_reasons = $this->get_deactivate_reasons();
 
-			$deativation_reason = array_key_exists( $reason, $deactivate_reasons ) ? $reason : 'other';
+			$deactivation_reason = array_key_exists( $reason, $deactivate_reasons ) ? $reason : 'other';
 		
 			$sanitized_message = '' === $message ? 'N/A' : $message;
 			$admin_email       = sanitize_email( get_option( 'admin_email' ) );
@@ -183,17 +163,18 @@ class CtlbUsersFeedback {
             $install_date      = get_option('ctlb-install-date') ? get_option('ctlb-install-date'): 'N/A';
 			$unique_key        = '60';
 			$site_id        	= $site_url . '-' . $install_date . '-' . $unique_key;
+			$user_info = \CoolTimelineBlock::ctlb_get_user_info();
 			$response = wp_remote_post(
 			$feedback_url,
 			array(
 				'timeout' => 30,
 				'body'    => array(
-					'server_info'   => serialize( \CoolTimelineBlock::ctlb_get_user_info()['server_info'] ),
-					'extra_details' => serialize( \CoolTimelineBlock::ctlb_get_user_info()['extra_details'] ),
+					'server_info'   => serialize( $user_info['server_info'] ),
+					'extra_details' => serialize( $user_info['extra_details'] ),
 					'plugin_version' => $this->plugin_version,
 					'plugin_name'    => $this->plugin_name,
 					'plugin_initial' => $plugin_initial,
-					'reason'         => $deativation_reason,
+					'reason'         => $deactivation_reason,
 					'review'         => $sanitized_message,
 					'email'          => $admin_email,
 					'domain'         => $site_url,
