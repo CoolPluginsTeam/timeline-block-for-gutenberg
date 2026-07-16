@@ -87,7 +87,6 @@ span#cool-plugins-feedback-form-title {
 }
 .cool-plugins-deactivation-response .cool-plugins-loader-container {
     display: block;
-    text-align: center;
     top: 38%;
     position: absolute;
     left: 42%;
