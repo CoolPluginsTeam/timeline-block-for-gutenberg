@@ -129,7 +129,7 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 				if ( $this->ctlb_should_load_onboarding() ) {
 					require_once Timeline_Block_Dir . 'admin/ctlb-timeline-header.php';
 					require_once Timeline_Block_Dir . 'admin/cp-onboarding/loader.php';
-					cpo_onboarding_register( '1.1.1', Timeline_Block_Dir . 'admin/cp-onboarding' );
+					cpo_onboarding_register( '1.1.2', Timeline_Block_Dir . 'admin/cp-onboarding' );
 
 					add_action(
 						'cpo_onboarding_loaded',

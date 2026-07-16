@@ -75,7 +75,7 @@ final class CTLB_Onboarding_Config {
 				'primary_dark' => '#257f7e',
 			),
 			'page'            => array(
-				'menu_title' => __( 'Timeline Block', $td ),
+				'menu_title' => __( 'Timeline Addons', $td ),
 				'heading'    => __( 'Create your timeline', $td ),
 				'subheading' => __( 'Follow the quick setup guide to create your timeline in minutes.', $td ),
 				'chooser'    => __( 'Block Editor', $td ),
