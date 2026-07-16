@@ -64,11 +64,11 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 		}
 
 		/**
-		 * Initialize plugin options
-		 * Note: load_plugin_textdomain() is not needed for WordPress.org hosted plugins
-		 * as translations are automatically loaded since WordPress 4.6
+		 	 * Add initial plugin options.
+		 *
+		 * @return void
 		 */
-		public function ctlb_load_plugin_textdomain() {
+		private function ctlb_set_initial_options() {
 			if ( ! get_option( 'ctlb-initial-save-version' ) ) {
 				add_option( 'ctlb-initial-save-version', Timeline_Block_Version );
 			}
@@ -77,17 +77,23 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 			}
 		}
 
+        /**
+		 * Load plugin text domain and ensure initial options exist.
+		 *
+		 * @return void
+		 */
+		public function ctlb_load_plugin_textdomain() {
+			$this->ctlb_set_initial_options();
+		}
 
-
-		 public function ctlb_plugin_activate() {
-			if ( ! get_option( 'ctlb-initial-save-version' ) ) {
-				add_option( 'ctlb-initial-save-version', Timeline_Block_Version );
-			}
-			if ( ! get_option( 'ctlb-install-date' ) ) {
-				add_option( 'ctlb-install-date', gmdate( 'Y-m-d H:i:s' ) );
-			}
-			}
-
+		/**
+		 * Run plugin activation tasks.
+		 *
+		 * @return void
+		 */
+		public function ctlb_plugin_activate() {
+			$this->ctlb_set_initial_options();
+		}
 		/**
 		 * This method includes all the necessary files for the plugin to function.
 		 * It loads files for the Gutenberg block, the Cool Timeline Block source, and admin feedback functionality.
