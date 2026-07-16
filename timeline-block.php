@@ -53,7 +53,7 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 		}
 
 		/** Constructor */
-		public function __construct() {
+		private function __construct() {
 			// This section sets up the plugin object by hooking into the 'plugins_loaded' action to include required files.
 			add_action( 'plugins_loaded', array( $this, 'ctlb_include_files' ) );
 
