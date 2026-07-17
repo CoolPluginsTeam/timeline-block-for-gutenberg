@@ -127,7 +127,7 @@ final class CTLB_Onboarding_Config {
 			'video'         => array(
 				'id'       => 'WsFekfIL-A8',
 				'title'    => __( 'Create a Timeline with Block Editor', $td ),
-				'duration' => '3.44',
+				'duration' => '3:44',
 			),
 			'steps'         => array(
 				array(
