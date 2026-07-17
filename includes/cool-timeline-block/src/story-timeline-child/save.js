@@ -26,6 +26,9 @@ export default function Save(props) {
 		headingTag,
 		wodpressBlock,
 	} = props.attributes;
+	const safeHeadingTag = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(headingTag)
+	? headingTag
+	: 'h3';
 	const timeline_title =
 		"undefined" === typeof time_heading
 			? __("Timeline Heading ", "timeline-block")
@@ -54,7 +57,7 @@ export default function Save(props) {
 					<>
 						<RichText.Content
 							className="timeline-block_title"
-							tagName={headingTag}
+							tagName={safeHeadingTag}
 							value={timeline_title}
 						/>
 						<div className="timeline-block_desc">

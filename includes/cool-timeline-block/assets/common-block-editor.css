@@ -798,6 +798,7 @@ i.fipicon-angle-left:before {
   .timeline-block-colorpallete-reset,
   .timeline-block-control__actions_reset {
     margin-right: auto;
+	margin-left: 6px;
 	padding: 4px !important;
   }
   

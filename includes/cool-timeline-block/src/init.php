@@ -22,19 +22,51 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 
-add_action( 'enqueue_block_editor_assets', 'cltb_editor_side_css' );
+add_action( 'enqueue_block_assets', 'cltb_editor_side_css' );
 function cltb_editor_side_css() {
 		// Common Editor style.
 		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 		wp_enqueue_style(
-			'timeline-block
-		-block-common-editor-css', // Handle.
+		   'timeline-block-common-editor-css', // Handle.
 			plugin_dir_url( __FILE__ ) . '../assets/common-block-editor.css', // Block editor CSS.
 			array( 'wp-edit-blocks' )// Dependency to include the CSS after it.
 		);
 }
 
 add_action( 'wp_head', 'cltb_timeline_block_load_post_assets' );
+function ctlb_get_all_blocks( $blocks ) {
+	$all_blocks = array();
+
+	foreach ( $blocks as $block ) {
+
+		$all_blocks[] = $block;
+
+		if ( ! empty( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) ) {
+			$all_blocks = array_merge(
+				$all_blocks,
+				ctlb_get_all_blocks( $block['innerBlocks'] )
+			);
+		}
+
+		// Resolve reusable blocks and synced patterns (core/block with ref).
+		if ( isset( $block['blockName'] ) && 'core/block' === $block['blockName'] && ! empty( $block['attrs']['ref'] ) ) {
+			$reusable_id = absint( $block['attrs']['ref'] );
+			if ( $reusable_id && 'wp_block' === get_post_type( $reusable_id ) ) {
+				$reusable_post = get_post( $reusable_id );
+				if ( $reusable_post && ! empty( $reusable_post->post_content ) ) {
+					$reusable_blocks = parse_blocks( $reusable_post->post_content );
+					$all_blocks      = array_merge(
+						$all_blocks,
+						ctlb_get_all_blocks( $reusable_blocks )
+					);
+				}
+			}
+		}
+	}
+
+	return $all_blocks;
+}
+
 function cltb_timeline_block_load_post_assets() {
 	global $post;
 	$this_post = $post;
@@ -54,12 +86,14 @@ function cltb_timeline_block_load_post_assets() {
 	if ( has_blocks( $this_post->ID ) && isset( $this_post->post_content ) ) {
 
 		$blocks      = parse_blocks( $this_post->post_content );
-		$page_blocks = $blocks;
+		$page_blocks = ctlb_get_all_blocks( $blocks );
 
 		if ( ! is_array( $page_blocks ) || empty( $page_blocks ) ) {
 			return;
 		}
+		$loaded_font_urls = array();
 		foreach ( $page_blocks as $i => $block ) {
+			
 
 			if ( is_array( $block ) ) {
 
@@ -80,8 +114,11 @@ function cltb_timeline_block_load_post_assets() {
 
 						$head_font_url = ctlb_timeline_get_font_url( $headFont );
 
-						// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet
-						echo '<link href="'.esc_url($head_font_url).'" rel="stylesheet">';
+						if ( ! in_array( $head_font_url, $loaded_font_urls, true ) ) {
+							$loaded_font_urls[] = $head_font_url;
+							// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet
+							echo '<link href="'.esc_url($head_font_url).'" rel="stylesheet">';
+						}
 					}
 				}
 				if ( isset( $block['attrs']['subHeadFontFamily'] ) ) {
@@ -97,8 +134,11 @@ function cltb_timeline_block_load_post_assets() {
 
 						$subhead_font_url = ctlb_timeline_get_font_url( $subheadFont );
 
-						// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet
-						echo '<link href="'.esc_url($subhead_font_url).'" rel="stylesheet">';
+						if ( ! in_array( $subhead_font_url, $loaded_font_urls, true ) ) {
+							$loaded_font_urls[] = $subhead_font_url;
+							// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet
+							echo '<link href="'.esc_url($subhead_font_url).'" rel="stylesheet">';
+						}
 					}
 				}
 				if ( isset( $block['attrs']['dateFontFamily'] ) ) {
@@ -114,8 +154,11 @@ function cltb_timeline_block_load_post_assets() {
 
 						$date_font_url = ctlb_timeline_get_font_url( $dateFont );
 
-						// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet
-						echo '<link href="'.esc_url($date_font_url).'" rel="stylesheet">';
+						if ( ! in_array( $date_font_url, $loaded_font_urls, true ) ) {
+							$loaded_font_urls[] = $date_font_url;
+							// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet
+							echo '<link href="'.esc_url($date_font_url).'" rel="stylesheet">';
+						}
 					}
 				}
 			}

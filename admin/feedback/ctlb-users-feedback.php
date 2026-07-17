@@ -34,7 +34,7 @@ class CtlbUsersFeedback {
 	*/
 	function enqueue_feedback_scripts() {
 		$screen = get_current_screen();
-		if ( isset( $screen ) && $screen->id == 'plugins' ) {
+		if ( isset( $screen ) && 'plugins' === $screen->id ) {
 			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 			wp_enqueue_script( __NAMESPACE__ . 'feedback-script', $this->plugin_url . 'admin/feedback/js/admin-feedback.js', array( 'jquery' ), $this->plugin_version );
 			wp_enqueue_style( 'cool-plugins-feedback-style', $this->plugin_url . 'admin/feedback/css/admin-feedback.css', null, $this->plugin_version );
@@ -48,7 +48,7 @@ class CtlbUsersFeedback {
 	*/
 	public function show_deactivate_feedback_popup() {
 		$screen = get_current_screen();
-		if ( ! isset( $screen ) || $screen->id != 'plugins' ) {
+		if ( ! isset( $screen ) || $screen->id !== 'plugins' ) {
 			return;
 		}
 		$deactivate_reasons = array(
@@ -108,7 +108,7 @@ class CtlbUsersFeedback {
 									$twae_plugin_url = 'https://wordpress.org/plugins/timeline-widget-addon-for-elementor/';
 									?>
 								  <div class="cool-plugins-extra-links">
-									<?php echo esc_html__( 'Please try ', 'timeline-block' ); ?><a href="<?php echo esc_url( $twae_plugin_url ); ?>" target="_blank"><?php echo esc_html__( 'Timeline Widget For Elementor', 'timeline-block' ); ?></a> <?php echo esc_html__( 'plugin.', 'timeline-block' ); ?>
+									<?php echo esc_html__( 'Please try ', 'timeline-block' ); ?><a href="<?php echo esc_url( $twae_plugin_url ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html__( 'Timeline Widget For Elementor', 'timeline-block' ); ?></a> <?php echo esc_html__( 'plugin.', 'timeline-block' ); ?>
 									</div>
 									<?php
 								}
@@ -140,9 +140,9 @@ class CtlbUsersFeedback {
 
 	function submit_deactivation_response() {
 		// Check user capabilities
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Unauthorized access.', 'timeline-block' ) ) );
-			wp_die();
+			
 		}
 
 		if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), '_cool-plugins_deactivate_feedback_nonce' ) ) {
@@ -183,13 +183,23 @@ class CtlbUsersFeedback {
             $install_date      = get_option('ctlb-install-date') ? get_option('ctlb-install-date'): 'N/A';
 			$unique_key        = '60';
 			$site_id        	= $site_url . '-' . $install_date . '-' . $unique_key;
+			$user_info = \CoolTimelineBlock::ctlb_get_user_info();
+			$consent = isset( $_POST['consent'] ) ? absint( $_POST['consent'] ) : 0;
+
+			if ( ! $consent ) {
+				wp_send_json_error(
+					array(
+						'message' => __( 'Consent is required.', 'timeline-block' ),
+					)
+				);
+			}
 			$response          = wp_remote_post(
 				$feedback_url,
 				array(
 					'timeout' => 30,
 					'body'    => array(
-						'server_info' => serialize(\CoolTimelineBlock::ctlb_get_user_info()['server_info']), 
-						'extra_details' => serialize(\CoolTimelineBlock::ctlb_get_user_info()['extra_details']),
+						'server_info' => wp_json_encode( $user_info['server_info'] ?? array() ), 
+						'extra_details' => wp_json_encode( $user_info['extra_details'] ?? array() ),
 						'plugin_version' => $this->plugin_version,
 						'plugin_name'    => $this->plugin_name,
 						'plugin_initial' => $plugin_initial,
@@ -202,7 +212,12 @@ class CtlbUsersFeedback {
 				)
 			);
 
-			die( json_encode( array( 'response' => $response ) ) );
+			if ( is_wp_error( $response ) ) {
+				wp_send_json_error( array( 'message' => __( 'Feedback submission failed.', 'timeline-block' ) ) );
+			}
+
+			$safe_response = wp_remote_retrieve_response_code( $response );
+			wp_send_json_success( array( 'response_code' => $safe_response ) );
 		}
 
 	}

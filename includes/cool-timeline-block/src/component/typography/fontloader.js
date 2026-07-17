@@ -41,14 +41,18 @@ class WebfontLoader extends Component {
 			this.setState( { status: statuses.inactive } )
 		}
 
+
 		this.loadFonts = () => {
 			//if ( ! this.state.fonts.includes( this.props.config.google.families[ 0 ] ) ) {
 			if ( ! googlefonts.includes( this.props.config.google.families[ 0 ] ) ) {
+				const windowRef=this.props?.windowRef ? this.props?.windowRef : null;
 				WebFont.load( {
 					...this.props.config,
 					loading: this.handleLoading,
 					active: this.handleActive,
 					inactive: this.handleInactive,
+					context: windowRef && windowRef.current?.ownerDocument && windowRef.current?.ownerDocument?.defaultView ? windowRef.current.ownerDocument.defaultView : window,
+					
 				} )
 				this.addFont( this.props.config.google.families[ 0 ] )
 			}
