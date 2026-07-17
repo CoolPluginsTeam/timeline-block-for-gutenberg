@@ -85,7 +85,7 @@ function cltb_timeline_block_load_post_assets() {
 					}
 				}
 				if ( isset( $block['attrs']['dateFontFamily'] ) ) {
-					if ( ! in_array( $block['attrs']['dateFontFamily'], $default_Fonts ) ) {
+					if ( ! in_array( $block['attrs']['dateFontFamily'], $default_Fonts,true ) ) {
 						$dateFont = array();
 						array_push( $dateFont, $block['attrs']['dateFontFamily'] );
 						if ( isset( $block['attrs']['dateFontWeight'] ) ) {
@@ -122,14 +122,14 @@ function cltb_cp_timeline_cgb_block_assets() {
 		'cltb_cp_timeline-cgb-style', // Handle.
 		Timeline_Block_Url . 'includes/cool-timeline-block/dist/style-index.css',
 		is_admin() ? array( 'wp-editor' ) : null,
-		null // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+		Timeline_Block_Version // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 	);
 
 	wp_register_script(
 		'cltb_cp_timeline-cgb-block-js', // Handle.
 		Timeline_Block_Url . 'includes/cool-timeline-block/dist/block.build.js',
 		array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor' ),
-		null, // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+		Timeline_Block_Version, // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 		true
 	);
 
@@ -137,7 +137,7 @@ function cltb_cp_timeline_cgb_block_assets() {
 		'cltb_cp_timeline-cgb-block-editor-css', // Handle.
 		Timeline_Block_Url . 'includes/cool-timeline-block/dist/index.css',
 		array( 'wp-edit-blocks' ),
-		null // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+		Timeline_Block_Version // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 	);
 
 	if ( function_exists( 'register_block_type' ) ) {
