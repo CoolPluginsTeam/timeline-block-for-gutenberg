@@ -752,7 +752,7 @@
 	transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
 }
 
-.wrap.cpo-onboarding-page .cpo-footer-card a.ctl_doc_link::after {
+.wrap.cpo-onboarding-page .cpo-footer-card a.ctlb_doc_link::after {
 	content: "\f345";
 	font-size: 14px;
 	font-family: Dashicons;
@@ -810,6 +810,7 @@
 	text-decoration: none;
 	transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
 }
+
 
 .wrap.cpo-onboarding-page .cpo-tutorial-item:hover,
 .wrap.cpo-onboarding-page .cpo-tutorial-item:focus {
