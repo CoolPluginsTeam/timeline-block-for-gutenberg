@@ -6,7 +6,7 @@
         let plugin_slug = 'timeline-block'; // plugin slug
 
 
-        $target = $('#the-list').find('[data-slug="' + plugin_name + '"] span.deactivate a');
+       const $target = $('#the-list').find('[data-slug="' + plugin_name + '"] span.deactivate a');
 
         var plugin_deactivate_link = $target.attr('href');
 
@@ -87,16 +87,23 @@
                     'reason': reason,
                     'message': message,
                 },
-                beforeSend: function(data) {
+                beforeSend: function() {
                     $('#ctlb-cool-plugin-submitNdeactivate').text('Deactivating...');
                     $('#ctlb-cool-plugin-submitNdeactivate').attr('id', 'deactivating-plugin');
                     $('#cool-plugins-loader-wrapper').show();
                     $('#ctlb-cool-plugin-skipNdeactivate').remove();
                 },
                 success: function(res) {
+                    if(res.success === true) {
+                        $('#cool-plugins-loader-wrapper').hide();
+                        window.location = plugin_deactivate_link;
+                    } else {
+                        alert(res.data);
+                    }
+                },
+                error: function(res) {
                     $('#cool-plugins-loader-wrapper').hide();
-                    window.location = plugin_deactivate_link;
-                    $('#deactivating-plugin').text('Deactivated');
+                    alert('Something went wrong. Please try again later.');
                 }
             })
 
@@ -104,8 +111,7 @@
 
         $(document).on('click', '#ctlb-cool-plugin-skipNdeactivate:not(".button-deactivate")', function() {
             $('#ctlb-cool-plugin-submitNdeactivate').remove();
-            $('ctlb-cool-plugin-skipNdeactivate').addClass('button-deactivate');
-            $('ctlb-cool-plugin-skipNdeactivate').attr('id', 'deactivating-plugin');
+            $('#ctlb-cool-plugin-skipNdeactivate').text('deactivating...');
             window.location = plugin_deactivate_link;
         });
 
