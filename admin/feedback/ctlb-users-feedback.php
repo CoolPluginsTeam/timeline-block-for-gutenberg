@@ -44,7 +44,7 @@ class CtlbUsersFeedback {
 	|-----------------------------------------------------------------|
 	*/
 
-	function get_deactivate_reasons() {
+	private function get_deactivate_reasons() {
 		return array(
 			'didnt_work_as_expected'         => array(
 				'title'             => esc_html( __( 'The plugin didn\'t work as expected', 'timeline-block' ) ),
@@ -143,7 +143,6 @@ class CtlbUsersFeedback {
 		// Check user capabilities
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized access.', 'timeline-block' ) ) );
-			wp_die();
 		}
 
 		if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), '_cool-plugins_deactivate_feedback_nonce' ) ) {
