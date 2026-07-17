@@ -142,9 +142,7 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
         if (!function_exists('get_plugins')) {
             require_once ABSPATH . 'wp-admin/includes/plugin.php';
         }
-        if (!function_exists('get_plugin_data')) {
-            require_once ABSPATH . 'wp-admin/includes/plugin.php';
-        }
+    
         $plugin_data = [];
         $active_plugins = get_option('active_plugins', []);
         foreach ($active_plugins as $plugin_path) {
