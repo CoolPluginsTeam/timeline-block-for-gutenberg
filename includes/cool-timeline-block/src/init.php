@@ -198,10 +198,8 @@ function cltb_cp_timeline_cgb_block_assets() {
 				'api_version'   => 3,
 				'style'         => 'cltb_cp_timeline-cgb-style',
 				'editor_script' => 'cltb_cp_timeline-cgb-block-js',
-				'editor_style'  => array(
-					'timeline-block-common-editor-css',
-					'cltb_cp_timeline-cgb-block-editor-css',
-				),
+				// Single handle: common-block-editor.css is pulled in via style dependencies.
+				'editor_style'  => 'cltb_cp_timeline-cgb-block-editor-css',
 			)
 		);
 		register_block_type(
