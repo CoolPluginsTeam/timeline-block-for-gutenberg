@@ -12,6 +12,9 @@
 	},
 	"textdomain": "cool-timeline",
 	"editorScript": "file:./index.js",
-	"editorStyle": "file:./index.css",
+	"editorStyle": [
+		"file:./index.css",
+		"file:../assets/common-block-editor.css"
+	],
 	"style": "file:./style-index.css"
 }

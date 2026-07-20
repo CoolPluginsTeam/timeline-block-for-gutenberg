@@ -1,17 +1,20 @@
 {
-  "$schema": "https://schemas.wp.org/trunk/block.json",
-  "apiVersion": 3,
-  "name": "cp-timeline/content-timeline-block",
-  "version": "1.5",
-  "title": "Timeline block",
-  "category": "widgets",
-  "icon": "smiley",
-  "description": "Responsive timeline block for Gutenberg editor.",
-  "supports": {
-    "html": false
-  },
-  "textdomain": "cool-timeline",
-  "editorScript": "file:./index.js",
-  "editorStyle": "file:./index.css",
-  "style": "file:./style-index.css"
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cp-timeline/content-timeline-block",
+	"version": "1.5",
+	"title": "Timeline block",
+	"category": "widgets",
+	"icon": "smiley",
+	"description": "Responsive timeline block for Gutenberg editor.",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "cool-timeline",
+	"editorScript": "file:./index.js",
+	"editorStyle": [
+		"file:./index.css",
+		"file:../assets/common-block-editor.css"
+	],
+	"style": "file:./style-index.css"
 }
