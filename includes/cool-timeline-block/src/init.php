@@ -168,12 +168,13 @@ function cltb_cp_timeline_cgb_block_assets() {
 	wp_register_script(
 		'cltb_cp_timeline-cgb-block-js',
 		Timeline_Block_Url . 'includes/cool-timeline-block/dist/block.build.js',
-		array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor' ),
+		array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-block-editor' ),
 		null, // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 		true
 	);
 
-	// Editor-only CSS (icon picker / inspector UI).
+	// Editor-only CSS — loaded via register_block_type() editor_style (not block.json;
+	// this block is registered by name, so block.json asset fields are unused at runtime).
 	wp_register_style(
 		'timeline-block-common-editor-css',
 		Timeline_Block_Url . 'includes/cool-timeline-block/assets/common-block-editor.css',
