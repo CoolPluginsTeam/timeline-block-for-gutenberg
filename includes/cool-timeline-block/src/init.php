@@ -6,6 +6,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+
 // add_action( 'enqueue_block_assets', 'cltb_timeline_block_editor_assets' );
 // function cltb_timeline_block_editor_assets() {
 

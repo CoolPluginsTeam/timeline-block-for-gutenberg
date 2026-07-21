@@ -12,6 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound, WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+
 if ( ! function_exists( 'cp_timeline_header_get_css' ) ) {
 	/**
 	 * Return inline CSS for the global header.
@@ -312,6 +314,7 @@ if ( ! function_exists( 'cp_timeline_header_render' ) ) {
 		$args   = wp_parse_args( $args, $defaults );
 		$prefix = sanitize_key( $args['prefix'] );
 
+		// phpcs:disable WordPress.WP.I18n.NonSingularStringLiteralDomain
 		if ( '' === $args['docs_label'] ) {
 			$args['docs_label'] = __( 'Check Docs', $args['text_domain'] );
 		}
@@ -320,6 +323,7 @@ if ( ! function_exists( 'cp_timeline_header_render' ) ) {
 		}
 
 		$icon_alt = '' !== $args['heading'] ? $args['heading'] : __( 'Timeline Addons', $args['text_domain'] );
+		// phpcs:enable WordPress.WP.I18n.NonSingularStringLiteralDomain
 		?>
 		<header class="<?php echo esc_attr( $prefix ); ?>-top-header">
 			<div class="<?php echo esc_attr( $prefix ); ?>-header-left">

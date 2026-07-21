@@ -9,6 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:disable WordPress.WP.I18n.TextDomainMismatch
+
 if ( ! function_exists( 'ctlb_is_onboarding_page' ) ) {
 	/**
 	 * Whether the current admin screen is the Timeline Block onboarding page.

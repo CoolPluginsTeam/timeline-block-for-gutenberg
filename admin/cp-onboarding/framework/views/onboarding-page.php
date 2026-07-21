@@ -19,6 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:disable WordPress.WP.I18n.TextDomainMismatch, WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
+
 $cpo_methods = $config->visible_methods();
 $cpo_first   = $config->default_method_key( $cpo_methods );
 $cpo_links   = $config->links();
@@ -426,7 +428,7 @@ else :
 				?>
 			<div class="cpo-footer-card">
 				<?php if ( ! empty( $cpo_card['icon'] ) ) : ?>
-					<div class="cpo-footer-icon" aria-hidden="true"><?php echo  $cpo_card['icon']; ?></div>
+					<div class="cpo-footer-icon" aria-hidden="true"><?php echo wp_kses( $cpo_card['icon'], $cpo_content_allowed ); ?></div>
 				<?php endif; ?>
 				<h3><?php echo esc_html( $cpo_card['title'] ); ?></h3>
 

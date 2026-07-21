@@ -17,6 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:disable WordPress.WP.I18n.TextDomainMismatch
+
 /**
  * Addon helper.
  */

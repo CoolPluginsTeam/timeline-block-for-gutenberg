@@ -16,12 +16,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
+
 define( 'Timeline_Block_File', __FILE__ );
 define( 'Timeline_Block_Url', plugin_dir_url( Timeline_Block_File ) );
 define( 'Timeline_Block_Dir', plugin_dir_path( __FILE__ ) );
 if ( ! defined( 'Timeline_Block_Version' ) ) {
 	define( 'Timeline_Block_Version', '1.9.0' );
 }
+
+// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
 
 /**
  * This class is responsible for registering all block assets, making them available for enqueueing through the block editor in the appropriate context.
@@ -190,6 +194,7 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 		}
 		   public function ctlb_settings_link( $links ) {
 			if ( $this->ctlb_should_load_onboarding() ) {
+				// phpcs:ignore WordPress.WP.I18n.TextDomainMismatch -- Plugin text domain is timeline-block.
 				$links[] = '<a href="admin.php?page=ctlb-getting-started&mode=onboarding">' . esc_html__( 'Getting Started', 'timeline-block' ) . '</a>';
 			}
 

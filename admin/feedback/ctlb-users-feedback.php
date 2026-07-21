@@ -6,6 +6,9 @@ namespace CTLB\feedback;
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+// phpcs:disable WordPress.WP.I18n.TextDomainMismatch
+
 class CtlbUsersFeedback {
 
 	private $plugin_url     = Timeline_Block_Url;
