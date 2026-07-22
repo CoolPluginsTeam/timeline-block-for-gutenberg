@@ -71,7 +71,7 @@ class CtlbUsersFeedback {
 
 	public function show_deactivate_feedback_popup() {
 		$screen = get_current_screen();
-		if ( ! isset( $screen ) || $screen->id != 'plugins' ) {
+		if ( ! isset( $screen ) || $screen->id !== 'plugins' ) {
 			return;
 		}
 		$deactivate_reasons = $this->get_deactivate_reasons();
@@ -179,8 +179,8 @@ class CtlbUsersFeedback {
 					'domain'         => $site_url,
 					'site_id'        => md5( $site_id ),
 				),
-			)
-		);
+				)
+			);
 
 		if ( is_wp_error( $response ) ) {
 			wp_send_json_error(
@@ -189,7 +189,7 @@ class CtlbUsersFeedback {
 						'Feedback could not be submitted.',
 						'timeline-block'
 					),
-				),
+					),
 				500
 			);
 		}
