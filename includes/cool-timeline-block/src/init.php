@@ -121,14 +121,14 @@ function cltb_cp_timeline_cgb_block_assets() {
 	wp_register_style(
 		'cltb_cp_timeline-cgb-style', // Handle.
 		Timeline_Block_Url . 'includes/cool-timeline-block/dist/style-index.css',
-		is_admin() ? array( 'wp-editor' ) : null,
+		is_admin() ? array( 'wp-block-editor' ) : null,
 		Timeline_Block_Version // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 	);
 
 	wp_register_script(
 		'cltb_cp_timeline-cgb-block-js', // Handle.
 		Timeline_Block_Url . 'includes/cool-timeline-block/dist/block.build.js',
-		array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor' ),
+		array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-block-editor' ),
 		Timeline_Block_Version, // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 		true
 	);
