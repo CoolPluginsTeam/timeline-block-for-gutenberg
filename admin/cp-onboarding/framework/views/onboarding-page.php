@@ -311,7 +311,7 @@ else :
 								src="<?php
 								$cpo_video_thumb = ! empty( $cpo_method['video']['thumb'] )
 									? $cpo_method['video']['thumb']
-									: 'https://img.youtube.com/vi/' . rawurlencode( $cpo_method['video']['id'] ) . '/maxresdefault.jpg';
+									: 'https://img.youtube.com/vi/' . rawurlencode( $cpo_method['video']['id'] ) . '/hqdefault.jpg';
 								$cpo_video_thumb_fallback = 'https://img.youtube.com/vi/' . rawurlencode( $cpo_method['video']['id'] ) . '/hqdefault.jpg';
 								echo esc_url( $cpo_video_thumb );
 								?>"
