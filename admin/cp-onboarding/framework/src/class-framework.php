@@ -94,10 +94,11 @@ final class Framework {
 		}
 
 		// Surface the page under the plugin's main menu when configured; fall back
-		// to an orphan (URL-accessible) page when no parent slug is provided.
+		// to options.php (hidden, URL-accessible) when no parent slug is provided.
+		// Never pass null — PHP 8.1+ deprecates null in wp_normalize_path()/wp_is_stream().
 		$parent = $this->config->parent_slug();
-		if ( '' === $parent ) {
-			$parent = null;
+		if ( ! is_string( $parent ) || '' === $parent ) {
+			$parent = 'options.php';
 		}
 
 		$hook = add_submenu_page(
