@@ -546,6 +546,12 @@
 	gap: 8px;
 	margin: 0 0 22px;
 }
+.cpo-box .cpo-content-grid{
+	padding: 22px;
+    background: #F9FBFB;
+    border: 1px solid #e6ebeb;
+    border-radius: 16px;
+}
 
 .wrap.cpo-onboarding-page .cpo-content-header .cpo-substep-tabs {
 	margin: 0 0 0 auto;
