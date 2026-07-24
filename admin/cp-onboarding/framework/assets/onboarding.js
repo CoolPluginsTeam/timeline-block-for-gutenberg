@@ -337,7 +337,10 @@
 					} catch ( e ) {}
 				}
 				if ( response && response.success ) {
-					markActivated( btn, labelEl, spin );
+					var redirectUrl = response.data && response.data.redirectUrl
+						? response.data.redirectUrl
+						: '';
+					markActivated( btn, labelEl, spin, redirectUrl );
 					return;
 				}
 				var errMsg = response && response.data
@@ -350,7 +353,7 @@
 			} );
 	}
 
-	function markActivated( btn, labelEl, spin ) {
+	function markActivated( btn, labelEl, spin, redirectUrl ) {
 		if ( spin ) {
 			spin.classList.remove( 'is-active' );
 		}
@@ -361,7 +364,7 @@
 		if ( labelEl && data.install && data.install.labels ) {
 			labelEl.textContent = data.install.labels.activated;
 		}
-		var setupUrl = btn.getAttribute( 'data-setup-url' );
+		var setupUrl = redirectUrl || btn.getAttribute( 'data-setup-url' );
 		if ( setupUrl ) {
 			if ( labelEl && data.labels && data.labels.redirecting ) {
 				labelEl.textContent = data.labels.redirecting;

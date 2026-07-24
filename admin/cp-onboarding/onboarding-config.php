@@ -27,6 +27,13 @@ final class CTLB_Onboarding_Config {
 	private const TEXT_DOMAIN = 'timeline-block';
 
 	/**
+	 * Timeline Block Pro plugin folder slug.
+	 *
+	 * @var string
+	 */
+	const PRO_SLUG = 'timeline-block-pro-for-gutenberg';
+
+	/**
 	 * Build the full config array passed to CoolPlugins\Onboarding\Config.
 	 *
 	 * @param string $page      Current admin page slug from $_GET['page'].
@@ -121,9 +128,9 @@ final class CTLB_Onboarding_Config {
 		$method = array(
 			'type'          => 'block-based',
 			'title'         => __( 'Block Editor', $td ),
-			'badge'         => __( 'Recommended', $td ),
+			'badge'         => __( 'Recommended', $td ),									
 			'content_badge' => __( 'Best for Beginners', $td ),
-			'description'   => __( 'Add a Timeline Block to any page or post. The easiest way to start.', $td ),
+			'description'   => __( 'Create timelines using Timeline Blocks.', $td ),
 			'best_for'      => __( 'Beginners and block-first sites', $td ),
 			'editions'      => array( 'liter', 'full' ),
 			'video'         => array(
@@ -206,7 +213,7 @@ final class CTLB_Onboarding_Config {
 		if ( $this->is_timeline_block_pro_installed() ) {
 			return array(
 				array(
-					'slug'           => 'timeline-block-pro-for-gutenberg',
+					'slug'           => self::PRO_SLUG,
 					'type'           => 'free',
 					'group'          => 'block-based',
 					'install_method' => 'manually',
@@ -214,7 +221,7 @@ final class CTLB_Onboarding_Config {
 					'description'    => __( 'Unlock horizontal layouts, advanced settings, and premium designs.', $td ),
 					'label_text'     => __( 'Timeline Block Pro is installed — activate it to unlock premium features.', $td ),
 					'learn_more'     => 'https://cooltimeline.com/plugin/timeline-block-pro-for-gutenberg/' . $utm_params,
-					'setup_url'      => admin_url( 'admin.php?page=ctlbp-getting-started' ),
+					'setup_url'      => self::timeline_block_pro_setup_url(),
 					'show'           => true,
 				),
 			);
@@ -222,7 +229,7 @@ final class CTLB_Onboarding_Config {
 
 		return array(
 			array(
-				'slug'          => 'timeline-block-pro-for-gutenberg',
+				'slug'          => self::PRO_SLUG,
 				'type'          => 'pro',
 				'group'         => 'block-based',
 				'title'         => __( 'Timeline Block Pro', $td ),
@@ -267,18 +274,55 @@ final class CTLB_Onboarding_Config {
 	 *
 	 * @return string Relative plugin file, or empty string if not installed.
 	 */
-	private static function timeline_block_pro_plugin_file() {
+	public static function timeline_block_pro_plugin_file() {
 		if ( ! function_exists( 'get_plugins' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
 		foreach ( get_plugins() as $file => $data ) {
-			if ( dirname( $file ) === 'timeline-block-pro-for-gutenberg' ) {
+			if ( dirname( $file ) === self::PRO_SLUG ) {
 				return $file;
 			}
 		}
 
 		return '';
+	}
+
+	/**
+	 * Post-activate setup URL for Timeline Block Pro.
+	 *
+	 * When Cool Timeline Pro (>= 6.1.5) is active, send users to its Getting Started
+	 * screen instead of Timeline Block Pro's own onboarding.
+	 *
+	 * @return string
+	 */
+	public static function timeline_block_pro_setup_url() {
+		if ( self::should_redirect_to_cool_timeline_pro() ) {
+			return admin_url( 'admin.php?page=ctl-getting-started' );
+		}
+
+		return admin_url( 'admin.php?page=ctlbp-getting-started' );
+	}
+
+	/**
+	 * Whether Cool Timeline Pro is active at a supported version for shared onboarding.
+	 *
+	 * @return bool
+	 */
+	public static function should_redirect_to_cool_timeline_pro() {
+		if ( ! defined( 'CTLPV' ) || ! is_string( CTLPV ) || '' === CTLPV ) {
+			return false;
+		}
+
+		if ( version_compare( CTLPV, '6.1.5', '<' ) ) {
+			return false;
+		}
+
+		if ( ! function_exists( 'is_plugin_active' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		return is_plugin_active( 'cool-timeline-pro/cool-timeline-pro.php' );
 	}
 
 	/**
@@ -325,7 +369,7 @@ final class CTLB_Onboarding_Config {
 					array(
 						'label' => __( 'View All Docs', $td ),
 						'class' => 'ctlb_doc_link',
-						'url'   => 'https://cooltimeline.com/docs/timeline-block/' . $utm_params,
+						'url'   => 'https://cooltimeline.com/docs/timeline-block-pro/' . $utm_params,
 					),
 				)
 			),
@@ -360,6 +404,67 @@ function ctlb_onboarding_register_hooks( Config $config ) {
 			$labels['error']       = __( 'Something went wrong. Please try again.', 'timeline-block' );
 			return $labels;
 		}
+	);
+
+	// Activate-only for Timeline Block Pro (already installed). No WP.org install.
+	add_action(
+		'wp_ajax_' . $config->ajax_action( 'install' ),
+		static function () use ( $config ) {
+			if ( ! current_user_can( 'activate_plugins' ) ) {
+				wp_send_json_error(
+					array( 'errorMessage' => __( 'Sorry, you are not allowed to activate plugins on this site.', 'timeline-block' ) ),
+					403
+				);
+			}
+
+			check_ajax_referer( $config->option( 'install' ), 'wp_nonce' );
+
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- verified above.
+			$slug = isset( $_POST['slug'] ) ? sanitize_key( wp_unslash( $_POST['slug'] ) ) : '';
+			if ( '' === $slug || CTLB_Onboarding_Config::PRO_SLUG !== $slug ) {
+				wp_send_json_error(
+					array( 'errorMessage' => __( 'This plugin cannot be activated from here.', 'timeline-block' ) ),
+					403
+				);
+			}
+
+			$file = CTLB_Onboarding_Config::timeline_block_pro_plugin_file();
+			if ( '' === $file ) {
+				wp_send_json_error(
+					array( 'errorMessage' => __( 'Plugin is not installed. Please install it first.', 'timeline-block' ) ),
+					404
+				);
+			}
+
+			if ( is_plugin_active( $file ) ) {
+				wp_send_json_success(
+					array(
+						'activated'   => true,
+						'redirectUrl' => CTLB_Onboarding_Config::timeline_block_pro_setup_url(),
+					)
+				);
+			}
+
+			if ( ! current_user_can( 'activate_plugin', $file ) ) {
+				wp_send_json_error(
+					array( 'errorMessage' => __( 'Sorry, you are not allowed to activate this plugin.', 'timeline-block' ) ),
+					403
+				);
+			}
+
+			$result = activate_plugin( $file );
+			if ( is_wp_error( $result ) ) {
+				wp_send_json_error( array( 'errorMessage' => $result->get_error_message() ), 500 );
+			}
+
+			wp_send_json_success(
+				array(
+					'activated'   => true,
+					'redirectUrl' => CTLB_Onboarding_Config::timeline_block_pro_setup_url(),
+				)
+			);
+		},
+		1
 	);
 }
 
