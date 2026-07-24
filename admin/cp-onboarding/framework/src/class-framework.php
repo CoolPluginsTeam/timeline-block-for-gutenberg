@@ -59,10 +59,8 @@ final class Framework {
 			array( $this, 'ajax_prepare' )
 		);
 
-		add_action(
-			'wp_ajax_' . $this->config->ajax_action( 'install' ),
-			array( $this, 'ajax_install' )
-		);
+		// No built-in WP.org install: this product only activates an already-
+		// installed Pro companion via a plugin-specific AJAX handler.
 
 		if ( $this->telemetry ) {
 			add_action(
@@ -220,18 +218,16 @@ final class Framework {
 			$data['labels']
 		);
 
-		// Default wiring for the 'manually' (custom AJAX) addon install button.
-		// Points at the framework's built-in handler so it works out of the box;
-		// a plugin can still override 'action'/'labels' via the script-data filter
-		// below (e.g. to use its own richer handler).
+		// Activate-only wiring for already-installed companions (e.g. Pro).
+		// The actual handler is registered by the plugin config — no WP.org download.
 		$data['install'] = array(
 			'action' => $this->config->ajax_action( 'install' ),
 			'labels' => array(
-				'installing' => __( 'Installing…', 'default' ),
+				'installing' => __( 'Activating…', 'default' ),
 				'activating' => __( 'Activating…', 'default' ),
 				'activated'  => __( 'Activated', 'default' ),
 				'setupGuide' => __( 'Check Setup Guide', 'default' ),
-				'error'      => __( 'Plugin could not be installed. Please try again.', 'default' ),
+				'error'      => __( 'Plugin could not be activated. Please try again.', 'default' ),
 			),
 		);
 
@@ -381,139 +377,6 @@ final class Framework {
 				'type'        => $type,
 			)
 		);
-	}
-
-	/**
-	 * AJAX: install (or activate) a configured cross-sell addon from WordPress.org.
-	 *
-	 * Only addons declared in config with the 'manually' install method are allowed
-	 * (the slug allow-list is derived from config, never from the request). Reuses the
-	 * standard WP.org install → activate flow. Plugins that need richer behaviour
-	 * (e.g. Pro) point `data.install.action` at their own handler instead.
-	 *
-	 * @return void
-	 */
-	public function ajax_install() {
-		check_ajax_referer( $this->config->option( 'install' ), 'wp_nonce' );
-
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- verified above.
-		$slug = isset( $_POST['slug'] ) ? sanitize_key( wp_unslash( $_POST['slug'] ) ) : '';
-		if ( '' === $slug ) {
-			wp_send_json_error( array( 'errorMessage' => __( 'No plugin specified.', 'default' ) ), 400 );
-		}
-
-		if ( ! in_array( $slug, $this->installable_slugs(), true ) ) {
-			wp_send_json_error( array( 'errorMessage' => __( 'This plugin cannot be installed from here.', 'default' ) ), 403 );
-		}
-
-		if ( ! function_exists( 'get_plugins' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-
-		// Already installed (including paid plugins not on wordpress.org): just activate.
-		foreach ( get_plugins() as $file => $data ) {
-			if ( dirname( $file ) !== $slug ) {
-				continue;
-			}
-			if ( ! current_user_can( 'activate_plugins' ) ) {
-				wp_send_json_error(
-					array( 'errorMessage' => __( 'Sorry, you are not allowed to activate plugins on this site.', 'default' ) ),
-					403
-				);
-			}
-			$this->activate_installed( array( 'file' => $file ) );
-		}
-
-		if ( ! current_user_can( 'install_plugins' ) ) {
-			wp_send_json_error(
-				array( 'errorMessage' => __( 'Sorry, you are not allowed to install plugins on this site.', 'default' ) ),
-				403
-			);
-		}
-
-		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
-		require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
-
-		$api = plugins_api(
-			'plugin_information',
-			array(
-				'slug'   => $slug,
-				'fields' => array( 'sections' => false ),
-			)
-		);
-
-		if ( is_wp_error( $api ) ) {
-			wp_send_json_error( array( 'errorMessage' => $api->get_error_message() ), 500 );
-		}
-
-		$skin     = new \WP_Ajax_Upgrader_Skin();
-		$upgrader = new \Plugin_Upgrader( $skin );
-		$result   = $upgrader->install( $api->download_link );
-
-		// Already installed: activate the existing copy instead of failing.
-		if ( is_wp_error( $skin->result ) && 'folder_exists' === $skin->result->get_error_code() ) {
-			$this->activate_installed( install_plugin_install_status( $api ) );
-		}
-
-		if ( is_wp_error( $result ) ) {
-			wp_send_json_error( array( 'errorMessage' => $result->get_error_message() ), 500 );
-		}
-
-		if ( is_wp_error( $skin->result ) ) {
-			wp_send_json_error( array( 'errorMessage' => $skin->result->get_error_message() ), 500 );
-		}
-
-		if ( $skin->get_errors()->has_errors() ) {
-			wp_send_json_error( array( 'errorMessage' => $skin->get_error_messages() ), 500 );
-		}
-
-		if ( null === $result ) {
-			wp_send_json_error(
-				array( 'errorMessage' => __( 'Unable to connect to the filesystem. Please confirm your credentials.', 'default' ) ),
-				500
-			);
-		}
-
-		$this->activate_installed( install_plugin_install_status( $api ) );
-	}
-
-	/**
-	 * Activate a freshly installed plugin and return a JSON success response.
-	 *
-	 * @param array $install_status Result of install_plugin_install_status().
-	 * @return void Sends a JSON response and exits.
-	 */
-	private function activate_installed( $install_status ) {
-		$file = isset( $install_status['file'] ) ? $install_status['file'] : '';
-
-		if ( '' !== $file && current_user_can( 'activate_plugin', $file ) && is_plugin_inactive( $file ) ) {
-			$network_wide = is_multisite();
-			$activated    = activate_plugin( $file, '', $network_wide );
-
-			if ( is_wp_error( $activated ) ) {
-				wp_send_json_error( array( 'errorMessage' => $activated->get_error_message() ), 500 );
-			}
-		}
-
-		wp_send_json_success( array( 'activated' => true ) );
-	}
-
-	/**
-	 * Slugs that the built-in installer is allowed to install: configured addons
-	 * whose install method resolves to 'manually'.
-	 *
-	 * @return string[]
-	 */
-	private function installable_slugs() {
-		$slugs = array();
-
-		foreach ( Addons::resolve( $this->config->addons(), $this->config ) as $addon ) {
-			if ( 'manually' === $addon['install_method'] ) {
-				$slugs[] = $addon['slug'];
-			}
-		}
-
-		return $slugs;
 	}
 
 	/**
