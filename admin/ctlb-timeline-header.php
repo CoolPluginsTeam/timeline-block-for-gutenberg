@@ -62,7 +62,7 @@ add_action(
 			array(
 				'heading'       => __( 'Timeline Addons', 'timeline-block' ),
 				'icon_url'      => Timeline_Block_Url . 'assets/images/timeline-icon.svg',
-				'docs_url'      => 'https://cooltimeline.com/docs/timeline-block/' . $utm_params,
+				'docs_url'      => 'https://cooltimeline.com/docs/timeline-block-pro/' . $utm_params,
 				'support_url'   => 'https://coolplugins.net/support/' . $utm_params,
 				'docs_label'    => __( 'Check Docs', 'timeline-block' ),
 				'support_label' => __( 'Get Support', 'timeline-block' ),
