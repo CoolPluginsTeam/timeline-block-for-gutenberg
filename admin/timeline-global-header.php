@@ -150,17 +150,10 @@ if ( ! function_exists( 'cp_timeline_header_get_css' ) ) {
 
 .cph-top-header a.cph-btn-primary,
 .cph-top-header button.cph-btn-primary {
-	 background: var(--cph-primary);
-    border-color: var(--cph-primary);
-    color: #fff;
-    box-shadow: 0 1px 2px rgba(0, 124, 122, 0.22);
-}
-
-.cph-top-header a.cph-btn-primary,
-.cph-top-header button.cph-btn-primary {
 	background: #15AAA9;
 	border: none;
 	color: #fff !important;
+	box-shadow: 0 1px 2px rgba(0, 124, 122, 0.22);
 }
 
 .cph-top-header a.cph-btn-primary:focus,
