@@ -46,9 +46,9 @@ export default function Save(props) {
 			{!["none", ""].includes(timeLineImage) && !wodpressBlock ? (
 				<div className={`story-image`}>
 					<img
-						src={/^https?:\/\/[^\s]+$/i.test(String(timeLineImage ?? '')) ? timeLineImage : ''}
+						src={timeLineImage}
 						alt={imageAlt}
-						className={time_image.id && Number.isInteger(Number(time_image.id)) ? `wp-image-${Number(time_image.id)}` : null}
+						className={time_image.id ? `wp-image-${time_image.id}` : null}
 					/>
 				</div>
 			) : null}
@@ -57,7 +57,7 @@ export default function Save(props) {
 					<>
 						<RichText.Content
 							className="timeline-block_title"
-							tagName={['h2', 'h3', 'h4', 'h5', 'h6'].includes(headingTag) ? headingTag : 'h3'}
+							tagName={safeHeadingTag}
 							value={timeline_title}
 						/>
 						<div className="timeline-block_desc">
@@ -106,9 +106,9 @@ export default function Save(props) {
 		</div>
 	);
 	return (
-		<div className={"timeline-content icon-" + (['true', 'false'].includes(iconToggle) ? iconToggle : 'false') + " "}>
+		<div className={"timeline-content icon-" + iconToggle + " "}>
 			<div
-				className={`timeline-block-timeline ctl-row  position-${['left', 'right'].includes(blockPosition) ? blockPosition : 'left'}${
+				className={`timeline-block-timeline ctl-row  position-${blockPosition}${
 					t_date == "" ? " ctl_timeFalse" : ""
 				}`}
 			>

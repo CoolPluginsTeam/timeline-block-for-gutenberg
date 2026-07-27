@@ -41,7 +41,7 @@ export default {
 					<div className="story-details">
 						{timeLineImage !== "none" ?
 							<div className={`story-image`}>
-								<img src={/^https?:\/\/[^\s]+$/i.test(String(timeLineImage ?? '')) ? timeLineImage : ''} alt={imageAlt} />
+								<img src={timeLineImage} alt={imageAlt} />
 							</div>
 							:
 							null}
@@ -68,8 +68,8 @@ export default {
 				</div>
 
 				return (
-					<div className={"timeline-content icon-" + (['true', 'false'].includes(iconToggle) ? iconToggle : 'false') + " "}>
-						<div className={" timeline-block-timeline ctl-row  position-" + (['left', 'right'].includes(blockPosition) ? blockPosition : 'left') + ""}>
+					<div className={"timeline-content icon-" + iconToggle + " "}>
+						<div className={" timeline-block-timeline ctl-row  position-" + blockPosition + ""}>
 							<div className="ctl-6 timeline-block-time">
 								<div className="story-time">
 									{StoryTime()}

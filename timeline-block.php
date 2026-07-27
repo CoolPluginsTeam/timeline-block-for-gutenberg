@@ -53,7 +53,7 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 		}
 
 		/** Constructor */
-		private function __construct() {
+		public function __construct() {
 			// This section sets up the plugin object by hooking into the 'plugins_loaded' action to include required files.
 			add_action( 'plugins_loaded', array( $this, 'ctlb_include_files' ) );
 
@@ -64,11 +64,11 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 		}
 
 		/**
-		 	 * Add initial plugin options.
-		 *
-		 * @return void
+		 * Initialize plugin options
+		 * Note: load_plugin_textdomain() is not needed for WordPress.org hosted plugins
+		 * as translations are automatically loaded since WordPress 4.6
 		 */
-		private function ctlb_set_initial_options() {
+		public function ctlb_load_plugin_textdomain() {
 			if ( ! get_option( 'ctlb-initial-save-version' ) ) {
 				add_option( 'ctlb-initial-save-version', Timeline_Block_Version );
 			}
@@ -77,23 +77,17 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 			}
 		}
 
-        /**
-		 * Load plugin text domain and ensure initial options exist.
-		 *
-		 * @return void
-		 */
-		public function ctlb_load_plugin_textdomain() {
-			$this->ctlb_set_initial_options();
-		}
 
-		/**
-		 * Run plugin activation tasks.
-		 *
-		 * @return void
-		 */
-		public function ctlb_plugin_activate() {
-			$this->ctlb_set_initial_options();
-		}
+
+		 public function ctlb_plugin_activate() {
+			if ( ! get_option( 'ctlb-initial-save-version' ) ) {
+				add_option( 'ctlb-initial-save-version', Timeline_Block_Version );
+			}
+			if ( ! get_option( 'ctlb-install-date' ) ) {
+				add_option( 'ctlb-install-date', gmdate( 'Y-m-d H:i:s' ) );
+			}
+			}
+
 		/**
 		 * This method includes all the necessary files for the plugin to function.
 		 * It loads files for the Gutenberg block, the Cool Timeline Block source, and admin feedback functionality.
@@ -142,7 +136,9 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
         if (!function_exists('get_plugins')) {
             require_once ABSPATH . 'wp-admin/includes/plugin.php';
         }
-    
+        if (!function_exists('get_plugin_data')) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
         $plugin_data = [];
         $active_plugins = get_option('active_plugins', []);
         foreach ($active_plugins as $plugin_path) {

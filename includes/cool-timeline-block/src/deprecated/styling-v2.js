@@ -209,7 +209,7 @@ function contentTimelineStyle( props ) {
        }
 
    var styling_css = ""
-   var id = `.cool-timeline-block-${String(block_id ?? '').replace(/[^a-zA-Z0-9_-]/g, '')}`;
+   var id = `.cool-timeline-block-${ block_id }`
    styling_css = generateCSS( selectors, id, timelineLayout )
    return styling_css
 }

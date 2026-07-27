@@ -20,9 +20,9 @@ export default {
                     return wp.data.select("core/block-editor").getBlockCount(block_id);
                 }
                 return (
-                    <div className = {"cool-timeline-block-"+String(block_id ?? "").replace(/[^a-zA-Z0-9_-]/g, "")+""}>
+                    <div className = {"cool-timeline-block-"+block_id+""}>
                         <style dangerouslySetInnerHTML={{ __html: deprContentTimelineStyle( props ) }} scoped="true"/>
-                        <div className={"cool-"+(['vertical', 'horizontal'].includes(timelineLayout) ? timelineLayout : 'vertical')+"-timeline-body " +(['both-sided', 'one-sided'].includes(timelineDesign) ? timelineDesign : 'both-sided')+" "+(['left', 'right'].includes(Orientation) ? Orientation : 'left')+""}>
+                        <div className={"cool-"+timelineLayout+"-timeline-body " +timelineDesign+" "+Orientation+""}>
                              <div className="cool-timeline-block-list" >
                                     <InnerBlocks.Content />
                              </div>
