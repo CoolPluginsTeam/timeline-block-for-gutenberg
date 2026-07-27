@@ -74,12 +74,6 @@ class CtlbUsersFeedback {
 			),
 		);
 
-	public function show_deactivate_feedback_popup() {
-		$screen = get_current_screen();
-		if ( ! isset( $screen ) || $screen->id != 'plugins' ) {
-			return;
-		}
-		$deactivate_reasons = $this->get_deactivate_reasons();
 		?>
 		<div id="cool-plugins-deactivate-feedback-dialog-wrapper" class="hide-feedback-popup" data-slug="<?php echo esc_attr( $this->plugin_slug ); ?>">
 						
@@ -114,7 +108,7 @@ class CtlbUsersFeedback {
 									$twae_plugin_url = 'https://wordpress.org/plugins/timeline-widget-addon-for-elementor/';
 									?>
 								  <div class="cool-plugins-extra-links">
-									<?php echo esc_html__( 'Please try ', 'timeline-block' ); ?><a href="<?php echo esc_url( $twae_plugin_url ); ?>" target="_blank"><?php echo esc_html__( 'Timeline Widget For Elementor', 'timeline-block' ); ?></a> <?php echo esc_html__( 'plugin.', 'timeline-block' ); ?>
+									<?php echo esc_html__( 'Please try ', 'timeline-block' ); ?><a href="<?php echo esc_url( $twae_plugin_url ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html__( 'Timeline Widget For Elementor', 'timeline-block' ); ?></a> <?php echo esc_html__( 'plugin.', 'timeline-block' ); ?>
 									</div>
 									<?php
 								}
@@ -190,40 +184,9 @@ class CtlbUsersFeedback {
 			$unique_key        = '60';
 			$site_id        	= $site_url . '-' . $install_date . '-' . $unique_key;
 			$user_info = \CoolTimelineBlock::ctlb_get_user_info();
-			$response = wp_remote_post(
-			$feedback_url,
-			array(
-				'timeout' => 30,
-				'body'    => array(
-					'server_info'   => serialize( $user_info['server_info'] ),
-					'extra_details' => serialize( $user_info['extra_details'] ),
-					'plugin_version' => $this->plugin_version,
-					'plugin_name'    => $this->plugin_name,
-					'plugin_initial' => $plugin_initial,
-					'reason'         => $deactivation_reason,
-					'review'         => $sanitized_message,
-					'email'          => $admin_email,
-					'domain'         => $site_url,
-					'site_id'        => md5( $site_id ),
-				),
-			)
-		);
+			$consent = isset( $_POST['consent'] ) ? absint( $_POST['consent'] ) : 0;
 
-		if ( is_wp_error( $response ) ) {
-			wp_send_json_error(
-				array(
-					'message' => esc_html__(
-						'Feedback could not be submitted.',
-						'timeline-block'
-					),
-				),
-				500
-			);
-		}
-
-		$response_code = wp_remote_retrieve_response_code( $response );
-
-			if ( $response_code < 200 || $response_code >= 300 ) {
+			if ( ! $consent ) {
 				wp_send_json_error(
 					array(
 						'message' => __( 'Consent is required.', 'timeline-block' ),
