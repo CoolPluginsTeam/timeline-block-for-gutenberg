@@ -94,11 +94,8 @@
                     $('#cool-plugins-loader-wrapper').show();
                     $('#ctlb-cool-plugin-skipNdeactivate').remove();
                 },
-                success: function(res) {
+                success: function() {
                     $('#cool-plugins-loader-wrapper').hide();
-                    if ( ! res || ! res.success ) {
-                        alert( ( res && res.data && res.data.message ) ? res.data.message : 'Something went wrong. Please try again.' );
-                    }
                     window.location = plugin_deactivate_link;
                 },
                 error: function() {
