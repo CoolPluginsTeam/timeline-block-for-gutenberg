@@ -94,10 +94,13 @@
                     $('#cool-plugins-loader-wrapper').show();
                     $('#ctlb-cool-plugin-skipNdeactivate').remove();
                 },
-                success: function(res) {
+                success: function() {
                     $('#cool-plugins-loader-wrapper').hide();
                     window.location = plugin_deactivate_link;
-                    $('#deactivating-plugin').text('Deactivated');
+                },
+                error: function() {
+                    $('#cool-plugins-loader-wrapper').hide();
+                    window.location = plugin_deactivate_link;
                 }
             })
 
