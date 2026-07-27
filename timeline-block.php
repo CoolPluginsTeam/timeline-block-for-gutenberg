@@ -193,6 +193,7 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 				true
 			);
 		}
+
 		public function ctlb_settings_link( $links ) {
 			if ( $this->ctlb_should_load_onboarding() ) {
 				// phpcs:ignore WordPress.WP.I18n.TextDomainMismatch -- Plugin text domain is timeline-block.
