@@ -54,29 +54,7 @@ class CtlbUsersFeedback {
 		if ( ! isset( $screen ) || $screen->id !== 'plugins' ) {
 			return;
 		}
-		$deactivate_reasons = array(
-			'didnt_work_as_expected'         => array(
-				'title'             => esc_html( __( 'The plugin didn\'t work as expected', 'timeline-block' ) ),
-				'input_placeholder' => 'What did you expect?',
-			),
-			'found_a_better_plugin'          => array(
-				'title'             => esc_html( __( 'I found a better plugin', 'timeline-block' ) ),
-				'input_placeholder' => esc_html( __( 'Please share which plugin', 'timeline-block' ) ),
-			),
-			'couldnt_get_the_plugin_to_work' => array(
-				'title'             => esc_html( __( 'The plugin is not working', 'timeline-block' ) ),
-				'input_placeholder' => 'Please share your issue. So we can fix that for other users.',
-			),
-			'temporary_deactivation'         => array(
-				'title'             => esc_html( __( 'It\'s a temporary deactivation', 'timeline-block' ) ),
-				'input_placeholder' => '',
-			),
-			'other'                          => array(
-				'title'             => esc_html( __( 'Other', 'timeline-block' ) ),
-				'input_placeholder' => esc_html( __( 'Please share the reason', 'timeline-block' ) ),
-			),
-		);
-
+		$deactivate_reasons = $this->get_deactivate_reasons();
 		?>
 		<div id="cool-plugins-deactivate-feedback-dialog-wrapper" class="hide-feedback-popup" data-slug="<?php echo esc_attr( $this->plugin_slug ); ?>">
 						
@@ -125,7 +103,7 @@ class CtlbUsersFeedback {
 						</div>
 					<?php endforeach; ?>
 
-					<input class="cool-plugins-GDPR-data-notice" id="cool-plugins-GDPR-data-notice-<?php echo esc_attr( $this->plugin_slug ); ?>" type="checkbox"><label for="cool-plugins-GDPR-data-notice"><?php echo esc_html__( 'I agree to share anonymous usage data and basic site details (such as server, PHP, and WordPress versions) to support Timeline Block improvement efforts. Additionally, I allow Cool Plugins to store all information provided through this form and to respond to my inquiry.', 'timeline-block' ); ?></label>
+					<input class="cool-plugins-GDPR-data-notice" id="cool-plugins-GDPR-data-notice-<?php echo esc_attr( $this->plugin_slug ); ?>" type="checkbox"><label for="cool-plugins-GDPR-data-notice"><?php echo esc_html__( 'I agree to share usage data and basic site details (such as server, PHP, and WordPress versions), my site URL, and the WordPress admin email address, to support Timeline Block improvement efforts. Additionally, I allow Cool Plugins to store all information provided through this form and to respond to my inquiry.', 'timeline-block' ); ?></label>
 					
 
 				</div>
@@ -141,6 +119,36 @@ class CtlbUsersFeedback {
 	}
 
 
+	/**
+	 * Deactivation feedback reasons (popup + AJAX validation).
+	 *
+	 * @return array
+	 */
+	private function get_deactivate_reasons() {
+		return array(
+			'didnt_work_as_expected'         => array(
+				'title'             => esc_html( __( 'The plugin didn\'t work as expected', 'timeline-block' ) ),
+				'input_placeholder' => 'What did you expect?',
+			),
+			'found_a_better_plugin'          => array(
+				'title'             => esc_html( __( 'I found a better plugin', 'timeline-block' ) ),
+				'input_placeholder' => esc_html( __( 'Please share which plugin', 'timeline-block' ) ),
+			),
+			'couldnt_get_the_plugin_to_work' => array(
+				'title'             => esc_html( __( 'The plugin is not working', 'timeline-block' ) ),
+				'input_placeholder' => 'Please share your issue. So we can fix that for other users.',
+			),
+			'temporary_deactivation'         => array(
+				'title'             => esc_html( __( 'It\'s a temporary deactivation', 'timeline-block' ) ),
+				'input_placeholder' => '',
+			),
+			'other'                          => array(
+				'title'             => esc_html( __( 'Other', 'timeline-block' ) ),
+				'input_placeholder' => esc_html( __( 'Please share the reason', 'timeline-block' ) ),
+			),
+		);
+	}
+
 	function submit_deactivation_response() {
 		// Check user capabilities
 		if ( ! current_user_can( 'activate_plugins' ) ) {
@@ -150,79 +158,58 @@ class CtlbUsersFeedback {
 
 		if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), '_cool-plugins_deactivate_feedback_nonce' ) ) {
 			wp_send_json_error();
-		} else {
-			$reason             = isset( $_POST['reason'] ) ? sanitize_text_field( wp_unslash( $_POST['reason'] ) ) : ''; // Sanitize reason input
-			$message            = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : ''; // Sanitize message input
-			$deactivate_reasons = array(
-				'didnt_work_as_expected'         => array(
-					'title'             => esc_html( __( 'The plugin didn\'t work as expected', 'timeline-block' ) ),
-					'input_placeholder' => 'What did you expect?',
-				),
-				'found_a_better_plugin'          => array(
-					'title'             => esc_html( __( 'I found a better plugin', 'timeline-block' ) ),
-					'input_placeholder' => esc_html( __( 'Please share which plugin', 'timeline-block' ) ),
-				),
-				'couldnt_get_the_plugin_to_work' => array(
-					'title'             => esc_html( __( 'The plugin is not working', 'timeline-block' ) ),
-					'input_placeholder' => 'Please share your issue. So we can fix that for other users.',
-				),
-				'temporary_deactivation'         => array(
-					'title'             => esc_html( __( 'It\'s a temporary deactivation', 'timeline-block' ) ),
-					'input_placeholder' => '',
-				),
-				'other'                          => array(
-					'title'             => esc_html( __( 'Other', 'timeline-block' ) ),
-					'input_placeholder' => esc_html( __( 'Please share the reason', 'timeline-block' ) ),
-				),
-			);
-
-			$deativation_reason = array_key_exists( $reason, $deactivate_reasons ) ? $reason : 'other';
-		
-			$sanitized_message = '' === $message ? 'N/A' : $message;
-			$admin_email       = sanitize_email( get_option( 'admin_email' ) );
-			$site_url          = esc_url( site_url() );
-			$feedback_url      = esc_url( 'https://feedback.coolplugins.net/wp-json/coolplugins-feedback/v1/feedback' );
-			$plugin_initial    = get_option('ctlb-initial-save-version') ? get_option('ctlb-initial-save-version'): 'N/A';
-            $install_date      = get_option('ctlb-install-date') ? get_option('ctlb-install-date'): 'N/A';
-			$unique_key        = '60';
-			$site_id        	= $site_url . '-' . $install_date . '-' . $unique_key;
-			$user_info = \CoolTimelineBlock::ctlb_get_user_info();
-			$consent = isset( $_POST['consent'] ) ? absint( $_POST['consent'] ) : 0;
-
-			if ( ! $consent ) {
-				wp_send_json_error(
-					array(
-						'message' => __( 'Consent is required.', 'timeline-block' ),
-					)
-				);
-			}
-			$response          = wp_remote_post(
-				$feedback_url,
-				array(
-					'timeout' => 30,
-					'body'    => array(
-						'server_info' => wp_json_encode( $user_info['server_info'] ?? array() ), 
-						'extra_details' => wp_json_encode( $user_info['extra_details'] ?? array() ),
-						'plugin_version' => $this->plugin_version,
-						'plugin_name'    => $this->plugin_name,
-						'plugin_initial' => $plugin_initial,
-						'reason'         => $deativation_reason,
-						'review'         => $sanitized_message,
-						'email'          => $admin_email,
-						'domain'         => $site_url,
-						'site_id'    	 => md5($site_id),
-					),
-				)
-			);
-
-			if ( is_wp_error( $response ) ) {
-				wp_send_json_error( array( 'message' => __( 'Feedback submission failed.', 'timeline-block' ) ) );
-			}
-
-			$safe_response = wp_remote_retrieve_response_code( $response );
-			wp_send_json_success( array( 'response_code' => $safe_response ) );
 		}
 
+		$consent = isset( $_POST['consent'] ) ? absint( $_POST['consent'] ) : 0;
+		if ( ! $consent ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Consent is required.', 'timeline-block' ),
+				)
+			);
+		}
+
+		$reason             = isset( $_POST['reason'] ) ? sanitize_text_field( wp_unslash( $_POST['reason'] ) ) : '';
+		$message            = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '';
+		$deactivate_reasons = $this->get_deactivate_reasons();
+
+		$deativation_reason = array_key_exists( $reason, $deactivate_reasons ) ? $reason : 'other';
+
+		$sanitized_message = '' === $message ? 'N/A' : $message;
+		$admin_email       = sanitize_email( get_option( 'admin_email' ) );
+		$site_url       = esc_url( site_url() );
+		$feedback_url   = esc_url( 'https://feedback.coolplugins.net/wp-json/coolplugins-feedback/v1/feedback' );
+		$plugin_initial = get_option( 'ctlb-initial-save-version' ) ?: 'N/A';
+		$install_date   = get_option( 'ctlb-install-date' ) ?: 'N/A';
+		$unique_key     = '60';
+		$site_id           = $site_url . '-' . $install_date . '-' . $unique_key;
+		$user_info         = \CoolTimelineBlock::ctlb_get_user_info();
+
+		$response = wp_remote_post(
+			$feedback_url,
+			array(
+				'timeout' => 30,
+				'body'    => array(
+					'server_info'    => wp_json_encode( $user_info['server_info'] ?? array() ),
+					'extra_details'  => wp_json_encode( $user_info['extra_details'] ?? array() ),
+					'plugin_version' => $this->plugin_version,
+					'plugin_name'    => $this->plugin_name,
+					'plugin_initial' => $plugin_initial,
+					'reason'         => $deativation_reason,
+					'review'         => $sanitized_message,
+					'email'          => $admin_email,
+					'domain'         => $site_url,
+					'site_id'        => md5( $site_id ),
+				),
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+			wp_send_json_error( array( 'message' => __( 'Feedback submission failed.', 'timeline-block' ) ) );
+		}
+
+		$safe_response = wp_remote_retrieve_response_code( $response );
+		wp_send_json_success( array( 'response_code' => $safe_response ) );
 	}
 }
 new CtlbUsersFeedback();

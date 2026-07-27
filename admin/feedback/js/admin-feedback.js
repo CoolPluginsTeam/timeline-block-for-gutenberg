@@ -96,8 +96,14 @@
                 },
                 success: function(res) {
                     $('#cool-plugins-loader-wrapper').hide();
+                    if ( ! res || ! res.success ) {
+                        alert( ( res && res.data && res.data.message ) ? res.data.message : 'Something went wrong. Please try again.' );
+                    }
                     window.location = plugin_deactivate_link;
-                    $('#deactivating-plugin').text('Deactivated');
+                },
+                error: function() {
+                    $('#cool-plugins-loader-wrapper').hide();
+                    window.location = plugin_deactivate_link;
                 }
             })
 
