@@ -91,6 +91,15 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 		 * as translations are automatically loaded since WordPress 4.6
 		 */
 		public function ctlb_load_plugin_textdomain() {
+			$this->ctlb_ensure_install_options();
+		}
+
+		/**
+		 * Set first-install tracking options once (idempotent).
+		 *
+		 * @return void
+		 */
+		private function ctlb_ensure_install_options() {
 			if ( ! get_option( 'ctlb-initial-save-version' ) ) {
 				add_option( 'ctlb-initial-save-version', Timeline_Block_Version );
 			}
@@ -99,13 +108,7 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 			}
 		}
 
-
-
-		 public function ctlb_plugin_activate() {
-			if ( ! get_option( 'ctlb-initial-save-version' ) ) {
-				add_option( 'ctlb-initial-save-version', Timeline_Block_Version );
-			}
-
+		public function ctlb_plugin_activate() {
 			$is_new_user = false === get_option( 'ctlb-install-date' );
 
 			if ( $is_new_user && $this->ctlb_should_load_onboarding() ) {
@@ -113,10 +116,8 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 				set_transient( 'ctlb_activation_redirect', 1, 5 * MINUTE_IN_SECONDS );
 			}
 
-			if ( ! get_option( 'ctlb-install-date' ) ) {
-				add_option( 'ctlb-install-date', gmdate( 'Y-m-d H:i:s' ) );
-			}
-			}
+			$this->ctlb_ensure_install_options();
+		}
 
 		/**
 		 * This method includes all the necessary files for the plugin to function.
@@ -204,13 +205,18 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 		}
 
 
-		public static function ctlb_get_user_info(){
-         global $wpdb;
-        // Server and WP environment details
-        $server_info = [
-            'server_software'        => isset($_SERVER['SERVER_SOFTWARE']) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ) : 'N/A',
-			//phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-            'mysql_version'          => $wpdb ? sanitize_text_field($wpdb->get_var("SELECT VERSION()")) : 'N/A',
+		public static function ctlb_get_user_info() {
+			global $wpdb;
+
+			$mysql_version = 'N/A';
+			if ( $wpdb instanceof wpdb ) {
+				$mysql_version = sanitize_text_field( (string) $wpdb->db_version() );
+			}
+
+			// Server and WP environment details.
+			$server_info = array(
+				'server_software'        => isset( $_SERVER['SERVER_SOFTWARE'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ) : 'N/A',
+				'mysql_version'          => $mysql_version,
             'php_version'            => sanitize_text_field(phpversion() ?: 'N/A'),
             'wp_version'             => sanitize_text_field(get_bloginfo('version') ?: 'N/A'),
             'wp_debug'               => (defined('WP_DEBUG') && WP_DEBUG) ? 'Enabled' : 'Disabled',
@@ -219,8 +225,8 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
             'wp_permalink_structure' => sanitize_text_field(get_option('permalink_structure') ?: 'Default'),
             'wp_multisite'           => is_multisite() ? 'Enabled' : 'Disabled',
             'wp_language'            => sanitize_text_field(get_option('WPLANG') ?: get_locale()),
-            'wp_prefix'              => isset($wpdb->prefix) ? sanitize_key($wpdb->prefix) : 'N/A',
-        ];
+				'wp_prefix'              => isset( $wpdb->prefix ) ? sanitize_key( $wpdb->prefix ) : 'N/A',
+			);
         // Theme details
         $theme = wp_get_theme();
         $theme_data = [
