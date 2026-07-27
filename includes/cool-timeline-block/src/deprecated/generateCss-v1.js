@@ -38,17 +38,9 @@ function generateCSS ( selectors, id, isResponsive = false, responsiveType = "" 
 				continue;
 			}
 
-			if( typeof sel[j] != "undefined" && checkString ) {
-
-				const safeProperty = sanitizeCssProperty(j);
-				const safeValue = sanitizeCssValue(sel[j]);
-
-				if (!safeProperty || safeValue === '') {
-					continue;
-				}
-
-				if ('font-family' === safeProperty) {
-					css += `${safeProperty}: '${safeValue}';`;
+			if (typeof sel[j] !== 'undefined' && checkString && !/[{};<>]/.test(String(sel[j]))) {
+				if ( 'font-family' === j ) {
+					css += j + ": " + "'" + sel[j] + "'" + ";"
 				} else {
 					css += `${safeProperty}: ${safeValue};`;
 				}

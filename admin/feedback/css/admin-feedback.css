@@ -38,7 +38,7 @@
 }
 
 
-.cool-plugins-deactivate-feedback-dialog-input-wrappe label{
+.cool-plugins-deactivate-feedback-dialog-input-wrapper label{
     display: block;
 }
 .cool-plugins-deactivation-response textarea {
@@ -87,7 +87,6 @@ span#cool-plugins-feedback-form-title {
 }
 .cool-plugins-deactivation-response .cool-plugins-loader-container {
     display: block;
-    text-align: center;
     top: 38%;
     position: absolute;
     left: 42%;
@@ -122,12 +121,9 @@ a.cool-plugins-button:hover {
     background-color: silver;
 }
 
-#cool-plugins-form-wrapper input#cool-plugins-GDPR-data-notice {
+#cool-plugins-form-wrapper input#cool-plugins-GDPR-data-notice-timeline-block {
     float: left;
     margin-top: 4px !important;
-}
-#cool-plugins-deactivate-feedback-dialog-form-body .cool-plugins-deactivate-feedback-dialog-input:not(:checked)~:where(.cool-plugins-feedback-text, .cool-plugins-extra-links) {
-    display: none;
 }
 
 .cool-plugins-extra-links {
