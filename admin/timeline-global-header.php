@@ -139,12 +139,6 @@ if ( ! function_exists( 'cp_timeline_header_get_css' ) ) {
 	
 	background: #069392;
 	color: #fff !important;
-}	
-.cph-top-header a.cph-btn:focus,
-.cph-top-header a.cph-btn:visited,
-.cph-top-header button.cph-btn:focus,
-.cph-top-header button.cph-btn:visited {
-	box-shadow: none !important;
 }
 
 .cph-top-header a.cph-btn-outline,
@@ -173,7 +167,6 @@ if ( ! function_exists( 'cp_timeline_header_get_css' ) ) {
 .cph-top-header a.cph-btn-primary:visited,
 .cph-top-header button.cph-btn-primary:focus,
 .cph-top-header button.cph-btn-primary:visited {
-.cph-top-header button.cph-btn-primary:focus {
 	box-shadow: none !important;
 }
 
