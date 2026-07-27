@@ -329,13 +329,13 @@ if ( ! function_exists( 'cp_timeline_header_render' ) ) {
 			</div>
 			<div class="<?php echo esc_attr( $prefix ); ?>-header-right">
 				<?php if ( ! empty( $args['support_url'] ) ) : ?>
-				<a href="<?php echo esc_url( $args['support_url'] ); ?>" target="_blank" rel="noopener" class="<?php echo esc_attr( $prefix ); ?>-btn <?php echo esc_attr( $prefix ); ?>-btn-outline">
+				<a href="<?php echo esc_url( $args['support_url'] ); ?>" target="_blank" rel="noopener noreferrer" class="<?php echo esc_attr( $prefix ); ?>-btn <?php echo esc_attr( $prefix ); ?>-btn-outline">
 				<span class="dashicons dashicons-editor-help"></span>
 					<?php echo esc_html( $args['support_label'] ); ?>
 				</a>
 				<?php endif; ?>
 				<?php if ( ! empty( $args['docs_url'] ) ) : ?>
-				<a href="<?php echo esc_url( $args['docs_url'] ); ?>" target="_blank" rel="noopener" class="<?php echo esc_attr( $prefix ); ?>-btn <?php echo esc_attr( $prefix ); ?>-btn-primary">
+				<a href="<?php echo esc_url( $args['docs_url'] ); ?>" target="_blank" rel="noopener noreferrer" class="<?php echo esc_attr( $prefix ); ?>-btn <?php echo esc_attr( $prefix ); ?>-btn-primary">
 				<span class="dashicons dashicons-book"></span>
 					<?php echo esc_html( $args['docs_label'] ); ?>
 				</a>
