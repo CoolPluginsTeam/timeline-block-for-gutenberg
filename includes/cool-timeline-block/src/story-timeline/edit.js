@@ -13,7 +13,7 @@ import SpacingControl from "../component/customComponents/MultipleUnits.js";
 // // Import Web font loader for google fonts.y
 import WebfontLoader from "../component/typography/fontloader.js";
 
-const { Component, Fragment } = wp.element
+const { Component, Fragment, createRef } = wp.element
 
 import React from 'react';
 
@@ -48,6 +48,8 @@ class Edit extends Component {
 	constructor() {
 		super();
 		this.onUpdateOrientation = this.onUpdateOrientation.bind(this);
+		this.timelineWrpRef = React.createRef();
+		this.ref =createRef();
 	}
 
 	addBlock(e){
@@ -94,6 +96,11 @@ class Edit extends Component {
 		const blocks = select("core/block-editor").getBlock(this.props.clientId).innerBlocks
 		blocks.forEach((block, index) => {block.attributes.headingTag=e});
 	};
+	getDocument(){
+		if(this.ref.current && this.ref.current.ownerDocument){
+		return this.ref.current.ownerDocument;
+		}
+		}
 	
 	render() {
 		// Setup the attributes.
@@ -167,10 +174,14 @@ class Edit extends Component {
 				timelineNavItems
 			},
 		} = this.props
-		var element = document.getElementById("cool-vertical-timeline-style-" + this.props.clientId)
-		if( element ) {
-			element.innerHTML = contentTimelineStyle( this.props )
+		if(this.getDocument()){
+			var element = this.getDocument().getElementById("cool-vertical-timeline-style-" + this.props.clientId)
+			
+			if( element ) {
+			element.textContent = contentTimelineStyle( this.props )
 		}
+		}
+		
 		const orientation_setting = ((timelineLayout == "vertical" && timelineDesign == 'one-sided') || (timelineLayout == "vertical" && timelineDesign == 'both-sided' && OrientationCheckBox)) ?
 			<Fragment><SelectControl
 			label={ timelineDesign == "both-sided" ? __("first story Based","timeline-block") : __( "Alignment","timeline-block" ) }
@@ -181,6 +192,7 @@ class Edit extends Component {
 				{ value: "left", label: __( "Left Sided","timeline-block") },
 			] }
 			__nextHasNoMarginBottom={ true }
+			__next40pxDefaultSize={ true }
 			/>
 			</Fragment>:null;
 		const general_setting=<CardBody>
@@ -226,6 +238,7 @@ class Edit extends Component {
 	allowReset={ true }
 	min={ 0 }
 	max={ 200 }
+	__next40pxDefaultSize={ true }
 	/>
 	<hr className="timeline-block-editor__separator"></hr>
 	<h2 className="timeline-block-settings-labels">Story Description</h2>
@@ -270,6 +283,7 @@ class Edit extends Component {
 	allowReset={ true }
 	min={ 0 }
 	max={ 200 }
+	__next40pxDefaultSize={ true }
 	/>
 	<hr className="timeline-block-editor__separator"></hr>
 	<h2 className="timeline-block-settings-labels">Primary Label(Date/Steps)</h2>
@@ -377,6 +391,7 @@ class Edit extends Component {
 		allowReset={ true }
 		min={ 0 }
 		max={ 200 }
+		__next40pxDefaultSize={ true }
 		/>
 		</Fragment>
 		}
@@ -390,6 +405,7 @@ class Edit extends Component {
 		allowReset={ true }
 		min={ 20 }
 		max={ 100 }
+		__next40pxDefaultSize={ true }
 		/>
 		{/* Icon font size controller */}
 		<h2>{__("Icon Size","timeline-block")}</h2>
@@ -401,6 +417,7 @@ class Edit extends Component {
 		allowReset={ true }
 		min={ 0 }
 		max={ 100 }
+		__next40pxDefaultSize={ true }
 		/>
 		{/* middle line size controller */}
 		<h2>{__("Line Size","timeline-block")}</h2>
@@ -412,6 +429,7 @@ class Edit extends Component {
 		allowReset={ true }
 		min={ 0 }
 		max={ 10 }
+		__next40pxDefaultSize={ true }
 		/>
 
 		{/* contaier box padding controler */}
@@ -447,7 +465,7 @@ class Edit extends Component {
 		/>
 	</CardBody>
 		const rating_box = <PanelBody title={__("Please Share Your Valuable Feedback.", "timeline-block")}>
-			<CardBody className={"cool-timeline-gt-block-review-tab"}>{__("We hope you liked our plugin created timelines. Please share your valuable feedback.", "timeline-block")}<br></br><a href="https://wordpress.org/support/plugin/timeline-block/reviews/#new-post" className="components-button is-primary is-small" target="_blank" >Rate Us<span> ★★★★★</span></a>
+			<CardBody className={"cool-timeline-gt-block-review-tab"}>{__("We hope you liked our plugin created timelines. Please share your valuable feedback.", "timeline-block")}<br></br><a href="https://wordpress.org/support/plugin/timeline-block/reviews/#new-post" className="components-button is-primary is-small" target="_blank" rel="noopener noreferrer" >Rate Us<span> ★★★★★</span></a>
 			</CardBody>
 		</PanelBody>
 		const timeline_setting = <CardBody>
@@ -468,6 +486,7 @@ class Edit extends Component {
 						// { value: "horizontal", label: __( "Horizontal (PRO)","timeline-block"), disabled: true }
 					] }
 					__nextHasNoMarginBottom={ true }
+					__next40pxDefaultSize={ true }
 					/>
 				{timelineLayout == "vertical" ?
 				<SelectControl
@@ -484,6 +503,7 @@ class Edit extends Component {
 						
 					] }
 					__nextHasNoMarginBottom={ true }
+					__next40pxDefaultSize={ true }
 					/>:
 					<RangeControl
 						label="Slides"
@@ -495,6 +515,7 @@ class Edit extends Component {
 						min={ 1 }
 						max={ 6 }
 						step={ 1 }
+						__next40pxDefaultSize={ true }
 					/>
 				}
 
@@ -554,8 +575,8 @@ class Edit extends Component {
 			{/* demo video link button */}
 			<PanelBody title={__("View Timeline Demos","timeline-block")} initialOpen={false}>
 				<CardBody className="cp-timeline-block-demo-button">
-					<a target="_blank" className="button button-primary" href="https://cooltimeline.com/demo/gutenberg-timeline-block?utm_source=tbg_plugin&utm_medium=inside&utm_campaign=demo&utm_content=timeline_block">View Demos</a>
-					<a target="_blank" className="button button-primary" href="https://cooltimeline.com/docs/timeline-block-pro/video-tutorials/free-plugin-video/?utm_source=tbg_plugin&utm_medium=inside&utm_campaign=docs&utm_content=timeline_block">Watch Videos</a>
+					<a target="_blank" rel="noopener noreferrer" className="button button-primary" href="https://cooltimeline.com/demo/gutenberg-timeline-block?utm_source=tbg_plugin&utm_medium=inside&utm_campaign=demo&utm_content=timeline_block">View Demos</a>
+					<a target="_blank" rel="noopener noreferrer" className="button button-primary" href="https://cooltimeline.com/docs/timeline-block-pro/video-tutorials/free-plugin-video/?utm_source=tbg_plugin&utm_medium=inside&utm_campaign=docs&utm_content=timeline_block">Watch Videos</a>
 				</CardBody>
 			</PanelBody>
 			{rating_box}
@@ -566,38 +587,38 @@ class Edit extends Component {
 		let loadHeadGoogleFonts
 		let loadSubHeadGoogleFonts
 		let loadDateGoogleFonts
-		if (headLoadGoogleFonts == true) {
+		if (headLoadGoogleFonts == true && this.ref.current) {
 			const headconfig = {
 				google: {
 					families: [headFontFamily + (headFontWeight ? ":" + headFontWeight : "")],
 				},
 			}
 			loadHeadGoogleFonts = (
-				<WebfontLoader config={headconfig}>
+				<WebfontLoader config={headconfig} windowRef={this.ref}>
 				</WebfontLoader>
 			)
 		}
 
-		if (subHeadLoadGoogleFonts == true) {
+		if (subHeadLoadGoogleFonts == true && this.ref.current) {
 			const subHeadconfig = {
 				google: {
 					families: [subHeadFontFamily + (subHeadFontWeight ? ":" + subHeadFontWeight : "")],
 				},
 			}
 			loadSubHeadGoogleFonts = (
-				<WebfontLoader config={subHeadconfig}>
+				<WebfontLoader config={subHeadconfig} windowRef={this.ref}>
 				</WebfontLoader>
 			)
 		}
 
-		if (dateLoadGoogleFonts == true) {
+		if (dateLoadGoogleFonts == true && this.ref.current) {
 			const dateconfig = {
 				google: {
 					families: [dateFontFamily + (dateFontWeight ? ":" + dateFontWeight : "")],
 				},
 			}
 			loadDateGoogleFonts = (
-				<WebfontLoader config={dateconfig}>
+				<WebfontLoader config={dateconfig} windowRef={this.ref}>
 				</WebfontLoader>
 			)
 		}
@@ -629,7 +650,7 @@ class Edit extends Component {
 			{settingTabs}
 			{loadDateGoogleFonts }
 		
-			<div className={"cool-timeline-block-" + this.props.clientId + " cool-timeline-block"}>
+			<div className={"cool-timeline-block-" + this.props.clientId + " cool-timeline-block"} ref={this.ref}>
 							<div className={`cool-${timelineLayout}-timeline-body ctlb-wrapper ${timelineDesign} ${Orientation}`}>
 								<div className="cool-timeline-block-list">
 									<InnerBlocks
@@ -653,10 +674,14 @@ class Edit extends Component {
 	componentDidMount() {
 		// //Store client id.
 		this.props.setAttributes( { block_id: this.props.clientId } )
+		
 		// Pushing Style tag for this block css.
-		const $style = document.createElement( "style" )
-		$style.setAttribute( "id", "cool-vertical-timeline-style-" + this.props.clientId )
-		document.head.appendChild( $style )
+		if(this.getDocument()){
+			const $style = this.getDocument().createElement( "style");
+		$style.setAttribute( "id", "cool-vertical-timeline-style-" + this.props.clientId)
+		this.getDocument().head.appendChild( $style )
+		}
+		 
 	}
 } export default
 	(Edit)

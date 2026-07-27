@@ -15,7 +15,7 @@ const {
 
 registerBlockType("cp-timeline/content-timeline-block-child", {
 	title: __('Single Story Details', 'timeline-block'), // Block title.
-	apiVersion: 2,
+	apiVersion: 3,
 	icon: CoolStoryIcon,
 	keywords: [
 		__("Content Timeline", 'timeline-block'),

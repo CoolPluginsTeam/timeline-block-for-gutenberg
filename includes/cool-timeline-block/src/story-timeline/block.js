@@ -66,7 +66,7 @@ const withcontentTimeline = createHigherOrderComponent((BlockEdit) => {
 registerBlockType("cp-timeline/content-timeline-block", {
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
 	title: __('Timeline Block', 'timeline-block'), // Block title.
-	apiVersion: 2,
+	apiVersion: 3,
 	description: __("Create an ultimate timeline easily and share your story or roadmap.", 'timeline-block'),
 	keywords: [
 		__("Content Timeline", 'timeline-block'),
