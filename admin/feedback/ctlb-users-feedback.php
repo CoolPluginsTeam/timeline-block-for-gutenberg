@@ -74,6 +74,12 @@ class CtlbUsersFeedback {
 			),
 		);
 
+	public function show_deactivate_feedback_popup() {
+		$screen = get_current_screen();
+		if ( ! isset( $screen ) || $screen->id != 'plugins' ) {
+			return;
+		}
+		$deactivate_reasons = $this->get_deactivate_reasons();
 		?>
 		<div id="cool-plugins-deactivate-feedback-dialog-wrapper" class="hide-feedback-popup" data-slug="<?php echo esc_attr( $this->plugin_slug ); ?>">
 						
@@ -184,9 +190,40 @@ class CtlbUsersFeedback {
 			$unique_key        = '60';
 			$site_id        	= $site_url . '-' . $install_date . '-' . $unique_key;
 			$user_info = \CoolTimelineBlock::ctlb_get_user_info();
-			$consent = isset( $_POST['consent'] ) ? absint( $_POST['consent'] ) : 0;
+			$response = wp_remote_post(
+			$feedback_url,
+			array(
+				'timeout' => 30,
+				'body'    => array(
+					'server_info'   => wp_json_encode( $user_info['server_info'] ),
+					'extra_details' => wp_json_encode( $user_info['extra_details'] ),
+					'plugin_version' => $this->plugin_version,
+					'plugin_name'    => $this->plugin_name,
+					'plugin_initial' => $plugin_initial,
+					'reason'         => $deactivation_reason,
+					'review'         => $sanitized_message,
+					'email'          => $admin_email,
+					'domain'         => $site_url,
+					'site_id'        => md5( $site_id ),
+				),
+			)
+		);
 
-			if ( ! $consent ) {
+		if ( is_wp_error( $response ) ) {
+			wp_send_json_error(
+				array(
+					'message' => esc_html__(
+						'Feedback could not be submitted.',
+						'timeline-block'
+					),
+				),
+				500
+			);
+		}
+
+		$response_code = wp_remote_retrieve_response_code( $response );
+
+			if ( $response_code < 200 || $response_code >= 300 ) {
 				wp_send_json_error(
 					array(
 						'message' => __( 'Consent is required.', 'timeline-block' ),
