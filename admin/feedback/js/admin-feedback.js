@@ -86,6 +86,7 @@
                     '_wpnonce': nonce,
                     'reason': reason,
                     'message': message,
+                    consent: $('#cool-plugins-GDPR-data-notice-' + plugin_slug).is(':checked') ? 1 : 0,
                 },
                 beforeSend: function() {
                     $('#ctlb-cool-plugin-submitNdeactivate').text('Deactivating...');

@@ -163,35 +163,40 @@ class CtlbUsersFeedback {
 			$unique_key        = '60';
 			$site_id        	= $site_url . '-' . $install_date . '-' . $unique_key;
 			$user_info = \CoolTimelineBlock::ctlb_get_user_info();
-			$response = wp_remote_post(
-			$feedback_url,
-			array(
-				'timeout' => 30,
-				'body'    => array(
-					'server_info'   => wp_json_encode( $user_info['server_info'] ),
-					'extra_details' => wp_json_encode( $user_info['extra_details'] ),
-					'plugin_version' => $this->plugin_version,
-					'plugin_name'    => $this->plugin_name,
-					'plugin_initial' => $plugin_initial,
-					'reason'         => $deactivation_reason,
-					'review'         => $sanitized_message,
-					'email'          => $admin_email,
-					'domain'         => $site_url,
-					'site_id'        => md5( $site_id ),
-				),
+			$consent = isset( $_POST['consent'] ) ? absint( $_POST['consent'] ) : 0;
+
+			if ( ! $consent ) {
+				wp_send_json_error(
+					array(
+						'message' => __( 'Consent is required.', 'timeline-block' ),
+					)
+				);
+			}
+			$response          = wp_remote_post(
+				$feedback_url,
+				array(
+					'timeout' => 30,
+					'body'    => array(
+						'server_info' => wp_json_encode( $user_info['server_info'] ?? array() ), 
+						'extra_details' => wp_json_encode( $user_info['extra_details'] ?? array() ),
+						'plugin_version' => $this->plugin_version,
+						'plugin_name'    => $this->plugin_name,
+						'plugin_initial' => $plugin_initial,
+						'reason'         => $deativation_reason,
+						'review'         => $sanitized_message,
+						'email'          => $admin_email,
+						'domain'         => $site_url,
+						'site_id'    	 => md5($site_id),
+					),
 				)
 			);
 
-		if ( is_wp_error( $response ) ) {
-			wp_send_json_error(
-				array(
-					'message' => esc_html__(
-						'Feedback could not be submitted.',
-						'timeline-block'
-					),
-					),
-				500
-			);
+			if ( is_wp_error( $response ) ) {
+				wp_send_json_error( array( 'message' => __( 'Feedback submission failed.', 'timeline-block' ) ) );
+			}
+
+			$safe_response = wp_remote_retrieve_response_code( $response );
+			wp_send_json_success( array( 'response_code' => $safe_response ) );
 		}
 
 		$response_code = wp_remote_retrieve_response_code( $response );

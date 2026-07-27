@@ -19,6 +19,10 @@ const {
 } = wp.components;
 
 class Edit extends Component {
+	constructor(props) {
+		super(props);
+		this.myRef = React.createRef();
+	}
 	componentDidMount() {
 		//Store client id.
 		this.props.setAttributes( { block_id: this.props.clientId } )
@@ -211,6 +215,7 @@ class Edit extends Component {
 							setAttributes({t_date:date })
 						}}	
 						__nextHasNoMarginBottom={true}
+						__next40pxDefaultSize={ true }
 					/>
 					<hr className="timeline-block-editor__separator"></hr>
 					<div className="timeline-block-settings-labels">{__("Story Icon", "timeline-block")}</div>
@@ -264,7 +269,7 @@ class Edit extends Component {
 					</ToolbarGroup>
 				</BlockControls>
 				{content_control}
-				<div className={"timeline-content icon-" + iconToggle + ""}>
+				<div className={"timeline-content icon-" + iconToggle + ""} ref={this.myRef} >
 					<div className={`timeline-block-timeline ctl-row  position-${blockPosition}${t_date == '' ? ' ctl_timeFalse' : ''}`}>
 						<div className="ctl-6 timeline-block-time">
 							<div className="story-time">
@@ -302,10 +307,8 @@ class Edit extends Component {
 			let element = parentElement;
 			while (element) {
 				const { overflowY } = getComputedStyle(element);
-				if (overflowY !== 'auto') {
-					if(element.parentElement){
-						element = element.parentElement;
-					}
+				if (overflowY !== "auto") {
+					element = element.parentElement;
 				} else {
 					return element;
 				}
@@ -314,19 +317,37 @@ class Edit extends Component {
 		};
 
 		setTimeout(() => {
-			const parentBlockId = select('core/block-editor').getBlockHierarchyRootClientId(this.props.clientId),
-			paragraphBlock = document.querySelector(`#block-${id}`),
-			parentBlock = paragraphBlock.closest(`#block-${parentBlockId}`),
-			scrollElement = getParentOverflowElement(parentBlock),
-			paragraphToolbar = document.querySelector("div.components-popover");
-			if (paragraphBlock && paragraphToolbar) {
+			const parentBlockId = select('core/block-editor').getBlockHierarchyRootClientId(this.props.clientId);
+			const iframe = document.querySelector('iframe[name="editor-canvas"]');
+
+			const doc =
+				this.myRef?.current?.ownerDocument ||
+				iframe?.contentDocument ||
+				document;
+				const paragraphBlock =
+				doc.querySelector(`[data-block="${id}"]`) ||
+				doc.querySelector(`#block-${id}`);
+			if (!paragraphBlock) {
+				return;
+			}	
+			const parentBlock =
+			paragraphBlock.closest(`[data-block="${parentBlockId}"]`) ||
+			paragraphBlock.closest(`#block-${parentBlockId}`);
+			const scrollElement = getParentOverflowElement(parentBlock);
+			const paragraphToolbar = doc.querySelector("div.components-popover");
+			if (paragraphToolbar) {
 
 				const toolStyleValue = paragraphToolbar?.style?.transform;
 
 				// Get Toolbar updated transform position.
 				const updatedValue = () => {
-					const paragraphBlock = document.querySelector(`#block-${id}`),
-					paragraphStyle = getComputedStyle(paragraphBlock),
+					const paragraphBlock =
+					doc.querySelector(`[data-block="${id}"]`) ||
+					doc.querySelector(`#block-${id}`);
+				if (!paragraphBlock) {
+					return 0;
+				}
+				const paragraphStyle = getComputedStyle(paragraphBlock),
 					scrollTop = scrollElement.scrollTop,
 					rect = paragraphBlock.getBoundingClientRect(),
 					paragraphBlockYAxis = 0 > rect.top ? -Math.abs(rect.top) : Math.abs(rect.top),
@@ -353,7 +374,7 @@ class Edit extends Component {
 					if (selectBlockId === id) {
 						for (const mutation of mutationsList) {
 							if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-								const currentToolBarValue = document.querySelector("div.components-popover");
+								const currentToolBarValue = doc.querySelector("div.components-popover");
 								const currentTranslateY = getTranslateYValue(
 									currentToolBarValue?.style?.transform
 								);

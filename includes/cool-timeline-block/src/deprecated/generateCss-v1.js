@@ -1,3 +1,21 @@
+function sanitizeCssProperty(property) {
+	return /^[a-zA-Z-]+$/.test(property) ? property : '';
+}
+
+function sanitizeCssValue(value) {
+	if (typeof value !== 'string' && typeof value !== 'number') {
+		return '';
+	}
+
+	return String(value)
+		.replace(/[{}<>]/g, '')
+		.replace(/;/g, '')
+		.replace(/javascript:/gi, '')
+		.replace(/expression\s*\(/gi, '')
+		.trim();
+}
+
+
 function generateCSS ( selectors, id, isResponsive = false, responsiveType = "" ) {
 
 	var gen_styling_css  = ""
@@ -24,7 +42,7 @@ function generateCSS ( selectors, id, isResponsive = false, responsiveType = "" 
 				if ( 'font-family' === j ) {
 					css += j + ": " + "'" + sel[j] + "'" + ";"
 				} else {
-					css += j + ": " + sel[j] + ";"
+					css += `${safeProperty}: ${safeValue};`;
 				}
 			}
 		}
