@@ -21,7 +21,7 @@ function generateCSS(selectors, id, layout, isResponsive = false, responsiveType
 
 				if (typeof sel[j] != "undefined" && checkString) {
 					// Skip any token containing CSS breakers
-					if (typeof sel[j] === 'string' && /[{};]/.test(sel[j])) {
+					if (typeof sel[j] === 'string' && /[{};<>]|<\/style/i.test( sel[j] )) {
 						continue;
 					}
 					if ('font-family' === j) {
