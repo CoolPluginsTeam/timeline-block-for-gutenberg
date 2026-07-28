@@ -4,6 +4,7 @@
 
 import generateCSS from "../component/css/generateCSS.js";
 import generateCSSUnit from "../component/css/generateCSSUnit.js";
+import { sanitizeColor } from "../component/css/sanitizeCSS.js";
 
 const addAlpha = (color, opacity) => {
     // coerce values so ti is between 0 and 1.
@@ -93,7 +94,7 @@ function contentTimelineStyle( props ) {
         "font-family": headFontFamily,
         "font-weight": headFontWeight,
         "line-height": generateCSSUnit( headLineHeight, headLineHeightType ),
-        "color": headingColor,
+        "color": sanitizeColor( headingColor ),
         "margin-bottom": titileBtSpacing != '' ? generateCSSUnit(titileBtSpacing , titileBtSpacingType) : '',
     },
     " .cool-vertical-timeline-body .story-time p" : {
@@ -209,7 +210,8 @@ function contentTimelineStyle( props ) {
        }
 
    var styling_css = ""
-   var id = `.cool-timeline-block-${ block_id }`
+   const safeBlockId = String( block_id || '' ).replace( /[^a-zA-Z0-9_-]/g, '' );
+   var id = `.cool-timeline-block-${safeBlockId}`
    styling_css = generateCSS( selectors, id, timelineLayout )
    return styling_css
 }
