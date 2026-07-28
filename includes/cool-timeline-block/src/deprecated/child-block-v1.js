@@ -37,11 +37,12 @@ export default {
 					imageAlt
 				} = props.attributes
 
+				const safeImageUrl = isSafeUrl( timeLineImage ) ? timeLineImage : '';
 				const StoryDetail = () => (
 					<div className="story-details">
-						{timeLineImage !== "none" ?
+						{safeImageUrl !== "none" ?
 							<div className={`story-image`}>
-								<img src={timeLineImage} alt={imageAlt} />
+								<img src={safeImageUrl} alt={imageAlt} />
 							</div>
 							:
 							null}

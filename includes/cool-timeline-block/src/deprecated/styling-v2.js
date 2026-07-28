@@ -98,7 +98,7 @@ function contentTimelineStyle( props ) {
         "margin-bottom": titileBtSpacing != '' ? generateCSSUnit(titileBtSpacing , titileBtSpacingType) : '',
     },
     " .cool-vertical-timeline-body .story-time p" : {
-        "color": dateColor != '' ? dateColor : '#333',
+        "color": dateColor != '' ? sanitizeColor( dateColor ) : '#333',
         "font-size" : generateCSSUnit( dateFontsize, dateFontsizeType ),
         "font-family": dateFontFamily,
         "font-weight": dateFontWeight,
