@@ -40,7 +40,7 @@ function ctlb_get_all_blocks( $blocks ) {
 	return $all_blocks;
 }
 
-function cltb_timeline_block_load_post_assets() {
+function cltb_timeline_block_load_post_assets() {// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 	global $post;
 	$this_post = $post;
 	if ( ! is_object( $this_post ) ) {
@@ -156,7 +156,7 @@ function ctlb_timeline_get_font_url( $font_set ) {
  * - editor_style  → editor only (never frontend)
  * - editor_script → editor only
  */
-function cltb_cp_timeline_cgb_block_assets() {
+function cltb_cp_timeline_cgb_block_assets() { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 	// Frontend / shared block CSS — no editor/admin dependencies.
 	wp_register_style(
 		'cltb_cp_timeline-cgb-style',
