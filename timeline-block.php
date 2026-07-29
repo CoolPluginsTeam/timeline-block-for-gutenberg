@@ -237,10 +237,7 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 				'theme_uri' => esc_url( $theme->get( 'ThemeURI' ) ),
 			);
 
-			if ( ! function_exists( 'get_plugins' ) ) {
-				require_once ABSPATH . 'wp-admin/includes/plugin.php';
-			}
-			if ( ! function_exists( 'get_plugin_data' ) ) {
+			if ( ! function_exists( 'get_plugins' ) || ! function_exists( 'get_plugin_data' ) ) {
 				require_once ABSPATH . 'wp-admin/includes/plugin.php';
 			}
 
