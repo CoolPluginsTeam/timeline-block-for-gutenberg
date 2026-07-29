@@ -141,10 +141,6 @@
 	margin-top: 20px;
 }
 
-.timeline-block-size-type-field-tabs{
-    margin-bottom: -20px;
-}
-
 .timeline-block-size-type-field-tabs .components-tab-panel__tabs {
 	border-bottom: 0;
 	text-align: right;
@@ -366,7 +362,7 @@ i.fipicon-angle-left:before {
     padding: 0;
     text-transform: uppercase;
   }
-  
+
   .cp-timeline-typography_apply .timeline-block-typography-control-btn,
   .cp-timeline-typography_apply .timeline-block-typography-reset-btn,
   .timeline-color-setting_apply,
@@ -501,11 +497,7 @@ i.fipicon-angle-left:before {
   .cp-timeline-block-demo-button a{
 	margin-right: 5px !important;
   }
-  
-  .timeline-block-add-story {
-    margin: 10px 0px 20px 0px;
-  }
-  
+
   .cooltimeline-tab-settings .active-tab {
     border-width: 1px 1px 0px 1px;
     border-color: #e5e5e5;
