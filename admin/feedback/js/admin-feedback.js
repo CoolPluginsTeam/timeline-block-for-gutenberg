@@ -1,12 +1,11 @@
 (function($) {
     $(document).ready(function() {
 
-        /** Vairables that may needs to update */
-        let plugin_name = 'timeline-block'; // add plugin name with dash (-) instead of space ( )
+        /** Vairables that may needs to update */ 
         let plugin_slug = 'timeline-block'; // plugin slug
 
 
-         let $target = $('#the-list').find('[data-slug="' + plugin_name + '"] span.deactivate a');
+         let $target = $('#the-list').find('[data-slug="' + plugin_slug + '"] span.deactivate a');
 
         var plugin_deactivate_link = $target.attr('href');
 
@@ -17,9 +16,10 @@
             $("#cool-plugins-deactivate-feedback-dialog-wrapper[data-slug='" + plugin_slug + "']").animate({
                 opacity: 1
             }, 200, function() {
-                $("#cool-plugins-deactivate-feedback-dialog-wrapper[data-slug='" + plugin_slug + "']").removeClass('hide-feedback-popup');
-                $("#cool-plugins-deactivate-feedback-dialog-wrapper[data-slug='" + plugin_slug + "']").find('#ctlb-cool-plugin-submitNdeactivate').addClass(plugin_slug);
-                $("#cool-plugins-deactivate-feedback-dialog-wrapper[data-slug='" + plugin_slug + "']").find('#ctlb-cool-plugin-skipNdeactivate').addClass(plugin_slug);
+                const $dialogWrapper = $("#cool-plugins-deactivate-feedback-dialog-wrapper[data-slug='" + plugin_slug + "']");
+                $dialogWrapper.removeClass('hide-feedback-popup');
+                $dialogWrapper.find('#ctlb-cool-plugin-submitNdeactivate').addClass(plugin_slug);
+                $dialogWrapper.find('#ctlb-cool-plugin-skipNdeactivate').addClass(plugin_slug);
             });
         });
         
