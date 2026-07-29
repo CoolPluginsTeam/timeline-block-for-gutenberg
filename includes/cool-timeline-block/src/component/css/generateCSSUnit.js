@@ -10,7 +10,7 @@ function generateCSSUnit ( value, unit ) {
 	
 	return css
 }
-const isSafeUrl = ( url ) => {
+export const isSafeUrl = ( url ) => {
 	if ( typeof url !== 'string' || ! url.trim() ) {
 		return false;
 	}

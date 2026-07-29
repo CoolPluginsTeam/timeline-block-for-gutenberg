@@ -5,6 +5,7 @@
 import { IconPickerItem } from "../component/Icons/index.js";
 import DOMPurify from "dompurify";
 import { __ } from "@wordpress/i18n";
+import { isSafeUrl } from "../component/css/generateCSSUnit.js";
 const { InnerBlocks, RichText } = wp.blockEditor;
 
 const filterDate = (data) => {
