@@ -54,11 +54,10 @@ $cpo_content_allowed = array(
 // Resolve cross-sell addons once (drops condition-failing addons) and index by slug,
 // so a method can surface its own addon control inside its content tab.
 $cpo_addons         = Addons::resolve( $config->addons(), $config );
-$cpo_addons_by_slug = array();
 $cpo_addons_by_group = array();
 
 foreach ( $cpo_addons as $cpo_a ) {
-	$cpo_addons_by_slug[ $cpo_a['slug'] ] = $cpo_a;
+
 	$cpo_group = ! empty( $cpo_a['group'] ) ? $cpo_a['group'] : '';
 	if ( '' !== $cpo_group ) {
 		if ( ! isset( $cpo_addons_by_group[ $cpo_group ] ) ) {
