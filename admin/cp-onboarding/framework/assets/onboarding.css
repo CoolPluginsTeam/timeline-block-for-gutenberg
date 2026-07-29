@@ -1034,9 +1034,7 @@
 
 /* --- Responsive --- */
 @media (max-width: 1140px) and (min-width: 781px) {
-	.wrap.cpo-onboarding-page .cpo-onboarding-wrapper {
-		
-	}
+
 
 	.wrap.cpo-onboarding-page .cpo-method-tabs {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1075,9 +1073,7 @@
 }
 
 @media (max-width: 780px) {
-	.wrap.cpo-onboarding-page .cpo-onboarding-wrapper {
-	
-	}
+
 
 	.wrap.cpo-onboarding-page .cpo-box,
 	.wrap.cpo-onboarding-page .cpo-footer-card {

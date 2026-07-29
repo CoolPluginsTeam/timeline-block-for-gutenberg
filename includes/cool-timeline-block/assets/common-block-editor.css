@@ -299,7 +299,6 @@ i.fipicon-angle-left:before {
 }
 
 [class^=fipicon-] {
-	speak: none;
 	font-style: normal;
 	font-weight: 400;
 	font-variant: normal;
@@ -367,11 +366,7 @@ i.fipicon-angle-left:before {
     padding: 0;
     text-transform: uppercase;
   }
-
-  .cp-timeline-block-style-settings button{
-	display: block;
-  }
-
+  
   .cp-timeline-typography_apply .timeline-block-typography-control-btn,
   .cp-timeline-typography_apply .timeline-block-typography-reset-btn,
   .timeline-color-setting_apply,
@@ -408,6 +403,7 @@ i.fipicon-angle-left:before {
   }
   
   .cp-timeline-block-style-settings button {
+	display: block;
     width: 28px !important;
     height: 28px !important;
     border-radius: 50%;
@@ -657,7 +653,6 @@ i.fipicon-angle-left:before {
     line-height: 1;
     font-weight: 400;
     font-style: normal;
-    speak: never;
     text-decoration: inherit;
     text-transform: none;
     text-rendering: auto;
