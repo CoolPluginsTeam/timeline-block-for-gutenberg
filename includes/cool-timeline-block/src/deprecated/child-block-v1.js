@@ -1,6 +1,7 @@
 import renderSVG from "../component/icon/renderIcon.js"
 import {__} from '@wordpress/i18n';
 import attributes from "../story-timeline-child/attributes.js";
+import { isSafeUrl } from "../component/css/generateCSSUnit.js";
 const {useBlockProps} = wp.blockEditor;
 const {RichText} = wp.blockEditor;
 
