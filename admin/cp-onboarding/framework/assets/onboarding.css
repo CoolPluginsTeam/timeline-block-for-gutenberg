@@ -455,12 +455,7 @@
 	padding: 3px 8px;
 	border-radius: 4px;
 	background: rgba(0, 0, 0, 0.7);
-	color: #fff;
-	font-size: 12px;
 	line-height: 1.3;
-}
-
-.wrap.cpo-onboarding-page .cpo-video-duration {
 	color: rgba(255, 255, 255, 0.85);
 	font-size: 12px;
 }
@@ -1039,9 +1034,7 @@
 
 /* --- Responsive --- */
 @media (max-width: 1140px) and (min-width: 781px) {
-	.wrap.cpo-onboarding-page .cpo-onboarding-wrapper {
-		
-	}
+
 
 	.wrap.cpo-onboarding-page .cpo-method-tabs {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1080,9 +1073,7 @@
 }
 
 @media (max-width: 780px) {
-	.wrap.cpo-onboarding-page .cpo-onboarding-wrapper {
-	
-	}
+
 
 	.wrap.cpo-onboarding-page .cpo-box,
 	.wrap.cpo-onboarding-page .cpo-footer-card {

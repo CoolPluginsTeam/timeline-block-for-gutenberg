@@ -47,7 +47,6 @@ final class CTLB_Onboarding_Config {
 		$config = $this->identity();
 
 		$config['show_chooser'] = false;
-		$config['edition']      = 'liter';
 		$config['addons']       = $is_onboarding ? array() : $this->pro_addons( $is_onboarding );
 		$config['links']        = array(
 			'footer' => $this->footer_cards( $is_onboarding ),

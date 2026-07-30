@@ -5,6 +5,7 @@
 import { IconPickerItem } from "../component/Icons/index.js";
 import DOMPurify from "dompurify";
 import { __ } from "@wordpress/i18n";
+import { isSafeUrl } from "../component/css/generateCSSUnit.js";
 const { InnerBlocks, RichText } = wp.blockEditor;
 
 const filterDate = (data) => {
@@ -41,12 +42,13 @@ export default function Save(props) {
 			  )
 			: time_desc;
 
+	const safeImageUrl = isSafeUrl( timeLineImage ) ? timeLineImage : '';
 	const StoryDetail = () => (
 		<div className="story-details">
 			{!["none", ""].includes(timeLineImage) && !wodpressBlock ? (
 				<div className={`story-image`}>
 					<img
-						src={timeLineImage}
+						src={safeImageUrl}
 						alt={imageAlt}
 						className={time_image.id ? `wp-image-${time_image.id}` : null}
 					/>

@@ -77,7 +77,8 @@ function contentTimelineStyle(props) {
     }
 
     const selectors = {};
-    selectors[` .cool-${timelineLayout}-timeline-body`] = {
+    const safeLayout = sanitizeKeyword( timelineLayout, ['vertical', 'horizontal'] ) || 'vertical';
+    selectors[` .cool-${safeLayout}-timeline-body`] = {
         '--ctlb-item-spacing': unitValue(itemSpacing, itemSpacingType,'--ctlb-item-spacing'),
         '--ctlb-content-alignment': sanitizeKeyword(contentAlignment, ['left', 'right', 'center']),
         '--ctlb-icon-color': sanitizeColor(iconColor),
@@ -114,7 +115,8 @@ function contentTimelineStyle(props) {
     };
 
     var styling_css = ""
-    var id = `.cool-timeline-block-${block_id}`
+    const safeBlockId = String( block_id || '' ).replace( /[^a-zA-Z0-9_-]/g, '' );
+    var id = `.cool-timeline-block-${safeBlockId}`
 
     styling_css = generateCSS(selectors, id, timelineLayout)
 

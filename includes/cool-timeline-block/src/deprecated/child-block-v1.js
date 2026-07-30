@@ -1,6 +1,7 @@
 import renderSVG from "../component/icon/renderIcon.js"
 import {__} from '@wordpress/i18n';
 import attributes from "../story-timeline-child/attributes.js";
+import { isSafeUrl } from "../component/css/generateCSSUnit.js";
 const {useBlockProps} = wp.blockEditor;
 const {RichText} = wp.blockEditor;
 
@@ -37,11 +38,12 @@ export default {
 					imageAlt
 				} = props.attributes
 
+				const safeImageUrl = isSafeUrl( timeLineImage ) ? timeLineImage : '';
 				const StoryDetail = () => (
 					<div className="story-details">
-						{timeLineImage !== "none" ?
+						{safeImageUrl !== "none" ?
 							<div className={`story-image`}>
-								<img src={timeLineImage} alt={imageAlt} />
+								<img src={safeImageUrl} alt={imageAlt} />
 							</div>
 							:
 							null}

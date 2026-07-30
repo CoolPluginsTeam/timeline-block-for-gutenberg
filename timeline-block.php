@@ -176,7 +176,7 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 		 */
 		public function ctlb_enqueue_onboarding_inserter() {
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- display-only query arg.
-			if ( ! isset( $_GET['action'] ) || 'filter-ctlb-blocks' !== $_GET['action'] ) {
+			if ( ! isset( $_GET['action'] ) || 'filter-ctlb-blocks' !== sanitize_key(wp_unslash( $_GET['action'] )) ) {
 				return;
 			}
 
@@ -237,10 +237,7 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 				'theme_uri' => esc_url( $theme->get( 'ThemeURI' ) ),
 			);
 
-			if ( ! function_exists( 'get_plugins' ) ) {
-				require_once ABSPATH . 'wp-admin/includes/plugin.php';
-			}
-			if ( ! function_exists( 'get_plugin_data' ) ) {
+			if ( ! function_exists( 'get_plugins' ) || ! function_exists( 'get_plugin_data' ) ) {
 				require_once ABSPATH . 'wp-admin/includes/plugin.php';
 			}
 

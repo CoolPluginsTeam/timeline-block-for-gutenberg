@@ -1,0 +1,22 @@
+<wpml-config>
+	<gutenberg-blocks>
+
+		<gutenberg-block
+			type="cp-timeline/content-timeline-block-child"
+			translate="1"
+			label="Content Timeline Block Child"
+		>
+			<!-- Translate the t_date block attribute -->
+			<key
+				name="t_date"
+				label="Timeline Date Attribute"
+			/>
+
+			<!-- Translate the date stored in frontend HTML -->
+			<xpath label="Timeline Date">
+				//div[contains(@class, 'story-time')]/p
+			</xpath>
+		</gutenberg-block>
+
+	</gutenberg-blocks>
+</wpml-config>
