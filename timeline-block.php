@@ -106,6 +106,7 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 			if ( ! get_option( 'ctlb-install-date' ) ) {
 				add_option( 'ctlb-install-date', gmdate( 'Y-m-d H:i:s' ) );
 			}
+			// update_option( 'ctlb-install-date', gmdate( 'Y-m-d H:i:s' ) );
 		}
 
 		public function ctlb_plugin_activate() {
@@ -124,12 +125,75 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 		 * It loads files for the Gutenberg block, the Cool Timeline Block source, and admin feedback functionality.
 		 */
 		public function ctlb_include_files() {
+			$name = 'Timeline Block';
 			require Timeline_Block_Dir . 'includes/cool-timeline-block/src/init.php'; // Includes the Cool Timeline Block source initialization file.
 
 			if ( is_admin() ) { // Checks if the current request is for an administrative interface page.
 				$pluginpath= plugin_basename( __FILE__ );
-				require_once Timeline_Block_Dir . 'admin/feedback/ctlb-users-feedback.php'; // Includes the admin feedback functionality file.
-			    add_filter( "plugin_action_links_$pluginpath", array( $this, 'ctlb_settings_link' ) );
+				require_once Timeline_Block_Dir . 'admin/cpfm-feedback/cpfm-deactivation-feedback.php'; 
+				require_once Timeline_Block_Dir . 'admin/cpfm-feedback/class-cpfm-review.php';
+
+				CPFM_Review::cpfm_register( array(
+					'id' => 'timeline-block',
+					'name' => 'Timeline Block',
+					'plugin_file' => __FILE__,
+					'review_url' => 'https://wordpress.org/plugins/timeline-block/',
+					'capability' => 'activate_plugins',
+					'quiet_days' => 1,
+					'own_screens' => array('timeline-addons_page_ctl-getting-started'),
+					'trigger' => array(
+						'type' => 'install_age',
+						'hours' => 24,
+					),
+                    'notice' => array(
+						'enabled' => true,
+						'template' => 'two_step',
+						'screens' => array(
+							'plugins',
+							'timeline-addons_page_ctl-getting-started',
+							'timeline-addons_page_cool_timeline_settings',
+							'toplevel_page_cool-plugins-timeline-addon',
+						),
+						'inline_screens' => array('timeline-addons_page_ctl-getting-started'),
+					),
+					'row' => array('enabled' => true),
+					'legacy' => array(
+						'done_options' => array(
+							'cool-timelne-ratingDiv' => 'yes',
+							'cool-timelne_review_prompt' => array('yes', 'done', 'dismissed'),
+							'cool-timelne_review_shown' => array('yes', 'done', 'dismissed'),
+						),
+						'done_user_meta' => array(
+							'eca_review_dismissed' => array('in_key' => 'countdown'),
+						),
+						'install_dates' => array('cool-timelne-installDate', 'ctl-install-date'),
+						// Keep any still-installed sibling that reads the old flag in sync.
+						'mirror_write' => array('cool-timelne-ratingDiv' => 'yes'),
+					),
+                    
+					'i18n' => array(
+						'like_question' => sprintf(
+							/* translators: %s: plugin name. */
+							__('Do you like the %s plugin?', 'cool-timeline'),
+							$name
+						),
+						'yes_button' => __('Yes, I like it', 'cool-timeline'),
+						'dismiss_link' => __('Not good, dismiss', 'cool-timeline'),
+						'later_link' => __('Ask me later', 'cool-timeline'),
+						'thanks_line' => __('That is great to hear! A quick review on WordPress.org would really help us.', 'cool-timeline'),
+						'submit_button' => __('Submit review', 'cool-timeline'),
+						'no_link' => __('I do not like it, dismiss', 'cool-timeline'),
+						'row_question' => __('Do you like this plugin?', 'cool-timeline'),
+						'inline_title' => sprintf(
+							/* translators: %s: plugin name. */
+							__('Enjoying %s?', 'cool-timeline'),
+							$name
+						),
+						'inline_text' => __('A short review helps other event organisers find it.', 'cool-timeline'),
+						'close_label' => __('Close', 'cool-timeline'),
+					),
+				) );
+								add_filter( "plugin_action_links_$pluginpath", array( $this, 'ctlb_settings_link' ) );
 
 				if ( $this->ctlb_should_load_onboarding() ) {
 					require_once Timeline_Block_Dir . 'admin/ctlb-timeline-header.php';
