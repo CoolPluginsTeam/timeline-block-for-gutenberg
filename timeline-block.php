@@ -130,9 +130,8 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 
 			if ( is_admin() ) { // Checks if the current request is for an administrative interface page.
 				$pluginpath= plugin_basename( __FILE__ );
-				require_once Timeline_Block_Dir . 'admin/cpfm-feedback/cpfm-deactivation-feedback.php'; 
-				require_once Timeline_Block_Dir . 'admin/cpfm-feedback/class-cpfm-review.php';
-
+				require_once Timeline_Block_Dir . 'admin/cpfm-feedback/class-cpfm-loader.php'; 
+                CPFM_Loader::load();
 				CPFM_Review::cpfm_register( array(
 					'id' => 'timeline-block',
 					'name' => 'Timeline Block',

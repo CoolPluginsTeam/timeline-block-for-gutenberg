@@ -86,8 +86,7 @@ if ( ! class_exists( 'CPFM_Review_Notice' ) ) {
 			if ( ! $screen || empty( $screen->id ) ) {
 				return;
 			}
-            var_dump($screen);
-			die();
+
 			foreach ( CPFM_Review::cpfm_registered() as $id ) {
 				$config = CPFM_Review::cpfm_config( $id );
 				if ( empty( $config['notice']['enabled'] ) ) {
