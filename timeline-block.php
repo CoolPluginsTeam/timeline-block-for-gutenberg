@@ -18,9 +18,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
 
+if ( ! defined( 'CTLB_V' ) ) {
+	define( 'CTLB_V', '1.9.1' );
+}
 define( 'Timeline_Block_File', __FILE__ );
 define( 'Timeline_Block_Url', plugin_dir_url( Timeline_Block_File ) );
 define( 'Timeline_Block_Dir', plugin_dir_path( __FILE__ ) );
+define( 'CTLB_FEEDBACK_API', 'https://feedback.coolplugins.net/' );
 if ( ! defined( 'Timeline_Block_Version' ) ) {
 	define( 'Timeline_Block_Version', '1.9.1' );
 }
@@ -120,6 +124,63 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 			$this->ctlb_ensure_install_options();
 		}
 
+		public function ctlb_register_deactivation_feedback() {
+			$name = 'Timeline Block';
+			CPFM_Deactivation_Feedback::cpfm_register(
+				array(
+					'id'          => 'ctlb',
+					'slug'        => 'timeline-block',
+					'plugin_name' => $name,
+					'version'     => CTLB_V,
+					'api'         => CTLB_FEEDBACK_API,
+					'site_key'              => '31',
+					// OUR option names — the module must not guess them.
+					'install_date_option'    => 'ctlb-install-date',
+					'initial_version_option' => 'ctlb-initial-save-version',
+					'onboarding_data'        => 'ctl_onboarding_telemetry',
+
+					'reasons'                => array(
+						'not_working'  => array(
+							'title'       => __( "The plugin isn't working", 'cool-timeline' ),
+							'placeholder' => __( 'Which problem did you run into? We read every reply.', 'cool-timeline' ),
+						),
+						'not_expected' => array(
+							'title'       => __( "It didn't do what I expected", 'cool-timeline' ),
+							'placeholder' => __( 'What were you hoping it would do?', 'cool-timeline' ),
+						),
+						'found_better' => array(
+							'title'       => __( 'I found a better plugin', 'cool-timeline' ),
+							'placeholder' => __( 'Mind sharing which one?', 'cool-timeline' ),
+						),
+						'temporary'    => array(
+							'title'       => __( "It's a temporary deactivation", 'cool-timeline' ),
+							'placeholder' => '',
+						),
+						'other'        => array(
+							'title'       => __( 'Another reason', 'cool-timeline' ),
+							'placeholder' => __( 'Please tell us more', 'cool-timeline' ),
+						),
+					),
+
+					'i18n'                   => array(
+						'title'           => __( 'Before you go…', 'cool-timeline' ),
+						/* translators: %s: plugin name (bold). */
+						'intro'           => __( 'What made you deactivate %s? Your answer helps us fix it.', 'cool-timeline' ),
+						'submit'          => __( 'Submit & Deactivate', 'cool-timeline' ),
+						'skip'            => __( 'Skip & Deactivate', 'cool-timeline' ),
+						'deactivating'    => __( 'Deactivating…', 'cool-timeline' ),
+						'pick_reason'     => __( 'Please choose a reason.', 'cool-timeline' ),
+						'close_label'     => __( 'Close', 'cool-timeline' ),
+						/* translators: %s: company name. */
+						'byline'          => __( 'A plugin by %s', 'cool-timeline' ),
+						// Must describe the FULL payload: submitting is deliberate and
+						// is not consent-gated, so this is the disclosure.
+						'consent'         => __( 'Submitting shares your reason plus your site URL, admin email and basic environment details (PHP, WordPress, active plugins). Skip & Deactivate sends nothing.', 'cool-timeline' ),
+					),
+				)
+			);
+		}
+
 		/**
 		 * This method includes all the necessary files for the plugin to function.
 		 * It loads files for the Gutenberg block, the Cool Timeline Block source, and admin feedback functionality.
@@ -132,6 +193,7 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 				$pluginpath= plugin_basename( __FILE__ );
 				require_once Timeline_Block_Dir . 'admin/cpfm-feedback/class-cpfm-loader.php'; 
                 CPFM_Loader::load();
+				$this->ctlb_register_deactivation_feedback();
 				CPFM_Review::cpfm_register( array(
 					'id' => 'timeline-block',
 					'name' => 'Timeline Block',
