@@ -256,7 +256,9 @@ class CPFM_Feedback_Notice {
             wp_send_json_error('Unauthorized access.');
         }
 
-        check_ajax_referer('cpfm_dismiss_admin_notice', 'nonce');
+        if ( false === check_ajax_referer('cpfm_dismiss_admin_notice', 'nonce', false) ) {
+            wp_send_json_error('Invalid or expired nonce.');
+        }
 
         $category   = isset($_POST['category']) ? sanitize_text_field( wp_unslash( $_POST['category'] ) ): '';
         $opt_in_raw = isset($_POST['opt_in']) ? sanitize_text_field( wp_unslash( $_POST['opt_in'] ) ) : '';

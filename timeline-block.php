@@ -166,7 +166,6 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 				static function () {
 					update_option( 'ctlb-cpfm-data-sharing', 'yes' );
 					CPFM_Usage_Cron::cpfm_schedule_event( 'ctlb_extra_data_update' );
-					do_action( 'ctlb_extra_data_update' ); // Send the first snapshot immediately after explicit consent.
 				}
 			);
 			add_action(
