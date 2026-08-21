@@ -70,6 +70,7 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 			// Load plugin textdomain
 			add_action('init', array($this, 'ctlb_load_plugin_textdomain'));
 			register_activation_hook( __FILE__, array( $this, 'ctlb_plugin_activate' ));
+			register_deactivation_hook( __FILE__, array( $this, 'ctlb_plugin_deactivate' ) );
 
 			if ( is_admin() && $this->ctlb_should_load_onboarding() ) {
 				add_action( 'enqueue_block_editor_assets', array( $this, 'ctlb_enqueue_onboarding_inserter' ) );
@@ -126,6 +127,10 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 			$this->ctlb_ensure_install_options();
 		}
 
+		public function ctlb_plugin_deactivate() {
+			wp_clear_scheduled_hook( 'ctlb_extra_data_update' );
+		}
+
 
 		/**
 		 * This method includes all the necessary files for the plugin to function.
@@ -135,10 +140,73 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 			$name = 'Timeline Block';
 			require Timeline_Block_Dir . 'includes/cool-timeline-block/src/init.php'; // Includes the Cool Timeline Block source initialization file.
 
+			require_once Timeline_Block_Dir . 'admin/cpfm-feedback/class-cpfm-loader.php';
+			CPFM_Loader::load();
+			CPFM_Usage_Cron::cpfm_register(
+				array(
+					'id'                      => 'ctlb',
+					'plugin_name'             => $name,
+					'version'                 => CTLB_V,
+					'api'                     => CTLB_FEEDBACK_API,
+					'cron_hook'               => 'ctlb_extra_data_update',
+					'consent_master_option'   => 'cpfm_opt_in_choice_timeline_block',
+					'consent_override_option' => 'ctlb-cpfm-data-sharing',
+					'install_date_option'     => 'ctlb-install-date',
+					'initial_version_option'  => 'ctlb-initial-save-version',
+					'onboarding_data'         => 'ctlb_onboarding_telemetry',
+					'site_key'                => '31',
+				)
+			);
+			$usage_override = get_option( 'ctlb-cpfm-data-sharing' );
+			if ( 'yes' === $usage_override || ( false === $usage_override && 'yes' === get_option( 'cpfm_opt_in_choice_timeline_block' ) ) ) {
+				CPFM_Usage_Cron::cpfm_schedule_event( 'ctlb_extra_data_update' );
+			}
+			add_action(
+				'cpfm_after_opt_in_timeline_block',
+				static function () {
+					update_option( 'ctlb-cpfm-data-sharing', 'yes' );
+					CPFM_Usage_Cron::cpfm_schedule_event( 'ctlb_extra_data_update' );
+					do_action( 'ctlb_extra_data_update' ); // Send the first snapshot immediately after explicit consent.
+				}
+			);
+			add_action(
+				'cpfm_after_opt_out_timeline_block',
+				static function () {
+					update_option( 'ctlb-cpfm-data-sharing', 'no' );
+					wp_clear_scheduled_hook( 'ctlb_extra_data_update' );
+				}
+			);
+
 			if ( is_admin() ) { // Checks if the current request is for an administrative interface page.
 				$pluginpath= plugin_basename( __FILE__ );
-				require_once Timeline_Block_Dir . 'admin/cpfm-feedback/class-cpfm-loader.php'; 
-                CPFM_Loader::load();
+				add_action(
+					'cpfm_register_notice',
+					static function () {
+						CPFM_Feedback_Notice::cpfm_register_notice(
+							'timeline_block',
+							array(
+								'plugin_name'    => 'timeline_block',
+								'title'          => __( 'Help Improve Timeline Block', 'timeline-block' ),
+								'message'        => __( 'Share non-sensitive usage data so we can improve Timeline Block compatibility and features.', 'timeline-block' ),
+								'pages'          => array(
+									'ctlb-getting-started',
+									'timeline-addons_page_ctl-getting-started',
+								),
+								'always_show_on' => array( 'ctlb-getting-started' ),
+								'i18n'           => array(
+									'panel_title'         => __( 'Help Improve Plugins', 'timeline-block' ),
+									'more_info'           => __( 'More info', 'timeline-block' ),
+									'consent_intro'       => __( 'Opt in to share basic site information that helps us improve compatibility and features. We will collect:', 'timeline-block' ),
+									'consent_item_site'   => __( 'Your website home URL and WordPress admin email.', 'timeline-block' ),
+									'consent_item_compat' => __( 'The active plugins and themes list, PHP, MySQL and WordPress versions, memory limit, multisite status, and site language.', 'timeline-block' ),
+									'consent_link'        => __( 'Click here', 'timeline-block' ),
+									'yes_label'           => __( "Yes, it's OK", 'timeline-block' ),
+									'no_label'            => __( 'No, Thanks', 'timeline-block' ),
+								),
+							)
+						);
+					}
+				);
 				CPFM_Deactivation_Feedback::cpfm_register(
 					array(
 						'id'                     => 'ctlb',
@@ -149,7 +217,7 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 						'site_key'               => '31',
 						'install_date_option'    => 'ctlb-install-date',
 						'initial_version_option' => 'ctlb-initial-save-version',
-						'onboarding_data'        => 'ctl_onboarding_telemetry',
+						'onboarding_data'        => 'ctlb_onboarding_telemetry',
 						'reasons'                => array(
 							'not_working'  => array(
 								'title'       => __( "The plugin isn't working", 'cool-timeline' ),
