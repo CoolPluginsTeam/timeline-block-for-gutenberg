@@ -21,6 +21,12 @@ if ( ! class_exists( 'CPFM_Environment' ) ) {
 	 * Builds the standard Cool Plugins feedback environment snapshot.
 	 */
 	final class CPFM_Environment {
+        /**
+		 * PHP 7 treats a method named like the class as a constructor.
+		 * `cpfm_environment()` is static, so that would fatal. An explicit
+		 * constructor keeps it a normal static method.
+		 */
+		private function __construct() {}
 
 		/**
 		 * Non-sensitive environment snapshot (disclosed in the consent copy).
