@@ -3,9 +3,9 @@ Contributors:coolplugins,narinder-singh
 Donate link:https://paypal.me/CoolPlugins/10USD/
 Requires at least: 5.0
 Tags: timeline, history, roadmap, company history, Gutenberg
-Tested up to:7.0
+Tested up to: 7.1
 Requires PHP: 7.2
-Stable tag:1.9.1
+Stable tag: 1.9.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Showcase your company history, process steps, milestones, and roadmap inside Gutenberg using the powerful Timeline Block
