@@ -77,8 +77,8 @@
     margin-top: 10px;
     margin-bottom: 10px;
     position: relative;
-	min-height: 300px;
-	height: 100%;
+	min-height: 0;
+	height: auto;
 }
 
 .timeline-block-font-family-option .timeline-block-typography-advanced{
@@ -354,8 +354,12 @@ i.fipicon-angle-left:before {
   }
 
   .cp-timeline-block-style-settings{
-	margin-bottom: 15px !important;
+	margin-bottom: 0 !important;
   }
+
+.cp-timeline-block-style-settings .ctlb-pro-lock {
+	margin-left: auto;
+}
 
   .cp-timeline-block-style-settings h2{
 	margin: 0;
@@ -403,10 +407,30 @@ i.fipicon-angle-left:before {
     width: 28px !important;
     height: 28px !important;
     border-radius: 50%;
+    min-width: 28px;
+    padding: 0;
+    border: 1px solid #ccc;
+  }
+
+  .cp-timeline-block-style-settings button.components-color-palette__custom-color-button::after{
+	background-image: unset !important;
   }
 
   .cp-timeline-block-style-settings button::after{
 	content: unset;
+  }
+
+  .cooltimeline-tab-settings .ctlb-label-heading{
+	margin-bottom: 0 !important;
+	margin-top: 0px;
+  }
+
+  .cooltimeline-tab-settings .ctlb-label-heading ~ .cp-timeline-block-range__control{
+	margin-bottom: 0 !important;
+  }
+
+  .cooltimeline-tab-settings .ctlb-label-heading + .cp-timeline-block-range__control {
+    margin-top: calc(-1 * var(--ctlb-stack-gap) + var(--ctlb-label-gap)) !important;
   }
   
   .timeline-block-typography-reset-btn,
@@ -450,43 +474,121 @@ i.fipicon-angle-left:before {
     margin-block: 0px !important;
   }
   
+  .timeline-block-typography-option-actions h2 {
+    margin-block: .6rem !important;
+  }
+
   .timeline-block-typography-control-btn {
     margin-left: auto;
-    width: 25px !important;
-    height: 25px !important;
+    width: 30px !important;
+    height: 30px !important;
     border-radius: 50%;
     padding: 0px 3px !important;
     box-shadow: 0 0 0 0px transparent !important;
+    background: var(--ctlb-badge-tint, #ebebfa) !important;
+    color: var(--ctlb-brand, #0d7a6f) !important;
+  }
+
+  .timeline-block-typography-control-btn.is-pressed {
+    background: var(--ctlb-badge-tint, #ebebfa) !important;
+    color: var(--ctlb-brand, #0d7a6f) !important;
   }
   
   .timeline-block-typography-options:has(.timeline-block-typography-advanced) .timeline-block-typography-control-btn {
-    box-shadow: 0 0 0 2px var(--wp-admin-theme-color) !important;
-    color: var(--wp-admin-theme-color) !important;
+    box-shadow: 0 0 0 2px var(--ctlb-brand, #0d7a6f) !important;
+    color: var(--ctlb-brand, #0d7a6f) !important;
+  }
+
+  .timeline-block-typography-range-options .timeline-block-size-type-field-tabs {
+    margin-top: 0;
+    margin-bottom: 8px;
   }
   
-  .cool-timeline-gt-block-review-tab {
-    text-align: center;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1882352941);
-    padding: 10px 0px !important;
-    border-radius: 5px !important;
+  /* Inspector footer */
+  .ctlb-footer {
+    padding: 12px 16px 14px;
+    border-top: 1px solid #ecece6;
+    background: #fbfbf9;
   }
-  
-  .cool-timeline-gt-block-review-tab a {
-    text-decoration: none;
-    color: #ffb900;
-    font-size: 15px;
-	margin-top: 10px;
-  }
-  .cool-timeline-gt-block-review-tab a span{
-	color: #ffb900 !important;
-	margin-left: 5px;
-  }
-  .cp-timeline-block-demo-button {
+
+  .ctlb-footer-row {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    padding-block: 0px !important;
+    gap: 8px;
+    margin-bottom: 10px;
   }
-  
+
+  .ctlb-footer-links-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .ctlb-footer-links-group a,
+  .ctlb-footer-rate {
+    font-size: 12px;
+    font-weight: 500;
+    color: #3d3d38;
+    text-decoration: none;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  .ctlb-footer-links-group a:hover,
+  .ctlb-footer-rate:hover {
+    color: var(--ctlb-brand, #0d7a6f);
+    text-decoration: underline;
+  }
+
+  .ctlb-footer-sep {
+    color: #c8c8c2;
+    font-size: 12px;
+    line-height: 1;
+    user-select: none;
+  }
+
+  .ctlb-footer-rate {
+    flex-shrink: 0;
+    font-weight: 400;
+    color: #757575;
+  }
+
+  .ctlb-footer-star {
+    color: #dba617;
+    font-size: 11px;
+  }
+
+  .ctlb-footer-upgrade {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 34px;
+    padding: 7px 12px;
+    border: 1px solid rgba(13, 122, 111, 0.28);
+    border-radius: 8px;
+    background: linear-gradient(180deg, #ffffff 0%, #f3faf9 100%);
+    color: var(--ctlb-brand, #0d7a6f);
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 1.3;
+    box-shadow: 0 1px 2px rgba(13, 122, 111, 0.08);
+    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .ctlb-footer-upgrade:hover,
+  .ctlb-footer-upgrade:focus {
+    color: #0a6359;
+    border-color: rgba(13, 122, 111, 0.45);
+    background: linear-gradient(180deg, #ffffff 0%, #e9f5f3 100%);
+    box-shadow: 0 2px 4px rgba(13, 122, 111, 0.12);
+    text-decoration: none;
+  }
+
   .timeline-block-add-story button {
     width: 110px;
     position: relative;
@@ -494,136 +596,695 @@ i.fipicon-angle-left:before {
     transform: translateX(-50%);
 	flex-direction: initial !important;
   }
-  .cp-timeline-block-demo-button a{
-	margin-right: 5px !important;
+
+  .cooltimeline-tab-settings {
+    --ctlb-brand: #0d7a6f;
+    --ctlb-brand-tint: #e9f5f3;
+    --ctlb-badge-tint: #ebebfa;
+    --ctlb-stack-gap: 16px;
+    --ctlb-label-gap: 8px;
   }
 
-  .cooltimeline-tab-settings .active-tab {
-    border-width: 1px 1px 0px 1px;
-    border-color: #e5e5e5;
-    border-style: solid;
-    border-radius: 5px 5px 0px 0px;
-    box-shadow: 0px 0px transparent;
+  /* Flatten the Card WP wraps around each tab's content — a bordered,
+     shadowed card directly under a pill tab bar reads as two competing
+     chrome styles stacked on top of each other. */
+  .cooltimeline-tab-settings.components-tab-panel .components-card,
+  .cooltimeline-tab-settings .components-card {
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
   }
-  
-  	.cooltimeline-tab-settings .tab-one.active-tab,
-	.cooltimeline-tab-settings .tab-two.active-tab,
-	.cooltimeline-tab-settings .tab-three.active-tab{
-		position: relative;
-	}
-	.cooltimeline-tab-settings .tab-one.active-tab::before,
-	.cooltimeline-tab-settings .tab-two.active-tab::before,
-	.cooltimeline-tab-settings .tab-three.active-tab::before{
-		content: '';
-		position: absolute;
-		height: 3px;
-		width: 100%;
-		z-index: 999;
-		background-color: #fff;
-		bottom: -1px;
-		left: 0px;
-	}
 
+  .cooltimeline-tab-settings .components-card__body {
+    padding: 16px !important;
+  }
+
+  /* Style / Advanced accordion lists — equal gap between every panel card. */
+  .cooltimeline-tab-settings .ctlb-panel-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cooltimeline-tab-settings .ctlb-panel-stack > .components-panel__body {
+    margin: 0 !important;
+  }
+
+  /* Pill/segmented tab bar (General / Style / Advanced) */
   .cooltimeline-tab-settings .components-tab-panel__tabs {
-    justify-content: space-between;
+    justify-content: stretch;
+    gap: 2px;
+    background: #f1f1ef;
+    border-radius: 7px;
+    padding: 2px;
+    margin: 10px 16px 4px;
   }
-  
+
+  .cooltimeline-tab-settings .ctlb-tabs {
+    flex: 1 1 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: auto !important;
+    min-height: 0 !important;
+    line-height: 1.3;
+    padding: 4px 4px !important;
+    font-size: 12px;
+    font-weight: 500;
+    color: #6d6d66;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+    outline: none !important;
+    transition: background-color 0.12s ease, color 0.12s ease;
+  }
+
+  .cooltimeline-tab-settings .ctlb-tabs::before {
+    content: none !important;
+  }
+
+  .cooltimeline-tab-settings .ctlb-tabs:hover {
+    color: #1c1c19;
+  }
+
+  .cooltimeline-tab-settings .ctlb-tabs:focus-visible:not(:disabled),
+  .cooltimeline-tab-settings .ctlb-segmented-btn:focus-visible:not(:disabled) {
+    box-shadow: inset 0 0 0 1.5px var(--ctlb-brand) !important;
+  }
+
+  .cooltimeline-tab-settings .ctlb-tabs.active-tab {
+    background: #fff !important;
+    color: var(--ctlb-brand) !important;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(28, 28, 25, 0.14) !important;
+  }
+
   .timeline-block-settings-labels {
     font-size: 11px;
     font-weight: 500;
     line-height: 1.4;
     text-transform: uppercase;
-    margin-bottom: 8px;
+    margin-bottom: 0;
     padding: 0px;
   }
 
-  .components-base-control .timeline-block-settings-labels {
-    margin-bottom: 0px;
-  }
-
-  .timeline-block-spacing-control {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .timeline-block-spacing-control input[type=number].cp-block-timeline-number_control,
-  .timeline-block-spacing-control .cp-timeline-block_control__link {
-    border-left: 1px solid;
-    border-right: 1px solid;
-    border-color: #E6E7E9;
-    color: #50575E;
-    border-radius: 0;
-    box-shadow: none !important;
-    height: 30px;
-    margin: 0 -1px 0 0;
-    padding-right: 1px;
-    width: 25%;
-  }
-  
-  .timeline-block-spacing-control input[type=number].cp-block-timeline-number_control:focus {
-    z-index: 1;
-    outline-offset: -1px;
-    outline: 1px solid #CCCCCC;
-  }
-  
-  .timeline-block-spacing-control .cp-timeline-block_control__link {
-    border: 1px solid #959595;
-    background-color: #959595;
-    color: #FFFFFF;
-    justify-content: center;
+  /* General tab: label-left / control-right rows */
+  .cooltimeline-tab-settings .ctlb-row {
     display: flex;
     align-items: center;
-    padding: 2px 0;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: var(--ctlb-stack-gap);
+  }
+
+  /* Stacked variant: label on its own line, control fills the full width below.
+     Used for multi-option segmented controls, which don't reliably fit next to
+     a label on the sidebar's ~280px width (a side-by-side layout can overflow). */
+  .cooltimeline-tab-settings .ctlb-row.ctlb-row--stack {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .cooltimeline-tab-settings .ctlb-row--stack .ctlb-segmented {
+    width: 100%;
+  }
+
+  .cooltimeline-tab-settings .ctlb-row--stack .ctlb-segmented-btn {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-left: 4px !important;
+    padding-right: 4px !important;
     font-size: 12px;
-    line-height: 28px;
-    cursor: pointer;
-    transition: none;
   }
-  
-  .timeline-block-spacing-control .cp-timeline-block_control__link.timeline-block-spacing-control-disconnected {
-    border-color: #E6E7E9;
-    background-color: #FFFFFF;
-    color: #959595;
+
+  /* text-overflow doesn't reliably clip on a flex container (the button itself
+     is display:flex for icon/label centering) — truncating a nested block-level
+     span is the reliable fix, and also guards against long translated labels. */
+  .cooltimeline-tab-settings .ctlb-segmented-btn-label {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: center;
   }
-  
-  .timeline-block-spacing-control .timeline-block-spacing-control__inputs > :first-child.cp-block-timeline-number_control {
-    border-radius: 3px 0 0 3px;
+
+  .cooltimeline-tab-settings .ctlb-row:last-child {
+    margin-bottom: 0;
   }
-  
-  .timeline-block-spacing-control .timeline-block-spacing-control__inputs > :last-child {
-    border-radius: 0 3px 3px 0;
+
+  .cooltimeline-tab-settings .ctlb-row-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #3d3d38;
   }
-  
+
+  .cooltimeline-tab-settings .ctlb-row-label-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .cooltimeline-tab-settings .ctlb-row-hint {
+    font-size: 11.5px;
+    color: #8a8a82;
+  }
+
+  /* Compact segmented control, used for Layout / Design / Content alignment */
+  .cooltimeline-tab-settings .ctlb-segmented {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: #f1f1ef;
+    border-radius: 7px;
+    padding: 2px;
+    flex: none;
+  }
+
+  .cooltimeline-tab-settings .ctlb-segmented-btn {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: auto !important;
+    min-height: 0 !important;
+    line-height: 1.3;
+    border: none !important;
+    border-radius: 5px !important;
+    padding: 6px 10px !important;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #6d6d66 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+    transition: background-color 0.12s ease, color 0.12s ease;
+  }
+
+  .cooltimeline-tab-settings .ctlb-segmented-btn:hover {
+    color: #1c1c19 !important;
+  }
+
+  .cooltimeline-tab-settings .ctlb-segmented-btn.is-active {
+    background: #fff !important;
+    color: var(--ctlb-brand) !important;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(28, 28, 25, 0.14), inset 0 0 0 1px rgba(13, 122, 111, 0.25) !important;
+  }
+
+  .cooltimeline-tab-settings .cool-timeline-content-alignment-buttons.ctlb-segmented .components-button,
+  .cooltimeline-tab-settings .cool-timeline-content-alignment-buttons.ctlb-segmented .components-button.ctlb-segmented-btn {
+    padding: 6px 9px !important;
+  }
+
+  .cooltimeline-tab-settings .ctlb-section-divider {
+    border: none;
+    border-top: 1px solid #ecece6;
+    margin: 0 !important;
+    padding: 0;
+    height: 0;
+  }
+
+  /* ── Unified vertical rhythm: one 16px gap between setting groups ── */
+  .cooltimeline-tab-settings .components-panel__body.is-opened > .components-panel__body-content,
+  .cooltimeline-tab-settings .ctlb-style-element-card.ctlb-general-card,
+  .cooltimeline-tab-settings .ctlb-pro-lock__controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ctlb-stack-gap);
+  }
+
+  .cooltimeline-tab-settings .components-panel__body.is-opened > .components-panel__body-content {
+    padding: 4px 16px 16px;
+  }
+
+  .cooltimeline-tab-settings .components-panel__body.is-opened > .components-panel__body-content > *,
+  .cooltimeline-tab-settings .ctlb-style-element-card.ctlb-general-card > *,
+  .cooltimeline-tab-settings .ctlb-pro-lock__controls > * {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Label + slider/range = one visual group (8px inside, 16px after) */
+  .cooltimeline-tab-settings .ctlb-label-heading {
+    margin: 0 0 var(--ctlb-label-gap) !important;
+  }
+
+  .cooltimeline-tab-settings .ctlb-label-heading ~ .cp-timeline-block-range__control {
+    margin-bottom: 0 !important;
+  }
+
+  .cooltimeline-tab-settings .cp-timeline-block-style-settings {
+    margin-bottom: 0 !important;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-options + .cp-timeline-block-style-settings,
+  .cooltimeline-tab-settings .ctlb-pro-lock .timeline-block-typography-options + .cp-timeline-block-style-settings {
+    margin-top: 0;
+  }
+
+  /* Pro section header sits 8px above its lock box */
+  .cooltimeline-tab-settings .ctlb-pro-field-header {
+    margin: 0 0 var(--ctlb-label-gap) !important;
+  }
+
+  .cooltimeline-tab-settings .ctlb-pro-field-header + .ctlb-pro-lock {
+    margin-top: calc(-1 * var(--ctlb-stack-gap) + var(--ctlb-label-gap)) !important;
+  }
+
+  .cooltimeline-tab-settings .ctlb-pro-lock {
+    margin-bottom: 0 !important;
+  }
+
+  /* Margin/Padding pairs — divider between grids, no double gap */
+  .cooltimeline-tab-settings .timeline-block-spacing-control + .timeline-block-spacing-control {
+    margin-top: calc(-1 * var(--ctlb-stack-gap)) !important;
+    padding-top: var(--ctlb-stack-gap);
+    border-top: 1px solid #ecece6;
+  }
+
+  .cooltimeline-tab-settings .cp-timeline-block-style-settings + .timeline-block-spacing-control {
+    margin-top: 0 !important;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .cooltimeline-tab-settings .ctlb-section-divider + .cp-timeline-block-style-settings,
+  .cooltimeline-tab-settings .ctlb-section-divider + .ctlb-pro-field-header,
+  .cooltimeline-tab-settings .ctlb-section-divider + .timeline-block-settings-labels,
+  .cooltimeline-tab-settings .ctlb-section-divider + .ctlb-label-heading {
+    margin-top: 0;
+  }
+
+  .cooltimeline-tab-settings .ctlb-general-card .components-panel__body {
+    margin-bottom: 0;
+  }
+
+  .cooltimeline-tab-settings .ctlb-general-card #ctlb-story-setting-panel > .components-panel__body {
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin: 0;
+  }
+
+  .cooltimeline-tab-settings .ctlb-general-card #ctlb-story-setting-panel > .components-panel__body.is-opened {
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .cooltimeline-tab-settings.ctlb-child-settings {
+    padding: 4px 0 0;
+  }
+
+  .cooltimeline-tab-settings .ctlb_icon_buttons_control.ctlb-segmented,
+  .cooltimeline-tab-settings .cool-timeline-content-alignment-buttons.ctlb-segmented {
+    width: 100%;
+  }
+
+  .cooltimeline-tab-settings .ctlb_icon_buttons_control.ctlb-segmented .ctlb-segmented-btn {
+    flex: 1 1 0;
+    width: auto;
+  }
+
+  /* Any dashicon inside a segmented pill button (content alignment, choose media
+     type, etc.) — native dashicons default to ~20px, which reads oversized in a
+     compact pill. */
+  .cooltimeline-tab-settings .ctlb-segmented-btn .dashicons {
+    width: 15px;
+    height: 15px;
+    font-size: 15px;
+  }
+
+  .cooltimeline-tab-settings .ctlb-style-element-card {
+    border: 1px solid #ecece6;
+    border-radius: 9px;
+    padding: 14px;
+    background: #fcfcfa;
+  }
+
+  .cooltimeline-tab-settings .ctlb-style-element-card > *:last-child {
+    margin-bottom: 0;
+  }
+
+  .cooltimeline-tab-settings .ctlb-general-card .ctlb-row {
+    margin-bottom: 0;
+  }
+
+  /* Native WP "secondary"/"link"/"tertiary" buttons (the em/% unit toggles inside
+     Margin/Padding/Border controls, and RangeControl's "Reset" buttons) render in
+     the site's own --wp-admin-theme-color by default, which fights the fixed
+     brand teal used everywhere else in this panel. Repin them to the same teal. */
+  .cooltimeline-tab-settings .components-button.is-secondary {
+    color: var(--ctlb-brand) !important;
+    border-color: var(--ctlb-brand) !important;
+    box-shadow: inset 0 0 0 1px var(--ctlb-brand) !important;
+  }
+
+  .cooltimeline-tab-settings .components-button.is-tertiary,
+  .cooltimeline-tab-settings .components-button.is-link,
+  .cooltimeline-tab-settings .components-range-control__reset {
+    color: var(--ctlb-brand) !important;
+  }
+
+  /* The "active" unit (px/em/%/rem) rendered solid-black by default (is-primary)
+     reads heavier than every other active state in this panel, which uses a light
+     bordered look. Match that lighter language instead of a solid fill. */
+  /* The active unit (px/em/%) — a solid brand-teal fill with white text,
+     matching the reference exactly (the inactive units keep the lighter
+     bordered look, kept below under .is-secondary). */
+  .cooltimeline-tab-settings .components-button.is-primary {
+    background: var(--ctlb-brand) !important;
+    color: #ffffff !important;
+    border-color: var(--ctlb-brand) !important;
+    box-shadow: none !important;
+  }
+
+  /* RangeControl thumb/track/tooltip render in the site's admin blue by default;
+     repin to the same brand teal used everywhere else. */
+  .cooltimeline-tab-settings .components-range-control__track {
+    background-color: var(--ctlb-brand) !important;
+  }
+
+  .cooltimeline-tab-settings .components-range-control__thumb-wrapper,
+  .cooltimeline-tab-settings .components-range-control__thumb-wrapper > span,
+  .cooltimeline-tab-settings .components-range-control__marker.is-in-range {
+    background: var(--ctlb-brand) !important;
+    border-color: var(--ctlb-brand) !important;
+  }
+
+  .cooltimeline-tab-settings .components-range-control__tooltip {
+    background: var(--ctlb-brand) !important;
+  }
+
+  .cooltimeline-tab-settings .components-range-control__slider {
+    accent-color: var(--ctlb-brand) !important;
+  }
+
+  /* WP base-control margins are handled by the flex gap stack above. */
+  .cooltimeline-tab-settings .components-panel__body .components-base-control {
+    margin-bottom: 0 !important;
+  }
+
+  .cooltimeline-tab-settings .cp-timeline-block-boxshadow-controller-wrapper {
+    margin-top: 0 !important;
+    margin-bottom: 0;
+  }
+
+  /* Icon-before-label for PanelBody titles (Style tab's Heading/Description/
+     Date label/Year label, and Advanced tab's section groups) — PanelBody's own
+     `icon` prop places it after the title, so this is composed into the title
+     string instead. */
+  .cooltimeline-tab-settings .ctlb-panel-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .cooltimeline-tab-settings .components-panel__body-toggle {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 8px 12px !important;
+    box-sizing: border-box;
+  }
+
+  .cooltimeline-tab-settings .components-panel__body-toggle .ctlb-panel-title .ctlb-pro-badge {
+    margin-left: auto;
+    margin-right: 2px;
+  }
+
+  .cooltimeline-tab-settings .ctlb-panel-title-badge {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--ctlb-badge-tint);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cooltimeline-tab-settings .ctlb-panel-title-badge .dashicons {
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
+    color: var(--ctlb-brand);
+  }
+
+  /* Each PanelBody section (Style tab elements, Advanced tab groups) reads as
+     its own bordered card instead of a flush accordion strip — easier to scan,
+     and the open one gets a teal-tinted border so it's clear which is expanded. */
+  .cooltimeline-tab-settings .components-panel__body {
+    border: 1px solid #e5e5e1 !important;
+    border-radius: 10px;
+    margin: 0 0 8px;
+    overflow: hidden;
+  }
+
+  .cooltimeline-tab-settings .components-panel__body:last-child {
+    margin-bottom: 0;
+  }
+
+  .cooltimeline-tab-settings .components-panel__body.is-opened {
+    border-color: var(--ctlb-brand-tint) !important;
+    box-shadow: 0 0 0 2px var(--ctlb-brand-tint);
+  }
+
+  /* WP applies a native blue text color + gray background band to the panel
+     title row on hover (and while it holds focus) — swap both for the same
+     brand teal / lavender used everywhere else instead of leaking blue+gray. */
+  .cooltimeline-tab-settings .components-panel__body-title {
+    background: transparent !important;
+  }
+
+  .cooltimeline-tab-settings .components-panel__body-toggle:hover,
+  .cooltimeline-tab-settings .components-panel__body-toggle:focus:not(:disabled) {
+    color: var(--ctlb-brand, #0d7a6f) !important;
+    background: var(--ctlb-badge-tint, #ebebfa) !important;
+  }
+
+  /* The hover background above is the exact same tint as the title's own
+     icon badge — without a border the badge visually disappears into the
+     row the moment it's hovered. */
+  .cooltimeline-tab-settings .components-panel__body-toggle:hover .ctlb-panel-title-badge,
+  .cooltimeline-tab-settings .components-panel__body-toggle:focus:not(:disabled) .ctlb-panel-title-badge {
+    box-shadow: 0 0 0 1px rgba(13, 122, 111, 0.25);
+  }
+
+  /* Color swatch buttons (Text Color etc.) show WP's native blue focus ring —
+     keep it teal like every other focus/selection state in this panel. */
+  .cooltimeline-tab-settings .components-color-palette__custom-color-button:focus,
+  .cooltimeline-tab-settings .cp-timeline-block-style-settings button:focus {
+    box-shadow: 0 0 0 2px var(--ctlb-brand, #0d7a6f) !important;
+  }
+
+  /* Typography's Font size / Line height rows: compact number + unit toggle +
+     reset, replacing the RangeControl slider — matches the narrow sidebar width
+     better than a slider + separate unit buttons stacked across two rows. */
+  .cooltimeline-tab-settings .ctlb-typo-size-row {
+    margin-bottom: 14px;
+  }
+
+  .cooltimeline-tab-settings .ctlb-typo-size-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: #6d6d66;
+    margin-bottom: 6px;
+  }
+
+  .cooltimeline-tab-settings .ctlb-typo-size-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .cooltimeline-tab-settings .ctlb-typo-size-input {
+    width: 56px;
+    flex: none;
+    border: 1px solid #ddddd6;
+    border-radius: 6px;
+    padding: 5px 8px;
+    font-family: inherit;
+    font-size: 12.5px;
+    color: #1c1c19;
+    background: #fff;
+    box-sizing: border-box;
+  }
+
+  .cooltimeline-tab-settings .ctlb-typo-size-input:focus {
+    outline: none;
+    border-color: var(--ctlb-brand);
+    box-shadow: 0 0 0 1px var(--ctlb-brand);
+  }
+
+  .cooltimeline-tab-settings .ctlb-typo-unit-toggle {
+    flex: none;
+  }
+
+  .cooltimeline-tab-settings .ctlb-typo-size-reset {
+    flex: 1 1 auto;
+    justify-content: center;
+    height: auto !important;
+    min-height: 0 !important;
+    background: var(--ctlb-brand) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 6px 10px !important;
+    font-size: 12px;
+    font-weight: 500;
+    box-shadow: none !important;
+  }
+
+  .cooltimeline-tab-settings .ctlb-typo-size-reset:hover {
+    background: #0a5f57 !important;
+  }
+
+  /* Brand-teal toggle switches (Alternating sides, Year navigation, Line filling),
+     independent of the site's own WP admin color scheme. */
+  .cooltimeline-tab-settings .components-form-toggle.is-checked .components-form-toggle__track {
+    background: var(--ctlb-brand) !important;
+  }
+
+
+.timeline-block-spacing-control {
+    position: relative;
+    display: block;
+    width: 100%;
+  }
+
+  .timeline-block-spacing-control .timeline-block-size-type-field-tabs {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .timeline-block-spacing-control .timeline-block-spacing-control__cell:focus-within {
+    border-color: var(--ctlb-brand, #0d7a6f);
+    box-shadow: 0 0 0 1px var(--ctlb-brand, #0d7a6f);
+  }
+
   .timeline-block-spacing-control .timeline-block-control__actions .components-tab-panel__tabs {
     padding-right: 4px;
     margin-right: 0;
   }
-  
-  .timeline-block-spacing-control .timeline-block-spacing-control__inputs {
-    display: flex;
+
+  .cooltimeline-tab-settings .timeline-block-spacing-control + .timeline-block-spacing-control {
+    margin-top: calc(-1 * var(--ctlb-stack-gap)) !important;
+    padding-top: var(--ctlb-stack-gap);
+    border-top: 1px solid #ecece6;
   }
-  
-  .timeline-block-spacing-control .timeline-block-spacing-control__input-labels {
-    display: flex;
-    margin-bottom: -3px;
+
+  .cooltimeline-tab-settings .cp-timeline-block-style-settings + .timeline-block-spacing-control {
+    margin-top: 0 !important;
+    padding-top: 0;
+    border-top: none;
   }
-  
-  .timeline-block-spacing-control .timeline-block-spacing-control__input-labels span {
+
+  .timeline-block-spacing-control .timeline-block-spacing-control__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) 26px;
+    gap: 4px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .timeline-block-spacing-control .timeline-block-spacing-control__cell {
+    border: 1px solid #e2e2de;
+    border-radius: 8px;
+    background: #ffffff;
+    padding: 8px 2px 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .timeline-block-spacing-control input[type="number"].cp-block-timeline-number_control {
+    border: none;
+    box-shadow: none !important;
+    outline: none !important;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
     text-align: center;
-    width: 20%;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #1c1c1a;
+    padding: 1px 0;
+    background: transparent;
+    -moz-appearance: textfield;
+    height: auto !important;
+    min-height: 0 !important;
   }
-  
-  .timeline-block-spacing-control .timeline-block-spacing-control__input-labels .cp-timeline-block_control__link-label {
-    width: 10%;
+
+  .timeline-block-spacing-control input[type="number"].cp-block-timeline-number_control::placeholder {
+    color: #c9c9c2;
+    font-weight: 400;
   }
-  
+
+  .timeline-block-spacing-control input[type="number"].cp-block-timeline-number_control::-webkit-inner-spin-button,
+  .timeline-block-spacing-control input[type="number"].cp-block-timeline-number_control::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
   .timeline-block-spacing-control .cp-block-timeline-number_control-label {
-    color: #CCCCCC;
+    color: #a6a69e;
     display: block;
-    font-size: 10px;
-    margin-top: 5px;
+    max-width: 100%;
+    font-size: 8px;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-  
+
+  .timeline-block-spacing-control .timeline-block-spacing-control__link-cell {
+    grid-column: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .timeline-block-spacing-control .cp-timeline-block_control__link {
+    width: 26px;
+    height: 26px;
+    flex: none;
+    border-radius: 7px;
+    border: 1px solid #e2e2de;
+    background: #ffffff;
+    color: var(--ctlb-brand, #0d7a6f);
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    cursor: pointer;
+    transition: none;
+  }
+
+  .timeline-block-spacing-control .cp-timeline-block_control__link.timeline-block-spacing-control-disconnected {
+    border-color: #e2e2de;
+    background-color: #ffffff;
+    color: #a6a69e;
+  }
+
   .timeline-block-control__actions h2 {
     display: inline-flex;
     margin-bottom: 1em;
@@ -634,44 +1295,402 @@ i.fipicon-angle-left:before {
     margin-left: auto;
   }
 
-.ctl-timeline-media-remove-button{
-	margin-right: 10px;
+  /* Spacing control header — label + reset on row 1, unit pills on row 2 so
+     px/em/% never wrap into the TOP/RIGHT/BTM/LEFT grid (especially inside
+     the narrower Pro lock teaser boxes). */
+  .cooltimeline-tab-settings .timeline-block-spacing-control .timeline-block-control__header {
+    margin-bottom: 8px;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-spacing-control .timeline-block-control__actions {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 6px 8px;
+    width: 100%;
+    align-items: center;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-spacing-control .timeline-block-control__actions_label,
+  .cooltimeline-tab-settings .timeline-block-spacing-control .timeline-block-control__actions h2 {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0 !important;
+    padding: 0;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: #1c1c1a;
+    line-height: 1.3;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-spacing-control .timeline-block-control__actions_reset {
+    grid-column: 2;
+    grid-row: 1;
+    flex: none;
+    width: 23px !important;
+    height: 23px !important;
+    min-width: 23px !important;
+    margin: 0 !important;
+    padding: 0 4px !important;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-spacing-control .timeline-block-control__units {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin-left: 0 !important;
+    justify-self: end;
+    display: inline-flex;
+    flex-wrap: nowrap;
+    gap: 2px;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-control__units .components-button {
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 5px 7px !important;
+    font-size: 10.5px !important;
+    line-height: 1 !important;
+    z-index: 0 !important;
+  }
+
+  .cooltimeline-tab-settings .ctlb-pro-lock .timeline-block-spacing-control {
+    margin-bottom: 0 !important;
+  }
+
+  .cooltimeline-tab-settings .ctlb-pro-lock .timeline-block-spacing-control + .timeline-block-spacing-control {
+    margin-top: calc(-1 * var(--ctlb-stack-gap)) !important;
+    padding-top: var(--ctlb-stack-gap);
+  }
+
+  .cooltimeline-tab-settings .ctlb-general-card .components-panel__body.is-opened > .components-panel__body-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ctlb-stack-gap);
+    padding: 0;
+  }
+
+  .cooltimeline-tab-settings .ctlb-general-card .components-panel__body.is-opened > .components-panel__body-content > * {
+    margin: 0 !important;
+  }
+
+  .cooltimeline-tab-settings .ctlb-row--stack .timeline-block-settings-labels {
+    margin-bottom: var(--ctlb-label-gap);
+  }
+
+.ctlb-visual-options {
+	margin-bottom: 0;
 }
 
-/* block style tab css start */
-.cooltimeline-tab-settings .ctlb-tabs::before{
-	font-family: dashicons;
-    display: inline-block;
-    line-height: 1;
-    font-weight: 400;
-    font-style: normal;
-    text-decoration: inherit;
-    text-transform: none;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    width: 25px;
-    height: 25px;
-    font-size: 25px;
-    vertical-align: top;
-    text-align: center;
-    transition: color 0.1s ease-in;
+.cooltimeline-tab-settings .ctlb-visual-options .components-base-control__label {
+	font-size: 11px;
+	font-weight: 500;
+	text-transform: uppercase;
+	margin-bottom: var(--ctlb-label-gap);
+	color: #3d3d38;
+}
+
+.ctlb-visual-options__grid {
+	display: grid;
+	gap: 8px;
+}
+.ctlb-visual-options__grid--2 {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.ctlb-visual-options__grid--3 {
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.ctlb-visual-option {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 6px 10px;
+	border: 1px solid #e5e5e1;
+	border-radius: 8px;
+	background: #fff;
+	cursor: pointer;
+	color: #1e1e1e;
+	transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+.ctlb-visual-option:hover {
+	border-color: #c8c8c2;
+}
+.ctlb-visual-option.is-active {
+	border-color: var(--ctlb-brand, #0d7a6f);
+	box-shadow: 0 0 0 1px var(--ctlb-brand, #0d7a6f);
+}
+.ctlb-visual-option.is-pro {
+	position: relative;
+	background: #fafaf8;
+}
+
+.ctlb-visual-option.is-pro .ctlb-pro-badge {
 	position: absolute;
-	left: 50%;
-	top: 2px;
-	transform: translateX(-50%);
+	top: 5px;
+	right: 5px;
+	margin: 0;
+	padding: 1px 5px;
+	font-size: 8px;
 }
-.cooltimeline-tab-settings .ctlb-general-tab.ctlb-tabs::before{
-	content: '\f108';
-	transform: translateX(-50%) rotate(90deg);
+
+.ctlb-visual-option.is-pro:not(.is-active):hover {
+	border-color: var(--ctlb-brand, #0d7a6f);
+	box-shadow: 0 0 0 1px rgba(13, 122, 111, 0.18);
 }
-.cooltimeline-tab-settings .ctlb-style-tab::before{
-	content: '\f540';
+.ctlb-visual-option__preview {
+	width: 100%;
+	color: #1e1e1e;
 }
-.cooltimeline-tab-settings .ctlb-advanced-tab::before{
-	content: '\f111';
+.ctlb-visual-option__preview svg {
+	display: block;
+	width: 100%;
+	height: auto;
 }
-.cooltimeline-tab-settings .ctlb-tabs{
-	padding-top: 25px
+.ctlb-visual-option__label {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 4px;
+	font-size: 11px;
+	line-height: 1.3;
+	text-align: center;
+	color: #3d3d38;
+}
+
+.cooltimeline-tab-settings .ctlb-segmented-btn-label .ctlb-pro-badge {
+	margin-left: 4px;
+	font-size: 8px;
+	padding: 1px 5px;
+	vertical-align: middle;
+}
+
+.ctlb-panel-title .ctlb-pro-badge {
+	margin-left: auto;
+	flex-shrink: 0;
+}
+
+.ctlb-pro-field-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	margin: 0;
+}
+
+.ctlb-pro-field-header .timeline-block-settings-labels,
+.ctlb-pro-field-header .ctlb-label-heading {
+	margin: 0;
+}
+
+.ctlb-pro-badge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin-left: 0;
+	padding: 2px 7px;
+	border-radius: 999px;
+	background: #ffffff;
+	color: var(--ctlb-brand, #0d7a6f);
+	border: 1px solid rgba(13, 122, 111, 0.35);
+	font-size: 9px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	line-height: 1.4;
+	vertical-align: middle;
+	flex-shrink: 0;
+}
+
+.ctlb-pro-lock {
+	position: relative;
+	margin: 0;
+	padding: 12px;
+	border: 1px dashed #d6d6d0;
+	border-radius: 8px;
+	background: linear-gradient(180deg, #fafaf8 0%, #f5f5f2 100%);
+	cursor: pointer;
+	overflow: hidden;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ctlb-pro-lock:hover,
+.ctlb-pro-lock:focus-within {
+	border-color: var(--ctlb-brand, #0d7a6f);
+	box-shadow: 0 0 0 1px rgba(13, 122, 111, 0.14);
+}
+
+.ctlb-pro-lock--compact {
+	padding: 10px;
+	margin-bottom: 0;
+}
+
+.ctlb-pro-lock__badge {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	z-index: 3;
+	pointer-events: none;
+}
+
+.ctlb-pro-lock__controls {
+	position: relative;
+	z-index: 1;
+	pointer-events: none;
+	user-select: none;
+	opacity: 0.78;
+}
+
+.ctlb-pro-lock:hover .ctlb-pro-lock__controls,
+.ctlb-pro-lock:focus-within .ctlb-pro-lock__controls {
+	opacity: 0.62;
+}
+
+.ctlb-pro-lock__hint {
+	position: absolute;
+	inset: 0;
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 8px;
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--ctlb-brand, #0d7a6f);
+	background: rgba(255, 255, 255, 0.88);
+	opacity: 0;
+	transition: opacity 0.15s ease;
+	pointer-events: none;
+	text-align: center;
+}
+
+.ctlb-pro-lock:hover .ctlb-pro-lock__hint,
+.ctlb-pro-lock:focus-within .ctlb-pro-lock__hint {
+	opacity: 1;
+}
+
+.ctlb-segmented-btn--pro {
+	position: relative;
+	opacity: 0.92;
+}
+
+.ctlb-segmented-btn--pro:hover {
+	border-color: var(--ctlb-brand, #0d7a6f) !important;
+	color: var(--ctlb-brand, #0d7a6f) !important;
+}
+
+.ctlb-segmented-btn-pro-mark {
+	position: absolute;
+	top: 3px;
+	right: 3px;
+	line-height: 1;
+	pointer-events: none;
+}
+
+.ctlb-segmented-btn-pro-mark .ctlb-pro-badge {
+	padding: 1px 5px;
+	font-size: 8px;
+}
+
+.ctlb_icon_buttons_control .ctlb-segmented-btn--pro {
+	flex: 1 1 0;
+	min-width: 0;
+}
+
+.ctlb_icon_buttons_control .ctlb-segmented-btn--pro .ctlb-segmented-btn-label {
+	padding-right: 14px;
+}
+
+.ctlb-pro-lock--inline {
+	display: inline-flex;
+	flex: 1 1 auto;
+	min-width: 0;
+	padding: 0;
+	margin: 0;
+	border: none;
+	background: transparent;
+}
+
+.ctlb-pro-lock--inline .ctlb-pro-lock__hint {
+	display: none;
+}
+
+.ctlb-pro-lock--inline .ctlb-pro-lock__controls {
+	opacity: 1;
+}
+
+.ctlb-setting-description {
+	margin: 0;
+	font-size: 12px;
+	line-height: 1.4;
+	color: #757575;
+}
+
+.cool-timeline-content-alignment-buttons,
+.ctl_media_control,
+.ctl_connector_control,
+.ctlb_icon_buttons_control {
+	width: 100%;
+	margin-bottom: 5px;
+}
+
+.ctlb_icon_buttons_control button {
+	width: 25%;
+	justify-content: center;
+	box-shadow: inset 0 0 0 1px #ccc !important;
+	color: #ccc !important;
+}
+
+.ctlb_icon_buttons_control button.active {
+	color: var(--wp-admin-theme-color) !important;
+	background-color: #dff4ff;
+}
+
+.ctlb_icon_buttons_control .ctlb-pro-lock--inline {
+	width: 50%;
+	display: inline-flex;
+	position: relative;
+}
+
+.ctlb_icon_buttons_control .ctlb-pro-lock--inline .ctlb-pro-lock__controls {
+	display: flex;
+	width: 100%;
+}
+
+.ctlb_icon_buttons_control .ctlb-pro-lock--inline button {
+	width: 50%;
+}
+
+.cp-timeline-block-boxshadow-controller-wrapper {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 8px;
+}
+
+.cp-timeline-block-unit_control {
+	flex: 1;
+}
+
+.ctlb-pro-upgrade {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin: 8px 0 4px;
+	padding: 8px 12px;
+	min-height: 36px;
+	border-radius: 2px;
+	background: var(--wp-admin-theme-color, #3858e9);
+	color: #fff !important;
+	text-decoration: none;
+	font-size: 13px;
+	font-weight: 500;
+}
+
+.ctlb-pro-upgrade:hover {
+	color: #fff !important;
+	filter: brightness(1.05);
 }
 /* block style tab css end */
