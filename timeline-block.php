@@ -149,7 +149,7 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 					'version'                 => CTLB_V,
 					'api'                     => CTLB_FEEDBACK_API,
 					'cron_hook'               => 'ctlb_extra_data_update',
-					'consent_master_option'   => 'cpfm_opt_in_choice_timeline_block',
+					'consent_master_option'   => 'cpfm_opt_in_choice_cool-timeline',
 					'consent_override_option' => 'ctlb-cpfm-data-sharing',
 					'install_date_option'     => 'ctlb-install-date',
 					'initial_version_option'  => 'ctlb-initial-save-version',
@@ -158,7 +158,7 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 				)
 			);
 			$usage_override = get_option( 'ctlb-cpfm-data-sharing' );
-			if ( 'yes' === $usage_override || ( false === $usage_override && 'yes' === get_option( 'cpfm_opt_in_choice_timeline_block' ) ) ) {
+			if ( 'yes' === $usage_override || ( false === $usage_override && 'yes' === get_option( 'cpfm_opt_in_choice_cool-timeline') ) ) {
 				CPFM_Usage_Cron::cpfm_schedule_event( 'ctlb_extra_data_update' );
 			}
 			add_action(
@@ -182,11 +182,11 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 					'cpfm_register_notice',
 					static function () {
 						CPFM_Feedback_Notice::cpfm_register_notice(
-							'timeline_block',
+							'cool-timeline',
 							array(
 								'plugin_name'    => 'timeline_block',
-								'title'          => __( 'Help Improve Timeline Block', 'timeline-block' ),
-								'message'        => __( 'Share non-sensitive usage data so we can improve Timeline Block compatibility and features.', 'timeline-block' ),
+								'title'          => __( 'Timeline Plugins by Cool Plugins', 'timeline-block' ),
+								'message'        => __( 'Help us make this plugin more compatible with your site by sharing non-sensitive site data.', 'timeline-block' ),
 								'pages'          => array(
 									'ctlb-getting-started',
 									'timeline-addons_page_ctl-getting-started',
