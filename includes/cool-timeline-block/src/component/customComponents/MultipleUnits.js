@@ -206,58 +206,37 @@ const SpacingControl = ( props ) => {
 		linkValue = valueTop.value;
 		changeLinkedValues( linkValue );
 	};
-	const [ labelTop, labelRight, labelBottom, labelLeft ] = props.labels || [
-		__( 'Top', 'timeline-block' ),
-		__( 'Right', 'timeline-block' ),
-		__( 'Btm', 'timeline-block' ),
-		__( 'Left', 'timeline-block' ),
-	];
-	const defaultValue = props.defaultValue !== undefined ? props.defaultValue : '0';
 	const output = {};
 	output.Desktop = (
-		<div className="timeline-block-spacing-control__grid">
-			<div className="timeline-block-spacing-control__cell">
+		<>
+			<div className="timeline-block-spacing-control__inputs">
 				<input
 					className="cp-block-timeline-number_control top"
 					type="number"
-					placeholder="-"
 					onChange={ ( e ) => onChangeTopValue( e ) }
-					value={ ( '' !== valueTop.value ) ? valueTop.value : defaultValue }
+					value={ ( '' !== valueTop.value ) ? valueTop.value : '0' }
 					/>
-				<span className="cp-block-timeline-number_control-label">{ labelTop }</span>
-			</div>
-			<div className="timeline-block-spacing-control__cell">
 				<input
 					className="cp-block-timeline-number_control right"
 					type="number"
-					placeholder="-"
 					onChange={ ( e ) => onChangeRightValue( e ) }
-					value={ ( '' !== valueRight.value ) ? valueRight.value : defaultValue }
+					value={ ( '' !== valueRight.value ) ? valueRight.value : '0' }
 				/>
-				<span className="cp-block-timeline-number_control-label">{ labelRight }</span>
-			</div>
-			<div className="timeline-block-spacing-control__cell">
 				<input
 					className="cp-block-timeline-number_control bottom"
 					type="number"
-					placeholder="-"
 					onChange={ ( e ) => onChangeBottomValue( e ) }
-					value={ ( '' !== valueBottom.value ) ? valueBottom.value : defaultValue }
+					value={ ( '' !== valueBottom.value ) ? valueBottom.value : '0' }
 					/>
-				<span className="cp-block-timeline-number_control-label">{ labelBottom }</span>
-			</div>
-			<div className="timeline-block-spacing-control__cell">
 				<input
 					className="cp-block-timeline-number_control left"
 					type="number"
-					placeholder="-"
 					onChange={ ( e ) => onChangeLeftValue( e ) }
-					value={ ( '' !== valueLeft.value ) ? valueLeft.value : defaultValue }
+					value={ ( '' !== valueLeft.value ) ? valueLeft.value : '0' }
 					/>
-				<span className="cp-block-timeline-number_control-label">{ labelLeft }</span>
+				{ linkHtml }
 			</div>
-			<div className="timeline-block-spacing-control__link-cell">{ linkHtml }</div>
-		</div>
+		</>
 	);
 	const resetValues = (  ) => {
 		onChangeTopValue( '', '', true );
@@ -302,6 +281,21 @@ const SpacingControl = ( props ) => {
 					</div>
 				</div>
                 { output.Desktop }
+				<div className="timeline-block-spacing-control__input-labels">
+					<span className="cp-block-timeline-number_control-label">
+						{ __( 'Top', 'timeline-block' ) }
+					</span>
+					<span className="cp-block-timeline-number_control-label">
+						{ __( 'Right', 'timeline-block' ) }
+					</span>
+					<span className="cp-block-timeline-number_control-label">
+						{ __( 'Bottom', 'timeline-block' ) }
+					</span>
+					<span className="cp-block-timeline-number_control-label">
+						{ __( 'Left', 'timeline-block' ) }
+					</span>
+					<span className="cp-block-timeline-number_control-label cp-timeline-block_control__link-label"></span>
+				</div>
 			</div>
 		</div>
 	);

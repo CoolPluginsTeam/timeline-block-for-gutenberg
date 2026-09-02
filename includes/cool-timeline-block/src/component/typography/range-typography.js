@@ -1,27 +1,53 @@
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
+ import { __ } from '@wordpress/i18n';
 
 const {
+	RangeControl,
+	ButtonGroup,
 	Button,
+	Dashicon,
 } = wp.components
 
-const { useSelect } = wp.data;
+// Extend component
+const { Fragment } = wp.element
+const { useSelect, useDispatch } = wp.data;
+import map from 'lodash/map.js';
 
 /**
- * Compact Font size / Line height row (number + unit + reset).
+ * Build the Measure controls
+ * @returns {object} Measure settings.
  */
 export default function RangeTypographyControl ( props ) {
 	const deviceType = useSelect( ( select ) => {
-		const editor = select( 'core/editor' );
-		if ( editor && typeof editor.getDeviceType === 'function' ) {
-			return editor.getDeviceType();
-		}
-		return 'Desktop';
+		return select( 'core/editor' ).getDeviceType();
 	}, [] );
-
-	let sizeTypes
+	const {
+		__experimentalSetPreviewDeviceType: setPreviewDeviceType,
+	} = useDispatch( 'core/edit-post' );
+	const customSetPreviewDeviceType = ( device ) => {
+		setPreviewDeviceType( device );
+	};
+	const devices = [
+		{
+			name: 'Desktop',
+			title: <Dashicon icon="desktop" />,
+			itemClass: 'timeline-block-desktop-tab timeline-block-responsive-tabs',
+		},
+		{
+			name: 'Tablet',
+			title: <Dashicon icon="tablet" />,
+			itemClass: 'timeline-block-tablet-tab timeline-block-responsive-tabs',
+		},
+		{
+			name: 'Mobile',
+			key: 'mobile',
+			title: <Dashicon icon="smartphone" />,
+			itemClass: 'timeline-block-mobile-tab timeline-block-responsive-tabs',
+		},
+	];
+ 	let sizeTypes
 
 	if( "sizeTypes" in props ) {
 		sizeTypes = props.sizeTypes
@@ -32,67 +58,89 @@ export default function RangeTypographyControl ( props ) {
 		]
 	}
 
-	const sizeRow = ( { label, value, valueLabel, type, typeLabel, steps } ) => (
-		<div className="ctlb-typo-size-row">
-			<span className="ctlb-typo-size-label">{ label }</span>
-			<div className="ctlb-typo-size-controls">
-				<input
-					type="number"
-					className="ctlb-typo-size-input"
-					value={ value.value ?? "" }
-					step={ steps }
-					onChange={ ( e ) => props.setAttributes( { [ valueLabel ]: e.target.value === "" ? undefined : Number( e.target.value ) } ) }
-				/>
-				<div className="ctlb-segmented ctlb-typo-unit-toggle">
-					{ sizeTypes.map( ( { name, key } ) => (
-						<Button
-							key={ key }
-							className={ `ctlb-segmented-btn${ type.value === key ? ' is-active' : '' }` }
-							onClick={ () => props.setAttributes( { [ typeLabel ]: key } ) }
-						>
-							{ name }
-						</Button>
-					) ) }
-				</div>
+	const sizeTypesControls = (
+		<ButtonGroup className="timeline-block-size-type-field" aria-label={ __( "Size Type",'timeline-block' ) }>
+			{ map( sizeTypes, ( { name, key } ) => (
 				<Button
-					className="ctlb-typo-size-reset"
-					onClick={ () => props.setAttributes( { [ valueLabel ]: undefined, [ typeLabel ]: "px" } ) }
+					key={ key }
+					className="timeline-block-size-btn"
+					isSmall
+					isPrimary={ props.type.value === key }
+					aria-pressed={ props.type.value === key }
+					onClick={ () => props.setAttributes( { [props.typeLabel]: key } ) }
 				>
-					{ __( "Reset", "timeline-block" ) }
+					{ name }
 				</Button>
-			</div>
-		</div>
+			) ) }
+		</ButtonGroup>
 	)
-
 	const output = {};
-	output.Desktop = sizeRow( {
-		label: props.sizeText,
-		value: props.size,
-		valueLabel: props.sizeLabel,
-		type: props.type,
-		typeLabel: props.typeLabel,
-		steps: props.steps,
-	} );
-	output.Tablet = sizeRow( {
-		label: props.sizeTabletText,
-		value: props.sizeTablet,
-		valueLabel: props.sizeTabletLabel,
-		type: props.type,
-		typeLabel: props.typeLabel,
-		steps: props.steps,
-	} );
-	output.Mobile = sizeRow( {
-		label: props.sizeMobileText,
-		value: props.sizeMobile,
-		valueLabel: props.sizeMobileLabel,
-		type: props.type,
-		typeLabel: props.typeLabel,
-		steps: props.steps,
-	} );
-
+	output.Desktop = (
+		<Fragment>
+			{sizeTypesControls}
+			<RangeControl
+				label={ __( props.sizeText ) }
+				value={ props.size.value || "" }
+				onChange={ ( value ) => props.setAttributes( { [props.sizeLabel]: value } ) }
+				min={ 0 }
+				max={ 100 }
+				step={ props.steps }
+				beforeIcon="editor-textcolor"
+				allowReset={true}
+				initialPosition={props.initialPosition}
+				__next40pxDefaultSize={ true }
+			/>
+		</Fragment>
+	);
+	output.Tablet = (
+		<Fragment>
+			{sizeTypesControls}
+			<RangeControl
+				label={ __( props.sizeTabletText ) }
+				value={ props.sizeTablet.value }
+				onChange={ ( value ) => props.setAttributes( { [props.sizeTabletLabel]: value } ) }
+				min={ 0 }
+				max={ 100 }
+				step={ props.steps }
+				beforeIcon="editor-textcolor"
+				allowReset={true}
+				initialPosition={18}
+				__next40pxDefaultSize={ true }
+			/>
+		</Fragment>
+	);
+	output.Mobile = (
+		<Fragment>
+			{sizeTypesControls}
+			<RangeControl
+				label={ __( props.sizeMobileText ) }
+				value={ props.sizeMobile.value }
+				onChange={ ( value ) => props.setAttributes( { [props.sizeMobileLabel]: value } ) }
+				min={ 0 }
+				max={ 100 }
+				step={ props.steps }
+				beforeIcon="editor-textcolor"
+				allowReset={true}
+				initialPosition={30}
+				__next40pxDefaultSize={ true }
+			/>
+		</Fragment>
+	);
 	return (
 		<div className={ 'timeline-block-typography-range-options' }>
 			<div className="timeline-block-size-type-field-tabs">
+				{/* <ButtonGroup className="components-tab-panel__tabs" aria-label={ __( 'Device', 'timeline-block' ) }>
+					{ map( devices, ( { name, key, title, itemClass } ) => (
+						<Button
+							key={ key }
+							className={ `components-button components-tab-panel__tabs-item ${ itemClass }${ name === deviceType ? ' active-tab' : '' }` }
+							aria-pressed={ deviceType === name }
+							onClick={ () => customSetPreviewDeviceType( name ) }
+						>
+							{ title }
+						</Button>
+					) ) }
+				</ButtonGroup> */}
 				<div className="timeline-block-responsive-control-inner">
 				{ ( output[ deviceType ] ? output[ deviceType ] : output.Desktop ) }
 				</div>

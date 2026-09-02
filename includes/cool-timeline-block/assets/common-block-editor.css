@@ -1,3 +1,7 @@
+.cooltimeline-tab-settings .timeline-block-iconpicker {
+	margin-top: 0 !important;
+}
+
 .timeline-block-iconpicker{
 	margin-top: 1rem;
 	position: relative;
@@ -261,7 +265,8 @@
 	float: right;
     line-height: 1;
 	background: transparent !important;
-	color: var(--wp-components-color-foreground-inverted, #000) !important;
+	color: #000 !important;
+
   }
 
 .timeline-block-typography-options .timeline-block-size-btn.timeline-block-typography-reset-btn {
@@ -364,7 +369,6 @@ i.fipicon-angle-left:before {
   .cp-timeline-block-style-settings h2{
 	margin: 0;
     padding: 0;
-    text-transform: uppercase;
   }
 
   .cp-timeline-typography_apply .timeline-block-typography-control-btn,
@@ -420,17 +424,12 @@ i.fipicon-angle-left:before {
 	content: unset;
   }
 
-  .cooltimeline-tab-settings .ctlb-label-heading{
-	margin-bottom: 0 !important;
-	margin-top: 0px;
-  }
-
-  .cooltimeline-tab-settings .ctlb-label-heading ~ .cp-timeline-block-range__control{
+  .cooltimeline-tab-settings .ctlb-label-heading ~ .cp-timeline-block-range__control {
 	margin-bottom: 0 !important;
   }
 
-  .cooltimeline-tab-settings .ctlb-label-heading + .cp-timeline-block-range__control {
-    margin-top: calc(-1 * var(--ctlb-stack-gap) + var(--ctlb-label-gap)) !important;
+  .cooltimeline-tab-settings .ctlb-pro-field-header .ctlb-label-heading {
+    margin: 0 !important;
   }
   
   .timeline-block-typography-reset-btn,
@@ -456,7 +455,7 @@ i.fipicon-angle-left:before {
     display: flex;
     align-items: center;
   }
-  
+
   .cp-timeline-block-color-palates {
     color: transparent !important;
     font-size: 0px !important;
@@ -475,7 +474,7 @@ i.fipicon-angle-left:before {
   }
   
   .timeline-block-typography-option-actions h2 {
-    margin-block: .6rem !important;
+    margin-block: 0 !important;
   }
 
   .timeline-block-typography-control-btn {
@@ -601,7 +600,7 @@ i.fipicon-angle-left:before {
     --ctlb-brand: #0d7a6f;
     --ctlb-brand-tint: #e9f5f3;
     --ctlb-badge-tint: #ebebfa;
-    --ctlb-stack-gap: 16px;
+    --ctlb-stack-gap: 20px;
     --ctlb-label-gap: 8px;
   }
 
@@ -615,8 +614,28 @@ i.fipicon-angle-left:before {
     border-radius: 0 !important;
   }
 
-  .cooltimeline-tab-settings .components-card__body {
-    padding: 16px !important;
+  /* Tab shell — margin-top on tab-content is the reliable tabs→content spacer. */
+  .cooltimeline-tab-settings.components-tab-panel {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .cooltimeline-tab-settings .components-tab-panel__tab-content {
+    margin-top: 20px !important;
+    padding-top: 0 !important;
+    min-height: 0;
+  }
+
+  .cooltimeline-tab-settings.components-tab-panel > .components-card,
+  .cooltimeline-tab-settings .components-tab-panel__tab-content > .components-card {
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 0;
+  }
+
+  .cooltimeline-tab-settings .components-card__body,
+  .cooltimeline-tab-settings .components-card-body {
+    padding: 0 16px 16px !important;
   }
 
   /* Style / Advanced accordion lists — equal gap between every panel card. */
@@ -624,6 +643,7 @@ i.fipicon-angle-left:before {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    padding: 0 16px 16px !important;
   }
 
   .cooltimeline-tab-settings .ctlb-panel-stack > .components-panel__body {
@@ -637,7 +657,8 @@ i.fipicon-angle-left:before {
     background: #f1f1ef;
     border-radius: 7px;
     padding: 2px;
-    margin: 10px 16px 4px;
+    margin: 10px 16px 0 !important;
+    flex-shrink: 0;
   }
 
   .cooltimeline-tab-settings .ctlb-tabs {
@@ -686,26 +707,31 @@ i.fipicon-angle-left:before {
     font-weight: 500;
     line-height: 1.4;
     text-transform: uppercase;
-    margin-bottom: 0;
+    margin-bottom: 8px;
     padding: 0px;
   }
 
-  /* General tab: label-left / control-right rows */
+  /* General tab: label-left / control-right rows (parent flex gap handles spacing) */
   .cooltimeline-tab-settings .ctlb-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    margin-bottom: var(--ctlb-stack-gap);
+    margin-bottom: 0;
   }
 
   /* Stacked variant: label on its own line, control fills the full width below.
      Used for multi-option segmented controls, which don't reliably fit next to
      a label on the sidebar's ~280px width (a side-by-side layout can overflow). */
-  .cooltimeline-tab-settings .ctlb-row.ctlb-row--stack {
+  .cooltimeline-tab-settings .ctlb-row.ctlb-row--stack,
+  .cooltimeline-tab-settings .ctlb-row--stack:not(.ctlb-row) {
     flex-direction: column;
     align-items: stretch;
-    gap: 6px;
+    gap: var(--ctlb-label-gap);
+  }
+
+  .cooltimeline-tab-settings .ctlb-row--stack:not(.ctlb-row) {
+    display: flex;
   }
 
   .cooltimeline-tab-settings .ctlb-row--stack .ctlb-segmented {
@@ -806,34 +832,110 @@ i.fipicon-angle-left:before {
     margin: 0 !important;
     padding: 0;
     height: 0;
+    align-self: stretch;
+    flex-shrink: 0;
   }
 
-  /* ── Unified vertical rhythm: one 16px gap between setting groups ── */
-  .cooltimeline-tab-settings .components-panel__body.is-opened > .components-panel__body-content,
+  /* ── Unified vertical rhythm: flex column + gap (avoids margin collapse in WP panels) ── */
+  .cooltimeline-tab-settings .ctlb-inspector-stack,
   .cooltimeline-tab-settings .ctlb-style-element-card.ctlb-general-card,
+  .cooltimeline-tab-settings .components-panel__body.is-opened,
+  .cooltimeline-tab-settings .components-panel__body.is-opened > .components-panel__body-content,
+  .cooltimeline-tab-settings .ctlb-panel-stack .components-panel__body.is-opened > .components-panel__body-content,
+  .cooltimeline-tab-settings .ctlb-general-card .components-panel__body.is-opened > .components-panel__body-content,
   .cooltimeline-tab-settings .ctlb-pro-lock__controls {
     display: flex;
     flex-direction: column;
     gap: var(--ctlb-stack-gap);
   }
 
-  .cooltimeline-tab-settings .components-panel__body.is-opened > .components-panel__body-content {
-    padding: 4px 16px 16px;
-  }
-
-  .cooltimeline-tab-settings .components-panel__body.is-opened > .components-panel__body-content > *,
+  .cooltimeline-tab-settings .ctlb-inspector-stack > *,
   .cooltimeline-tab-settings .ctlb-style-element-card.ctlb-general-card > *,
+  .cooltimeline-tab-settings .components-panel__body.is-opened > :not(.components-panel__body-title),
+  .cooltimeline-tab-settings .components-panel__body.is-opened > .components-panel__body-content > *,
+  .cooltimeline-tab-settings .ctlb-panel-stack .components-panel__body.is-opened > .components-panel__body-content > *,
+  .cooltimeline-tab-settings .ctlb-general-card .components-panel__body.is-opened > .components-panel__body-content > *,
   .cooltimeline-tab-settings .ctlb-pro-lock__controls > * {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
   }
 
-  /* Label + slider/range = one visual group (8px inside, 16px after) */
-  .cooltimeline-tab-settings .ctlb-label-heading {
-    margin: 0 0 var(--ctlb-label-gap) !important;
+  .cooltimeline-tab-settings .components-panel__body .components-base-control .components-base-control__label {
+    margin-bottom: var(--ctlb-label-gap);
   }
 
-  .cooltimeline-tab-settings .ctlb-label-heading ~ .cp-timeline-block-range__control {
+  /* WP 7.1+: PanelBody children are direct siblings of the title (no __body-content wrapper). */
+  /* .cooltimeline-tab-settings .components-panel__body.is-opened:not(:has(> .components-panel__body-content)) {
+    padding: 0 16px 16px;
+  } */
+
+  .cooltimeline-tab-settings .components-panel__body.is-opened:not(:has(> .components-panel__body-content)) > .components-panel__body-title {
+    margin-left: -16px !important;
+    margin-right: -16px !important;
+  }
+
+  .cooltimeline-tab-settings .components-panel__body.is-opened > .components-panel__body-content,
+  .cooltimeline-tab-settings .ctlb-panel-stack .components-panel__body.is-opened > .components-panel__body-content {
+    padding: 8px 16px 16px;
+  }
+
+  .cooltimeline-tab-settings .ctlb-general-card .components-panel__body.is-opened:not(:has(> .components-panel__body-content)) {
+    padding: 0;
+  }
+
+  .cooltimeline-tab-settings .ctlb-general-card .components-panel__body.is-opened:not(:has(> .components-panel__body-content)) > .components-panel__body-title {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .cooltimeline-tab-settings .ctlb-general-card .components-panel__body.is-opened > .components-panel__body-content {
+    padding: 0;
+  }
+
+  /* Label + control pairs (Bottom Spacing + slider, etc.) */
+  .cooltimeline-tab-settings .ctlb-field-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ctlb-label-gap);
+    margin: 0 !important;
+  }
+
+  .cooltimeline-tab-settings .ctlb-field-stack > * {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Pro header + lock = one group (8px inside, 20px outside) */
+  .cooltimeline-tab-settings .ctlb-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ctlb-label-gap);
+    margin: 0 !important;
+  }
+
+  .cooltimeline-tab-settings .ctlb-field-group > * {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .cooltimeline-tab-settings .ctlb-setting-description {
+    margin: 0 !important;
+    font-size: 12px;
+    line-height: 1.45;
+    color: #6d6d66;
+  }
+
+  .cooltimeline-tab-settings .ctlb-general-card .ctlb-row,
+  .cooltimeline-tab-settings .components-panel__body.is-opened .ctlb-row {
+    margin-bottom: 0 !important;
+  }
+
+  .cooltimeline-tab-settings .components-panel__body.is-opened .components-base-control {
+    margin-bottom: 0 !important;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-size-type-field-tabs {
+    margin-top: 0 !important;
     margin-bottom: 0 !important;
   }
 
@@ -841,18 +943,12 @@ i.fipicon-angle-left:before {
     margin-bottom: 0 !important;
   }
 
-  .cooltimeline-tab-settings .timeline-block-typography-options + .cp-timeline-block-style-settings,
-  .cooltimeline-tab-settings .ctlb-pro-lock .timeline-block-typography-options + .cp-timeline-block-style-settings {
-    margin-top: 0;
-  }
-
-  /* Pro section header sits 8px above its lock box */
   .cooltimeline-tab-settings .ctlb-pro-field-header {
-    margin: 0 0 var(--ctlb-label-gap) !important;
+    margin: 0 !important;
   }
 
-  .cooltimeline-tab-settings .ctlb-pro-field-header + .ctlb-pro-lock {
-    margin-top: calc(-1 * var(--ctlb-stack-gap) + var(--ctlb-label-gap)) !important;
+  .cooltimeline-tab-settings .ctlb-pro-field-header .timeline-block-settings-labels {
+    margin-bottom: 0;
   }
 
   .cooltimeline-tab-settings .ctlb-pro-lock {
@@ -870,13 +966,6 @@ i.fipicon-angle-left:before {
     margin-top: 0 !important;
     padding-top: 0;
     border-top: none;
-  }
-
-  .cooltimeline-tab-settings .ctlb-section-divider + .cp-timeline-block-style-settings,
-  .cooltimeline-tab-settings .ctlb-section-divider + .ctlb-pro-field-header,
-  .cooltimeline-tab-settings .ctlb-section-divider + .timeline-block-settings-labels,
-  .cooltimeline-tab-settings .ctlb-section-divider + .ctlb-label-heading {
-    margin-top: 0;
   }
 
   .cooltimeline-tab-settings .ctlb-general-card .components-panel__body {
@@ -926,10 +1015,6 @@ i.fipicon-angle-left:before {
   }
 
   .cooltimeline-tab-settings .ctlb-style-element-card > *:last-child {
-    margin-bottom: 0;
-  }
-
-  .cooltimeline-tab-settings .ctlb-general-card .ctlb-row {
     margin-bottom: 0;
   }
 
@@ -1009,7 +1094,7 @@ i.fipicon-angle-left:before {
     display: flex;
     align-items: center;
     min-height: 44px;
-    padding: 8px 12px !important;
+    padding: 10px 12px 8px !important;
     box-sizing: border-box;
   }
 
@@ -1087,7 +1172,7 @@ i.fipicon-angle-left:before {
      reset, replacing the RangeControl slider — matches the narrow sidebar width
      better than a slider + separate unit buttons stacked across two rows. */
   .cooltimeline-tab-settings .ctlb-typo-size-row {
-    margin-bottom: 14px;
+    margin-bottom: 0;
   }
 
   .cooltimeline-tab-settings .ctlb-typo-size-label {
@@ -1146,6 +1231,177 @@ i.fipicon-angle-left:before {
 
   .cooltimeline-tab-settings .ctlb-typo-size-reset:hover {
     background: #0a5f57 !important;
+  }
+
+  /* Typography — closed: header row only; open: popup panel via wrench */
+  .cooltimeline-tab-settings .timeline-block-typography-options {
+    position: relative;
+    display: block;
+    margin: 0 !important;
+    padding: 0;
+    border: none;
+    background: transparent;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-advanced {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    gap: var(--ctlb-stack-gap);
+    margin: 0 !important;
+    padding: 12px;
+    min-height: 0 !important;
+    height: auto;
+    border: 1px solid #e2e4e7;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 8px 28px rgba(25, 30, 35, 0.14);
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-advanced::before {
+    right: 14px;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-advanced::after {
+    right: 14px;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-advanced > * {
+    margin: 0 !important;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-range-options .timeline-block-size-type-field-tabs {
+    margin: 0 !important;
+  }
+
+  .cooltimeline-tab-settings .ctlb-typo-size-row {
+    margin-bottom: 0;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-font-family-options {
+    margin-top: 0 !important;
+    display: flex;
+    flex-direction: column;
+    gap: var(--ctlb-stack-gap);
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-font-family-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #3d3d38;
+    margin: 0;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-font-family-options .react-select-container {
+    width: 100%;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-font-family-options .react-select__control {
+    min-height: 36px;
+    border-color: #ddddd6;
+    border-radius: 6px;
+    box-shadow: none !important;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-font-family-options .react-select__control--is-focused {
+    border-color: var(--ctlb-brand, #0d7a6f) !important;
+    box-shadow: 0 0 0 1px var(--ctlb-brand, #0d7a6f) !important;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-font-family-options .components-base-control {
+    margin-bottom: 0 !important;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-font-family-options .components-base-control__label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: #6d6d66;
+    margin-bottom: 6px;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-font-family-options .components-base-control:last-child {
+    display: none;
+  }
+
+  .cooltimeline-tab-settings .ctlb-typo-unit-toggle .ctlb-segmented-btn {
+    padding: 5px 8px !important;
+    font-size: 11px !important;
+    min-width: 32px;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-options.is-typography-open .timeline-block-typography-control-btn {
+    box-shadow: 0 0 0 2px var(--ctlb-brand, #0d7a6f) !important;
+  }
+
+  .cooltimeline-tab-settings .components-panel__body.is-opened:has(.is-typography-open),
+  .cooltimeline-tab-settings .components-panel__body.is-opened:has(.timeline-block-typography-advanced) {
+    overflow: visible !important;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-control-btn .dashicon {
+    color: var(--ctlb-brand, #0d7a6f) !important;
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+  }
+
+  /* ── Unified inspector field rows (Typography, Text Color, labels) ── */
+  .cooltimeline-tab-settings .timeline-block-typography-option-actions,
+  .cooltimeline-tab-settings .cp-timeline-block-style-settings,
+  .cooltimeline-tab-settings .timeline-block-box-shadow-option-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    margin: 0 !important;
+    padding: 2px 0 !important;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-option-actions h2,
+  .cooltimeline-tab-settings .cp-timeline-block-style-settings h2,
+  .cooltimeline-tab-settings .timeline-block-box-shadow-option-actions h2,
+  .cooltimeline-tab-settings .ctlb-label-heading {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 1.35 !important;
+    color: #1c1c19 !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-option-actions h2,
+  .cooltimeline-tab-settings .cp-timeline-block-style-settings h2,
+  .cooltimeline-tab-settings .timeline-block-box-shadow-option-actions h2 {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-reset-btn,
+  .cooltimeline-tab-settings .timeline-block-colorpallete-reset,
+  .cooltimeline-tab-settings .timeline-block-box-shadow-reset-btn {
+    flex: none !important;
+    width: 23px !important;
+    height: 23px !important;
+    margin: 0 0 0 auto !important;
+    padding: 0 !important;
+    float: none !important;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-control-btn,
+  .cooltimeline-tab-settings .cp-timeline-block-style-settings > .components-color-palette__custom-color-button,
+  .cooltimeline-tab-settings .cp-timeline-block-style-settings > button.components-color-palette__custom-color-button,
+  .cooltimeline-tab-settings .timeline-block-box-shadow-control-btn {
+    flex: none !important;
+    margin: 0 !important;
   }
 
   /* Brand-teal toggle switches (Alternating sides, Year navigation, Line filling),
@@ -1365,19 +1621,8 @@ i.fipicon-angle-left:before {
     padding-top: var(--ctlb-stack-gap);
   }
 
-  .cooltimeline-tab-settings .ctlb-general-card .components-panel__body.is-opened > .components-panel__body-content {
-    display: flex;
-    flex-direction: column;
-    gap: var(--ctlb-stack-gap);
-    padding: 0;
-  }
-
-  .cooltimeline-tab-settings .ctlb-general-card .components-panel__body.is-opened > .components-panel__body-content > * {
-    margin: 0 !important;
-  }
-
   .cooltimeline-tab-settings .ctlb-row--stack .timeline-block-settings-labels {
-    margin-bottom: var(--ctlb-label-gap);
+    margin-bottom: 0;
   }
 
 .ctlb-visual-options {
@@ -1692,5 +1937,15 @@ i.fipicon-angle-left:before {
 .ctlb-pro-upgrade:hover {
 	color: #fff !important;
 	filter: brightness(1.05);
+}
+
+/* ── Tab bar → content top spacing ── */
+.cooltimeline-tab-settings .components-tab-panel__tab-content {
+	margin-top: 20px !important;
+	padding-top: 0 !important;
+}
+
+.cooltimeline-tab-settings .components-tab-panel__tabs {
+	margin: 10px 16px 0 !important;
 }
 /* block style tab css end */

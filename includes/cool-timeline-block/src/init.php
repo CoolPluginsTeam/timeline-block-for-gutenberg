@@ -169,9 +169,7 @@ function cltb_cp_timeline_cgb_block_assets() { // phpcs:ignore WordPress.NamingC
 		'cltb_cp_timeline-cgb-block-js',
 		Timeline_Block_Url . 'includes/cool-timeline-block/dist/block.build.js',
 		array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-block-editor' ),
-		file_exists( Timeline_Block_Dir . 'includes/cool-timeline-block/dist/block.build.js' )
-			? (string) filemtime( Timeline_Block_Dir . 'includes/cool-timeline-block/dist/block.build.js' )
-			: Timeline_Block_Version,
+		null, // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 		true
 	);
 
@@ -181,9 +179,7 @@ function cltb_cp_timeline_cgb_block_assets() { // phpcs:ignore WordPress.NamingC
 		'timeline-block-common-editor-css',
 		Timeline_Block_Url . 'includes/cool-timeline-block/assets/common-block-editor.css',
 		array( 'wp-edit-blocks' ),
-		file_exists( Timeline_Block_Dir . 'includes/cool-timeline-block/assets/common-block-editor.css' )
-			? (string) filemtime( Timeline_Block_Dir . 'includes/cool-timeline-block/assets/common-block-editor.css' )
-			: Timeline_Block_Version
+		null // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 	);
 
 	// Built editor CSS from webpack.
