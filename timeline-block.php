@@ -219,38 +219,38 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 						'onboarding_data'        => 'ctlb_onboarding_telemetry',
 						'reasons'                => array(
 							'not_working'  => array(
-								'title'       => __( "The plugin isn't working", 'cool-timeline' ),
-								'placeholder' => __( 'Which problem did you run into? We read every reply.', 'cool-timeline' ),
+								'title'       => __( "The plugin isn't working", 'timeline-block' ),
+								'placeholder' => __( 'Which problem did you run into? We read every reply.', 'timeline-block' ),
 							),
 							'not_expected' => array(
-								'title'       => __( "It didn't do what I expected", 'cool-timeline' ),
-								'placeholder' => __( 'What were you hoping it would do?', 'cool-timeline' ),
+								'title'       => __( "It didn't do what I expected", 'timeline-block' ),
+								'placeholder' => __( 'What were you hoping it would do?', 'timeline-block' ),
 							),
 							'found_better' => array(
-								'title'       => __( 'I found a better plugin', 'cool-timeline' ),
-								'placeholder' => __( 'Mind sharing which one?', 'cool-timeline' ),
+								'title'       => __( 'I found a better plugin', 'timeline-block' ),
+								'placeholder' => __( 'Mind sharing which one?', 'timeline-block' ),
 							),
 							'temporary'    => array(
-								'title'       => __( "It's a temporary deactivation", 'cool-timeline' ),
+								'title'       => __( "It's a temporary deactivation", 'timeline-block' ),
 								'placeholder' => '',
 							),
 							'other'        => array(
-								'title'       => __( 'Another reason', 'cool-timeline' ),
-								'placeholder' => __( 'Please tell us more', 'cool-timeline' ),
+								'title'       => __( 'Another reason', 'timeline-block' ),
+								'placeholder' => __( 'Please tell us more', 'timeline-block' ),
 							),
 						),
 						'i18n'                   => array(
-							'title'           => __( 'Before you go...', 'cool-timeline' ),
+							'title'           => __( 'Before you go...', 'timeline-block' ),
 							/* translators: %s: plugin name (bold). */
-							'intro'           => __( 'What made you deactivate %s? Your answer helps us fix it.', 'cool-timeline' ),
-							'submit'          => __( 'Submit & Deactivate', 'cool-timeline' ),
-							'skip'            => __( 'Skip & Deactivate', 'cool-timeline' ),
-							'deactivating'    => __( 'Deactivating...', 'cool-timeline' ),
-							'pick_reason'     => __( 'Please choose a reason.', 'cool-timeline' ),
-							'close_label'     => __( 'Close', 'cool-timeline' ),
+							'intro'           => __( 'What made you deactivate %s? Your answer helps us fix it.', 'timeline-block' ),
+							'submit'          => __( 'Submit & Deactivate', 'timeline-block' ),
+							'skip'            => __( 'Skip & Deactivate', 'timeline-block' ),
+							'deactivating'    => __( 'Deactivating...', 'timeline-block' ),
+							'pick_reason'     => __( 'Please choose a reason.', 'timeline-block' ),
+							'close_label'     => __( 'Close', 'timeline-block' ),
 							/* translators: %s: company name. */
-							'byline'          => __( 'A plugin by %s', 'cool-timeline' ),
-							'consent'         => __( 'Submitting shares your reason plus your site URL, admin email and basic environment details (PHP, WordPress, active plugins). Skip & Deactivate sends nothing.', 'cool-timeline' ),
+							'byline'          => __( 'A plugin by %s', 'timeline-block' ),
+							'consent'         => __( 'Submitting shares your reason plus your site URL, admin email and basic environment details (PHP, WordPress, active plugins). Skip & Deactivate sends nothing.', 'timeline-block' ),
 						),
 					)
 				);
@@ -295,23 +295,23 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 					'i18n' => array(
 						'like_question' => sprintf(
 							/* translators: %s: plugin name. */
-							__('Do you like the %s plugin?', 'cool-timeline'),
+							__('Do you like the %s plugin?', 'timeline-block'),
 							$name
 						),
-						'yes_button' => __('Yes, I like it', 'cool-timeline'),
-						'dismiss_link' => __('Not good, dismiss', 'cool-timeline'),
-						'later_link' => __('Ask me later', 'cool-timeline'),
-						'thanks_line' => __('That is great to hear! A quick review on WordPress.org would really help us.', 'cool-timeline'),
-						'submit_button' => __('Submit review', 'cool-timeline'),
-						'no_link' => __('I do not like it, dismiss', 'cool-timeline'),
-						'row_question' => __('Do you like this plugin?', 'cool-timeline'),
+						'yes_button' => __('Yes, I like it', 'timeline-block'),
+						'dismiss_link' => __('Not good, dismiss', 'timeline-block'),
+						'later_link' => __('Ask me later', 'timeline-block'),
+						'thanks_line' => __('That is great to hear! A quick review on WordPress.org would really help us.', 'timeline-block'),
+						'submit_button' => __('Submit review', 'timeline-block'),
+						'no_link' => __('I do not like it, dismiss', 'timeline-block'),
+						'row_question' => __('Do you like this plugin?', 'timeline-block'),
 						'inline_title' => sprintf(
 							/* translators: %s: plugin name. */
-							__('Enjoying %s?', 'cool-timeline'),
+							__('Enjoying %s?', 'timeline-block'),
 							$name
 						),
-						'inline_text' => __('A short review helps other event organisers find it.', 'cool-timeline'),
-						'close_label' => __('Close', 'cool-timeline'),
+						'inline_text' => __('A short review helps other event organisers find it.', 'timeline-block'),
+						'close_label' => __('Close', 'timeline-block'),
 					),
 				) );
 								add_filter( "plugin_action_links_$pluginpath", array( $this, 'ctlb_settings_link' ) );

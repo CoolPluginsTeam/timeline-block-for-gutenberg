@@ -293,7 +293,7 @@ if ( ! function_exists( 'cp_timeline_header_render' ) ) {
 			'support_url'   => '',
 			'docs_label'    => '',
 			'support_label' => '',
-			'text_domain'   => 'default',
+			'text_domain'   => 'timeline-block',
 			'prefix'        => 'cph',
 		);
 

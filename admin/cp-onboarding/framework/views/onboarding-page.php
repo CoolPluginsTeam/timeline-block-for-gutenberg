@@ -25,6 +25,7 @@ $cpo_methods = $config->visible_methods();
 $cpo_first   = $config->default_method_key( $cpo_methods );
 $cpo_links   = $config->links();
 $cpo_mode    = isset( $mode ) ? $mode : 'dashboard';
+$cpo_td      = $config->text_domain();
 
 // Allowed HTML for a method's raw `content` field (post context strips <button>).
 $cpo_content_allowed = array(
@@ -140,7 +141,7 @@ $cpo_addon_actions = function ( $cpo_addon ) {
 				target="_blank" rel="noopener noreferrer"><?php echo esc_html( $cpo_addon['label'] ); ?></a>
 		<?php endif; ?>
 		<?php if ( ! empty( $cpo_addon['learn_more'] ) ) : ?>
-			<a class="cpo-button cpo-button-secondary" href="<?php echo esc_url( $cpo_addon['learn_more'] ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html__( 'Learn More', 'default' ); ?></a>
+			<a class="cpo-button cpo-button-secondary" href="<?php echo esc_url( $cpo_addon['learn_more'] ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html__( 'Learn More', $cpo_td ); ?></a>
 		<?php endif; ?>
 		<?php return; ?>
 	<?php endif; ?>
@@ -163,10 +164,10 @@ $cpo_addon_actions = function ( $cpo_addon ) {
 		</button>
 	<?php endif; ?>
 	<?php if ( 'activated' === $cpo_addon['state'] && ! empty( $cpo_addon['setup_url'] ) ) : ?>
-		<a class="cpo-button cpo-button-secondary cpo-setup-guide" href="<?php echo esc_url( $cpo_addon['setup_url'] ); ?>"><?php echo esc_html__( 'Check Setup Guide', 'default' ); ?></a>
+		<a class="cpo-button cpo-button-secondary cpo-setup-guide" href="<?php echo esc_url( $cpo_addon['setup_url'] ); ?>"><?php echo esc_html__( 'Check Setup Guide', $cpo_td ); ?></a>
 	<?php endif; ?>
 	<?php if ( ! empty( $cpo_addon['learn_more'] ) ) : ?>
-		<a class="cpo-button cpo-button-secondary" href="<?php echo esc_url( $cpo_addon['learn_more'] ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html__( 'Explore Layouts', 'default' ); ?><span class="dashicons dashicons-arrow-right-alt2 cpo-button-chevron" aria-hidden="true"></span></a>
+		<a class="cpo-button cpo-button-secondary" href="<?php echo esc_url( $cpo_addon['learn_more'] ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html__( 'Explore Layouts', $cpo_td ); ?><span class="dashicons dashicons-arrow-right-alt2 cpo-button-chevron" aria-hidden="true"></span></a>
 	<?php endif; ?>
 	<?php
 };
@@ -239,7 +240,7 @@ else :
 						<div class="cpo-method-top">
 							<h3><?php echo esc_html( $cpo_method['title'] ); ?></h3>
 							<?php if ( ! empty( $cpo_method['_locked'] ) ) : ?>
-								<span class="cpo-badge cpo-badge-pro"><?php echo esc_html__( 'Pro', 'default' ); ?></span>
+								<span class="cpo-badge cpo-badge-pro"><?php echo esc_html__( 'Pro', $cpo_td ); ?></span>
 							<?php elseif ( ! empty( $cpo_method['badge'] ) ) : ?>
 								<span class="cpo-badge"><?php echo esc_html( $cpo_method['badge'] ); ?></span>
 							<?php endif; ?>
@@ -248,7 +249,7 @@ else :
 							<p class="cpo-method-desc"><?php echo esc_html( $cpo_method['description'] ); ?></p>
 						<?php endif; ?>
 						<?php if ( ! empty( $cpo_method['best_for'] ) ) : ?>
-							<p class="cpo-best-for"><strong><?php echo esc_html__( 'Best for', 'default' ); ?>:</strong> <?php echo esc_html( $cpo_method['best_for'] ); ?></p>
+							<p class="cpo-best-for"><strong><?php echo esc_html__( 'Best for', $cpo_td ); ?>:</strong> <?php echo esc_html( $cpo_method['best_for'] ); ?></p>
 						<?php endif; ?>
 					</button>
 				<?php endforeach; ?>
@@ -298,7 +299,7 @@ else :
 					<?php if ( ! empty( $cpo_method['video']['id'] ) ) : ?>
 					<div class="cpo-video">
 						<?php if ( ! empty( $cpo_method['video']['title'] ) ) : ?>
-							<h3><?php echo esc_html__( 'Watch how it works', 'default' ); ?></h3>
+							<h3><?php echo esc_html__( 'Watch how it works', $cpo_td ); ?></h3>
 						<?php endif; ?>
 						<button type="button"
 							class="cpo-video-box"
@@ -337,7 +338,7 @@ else :
 					<div class="cpo-guide">
 						<?php if ( ! empty( $cpo_method['steps'] ) ) : ?>
 							<div class="cpo-guide-heading">
-								<h3><?php echo esc_html__( 'Quick Setup Guide', 'default' ); ?></h3>
+								<h3><?php echo esc_html__( 'Quick Setup Guide', $cpo_td ); ?></h3>
 								<?php if ( ! empty( $cpo_method['time_estimate'] ) ) : ?>
 									<span class="cpo-time-badge">⏱ <?php echo esc_html( $cpo_method['time_estimate'] ); ?></span>
 								<?php endif; ?>
@@ -361,7 +362,7 @@ else :
 								<a class="button button-primary cpo-button-large cpo-upgrade"
 									href="<?php echo esc_url( $cpo_method['upgrade_url'] ); ?>"
 									target="_blank" rel="noopener noreferrer">
-									<?php echo esc_html( ! empty( $cpo_method['upgrade_label'] ) ? $cpo_method['upgrade_label'] : __( 'Unlock in Pro →', 'default' ) ); ?>
+									<?php echo esc_html( ! empty( $cpo_method['upgrade_label'] ) ? $cpo_method['upgrade_label'] : __( 'Unlock in Pro →', $cpo_td ) ); ?>
 								</a>
 							<?php elseif ( ! empty( $cpo_method['cta']['label'] ) ) : ?>
 								<button type="button" class="cpo-button cpo-button-primary cpo-button-large cpo-create" data-method-type="<?php echo esc_attr( $cpo_method['type'] ); ?>">
