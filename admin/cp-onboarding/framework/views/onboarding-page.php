@@ -131,7 +131,7 @@ $cpo_pick_addon_for_group = function ( $group ) use ( $cpo_addons_by_group ) {
  * @param array $cpo_addon Resolved addon data from Addons::resolve().
  * @return void
  */
-$cpo_addon_actions = function ( $cpo_addon ) {
+$cpo_addon_actions = function ( $cpo_addon ) use ( $cpo_td ) {
 	?>
 	<?php if ( ! empty( $cpo_addon['type'] ) && 'pro' === $cpo_addon['type'] ) : ?>
 		<?php // Pro promotion: external upgrade link only (no install/activate/setup). ?>
