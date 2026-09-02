@@ -996,6 +996,65 @@ i.fipicon-angle-left:before {
   .cooltimeline-tab-settings .ctlb_icon_buttons_control.ctlb-segmented .ctlb-segmented-btn {
     flex: 1 1 0;
     width: auto;
+    min-width: 0;
+  }
+
+  /* Story Icon — 4-way pill: pro options stack label + badge (no truncation). */
+  .cooltimeline-tab-settings .ctlb_icon_buttons_control.ctlb-segmented {
+    align-items: stretch;
+  }
+
+  .cooltimeline-tab-settings .ctlb_icon_buttons_control .ctlb-segmented-btn {
+    min-width: 48px;
+    padding: 7px 4px !important;
+    line-height: 1.2;
+  }
+
+  .cooltimeline-tab-settings .ctlb_icon_buttons_control .ctlb-segmented-btn:not(.ctlb-segmented-btn--pro) {
+    padding: 8px 6px !important;
+    font-size: 12px;
+  }
+
+  .cooltimeline-tab-settings .ctlb_icon_buttons_control .ctlb-segmented-btn--pro {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 5px 4px 4px !important;
+    min-height: 40px;
+    opacity: 0.95;
+  }
+
+  .cooltimeline-tab-settings .ctlb_icon_buttons_control .ctlb-segmented-btn--pro .ctlb-segmented-btn-label {
+    display: block;
+    width: auto;
+    max-width: none;
+    overflow: visible;
+    text-overflow: unset;
+    white-space: nowrap;
+    padding-right: 0;
+    font-size: 11px;
+    line-height: 1.15;
+  }
+
+  .cooltimeline-tab-settings .ctlb_icon_buttons_control .ctlb-segmented-btn-pro-mark {
+    position: static;
+    top: auto;
+    right: auto;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .cooltimeline-tab-settings .ctlb_icon_buttons_control .ctlb-segmented-btn-pro-mark .ctlb-pro-badge {
+    font-size: 7px;
+    padding: 1px 4px;
+    line-height: 1.2;
+    margin-left: 0;
+    vertical-align: middle;
+  }
+
+  .cooltimeline-tab-settings .ctlb-row--stack:has(.ctlb_icon_buttons_control) .timeline-block-iconpicker {
+    margin-top: 8px !important;
   }
 
   /* Any dashicon inside a segmented pill button (content alignment, choose media
@@ -1094,7 +1153,7 @@ i.fipicon-angle-left:before {
     display: flex;
     align-items: center;
     min-height: 44px;
-    padding: 10px 12px 8px !important;
+    /* padding: 10px 12px 8px !important; */
     box-sizing: border-box;
   }
 
@@ -1840,13 +1899,13 @@ i.fipicon-angle-left:before {
 	font-size: 8px;
 }
 
-.ctlb_icon_buttons_control .ctlb-segmented-btn--pro {
+.cooltimeline-tab-settings .ctlb_icon_buttons_control .ctlb-segmented-btn--pro {
 	flex: 1 1 0;
-	min-width: 0;
+	min-width: 48px;
 }
 
-.ctlb_icon_buttons_control .ctlb-segmented-btn--pro .ctlb-segmented-btn-label {
-	padding-right: 14px;
+.cooltimeline-tab-settings .ctlb_icon_buttons_control .ctlb-segmented-btn--pro .ctlb-segmented-btn-label {
+	padding-right: 0;
 }
 
 .ctlb-pro-lock--inline {
@@ -1880,6 +1939,20 @@ i.fipicon-angle-left:before {
 .ctlb_icon_buttons_control {
 	width: 100%;
 	margin-bottom: 5px;
+}
+
+.cooltimeline-tab-settings .ctlb_icon_buttons_control button {
+	width: auto !important;
+	flex: 1 1 0;
+	min-width: 0;
+	justify-content: center;
+	box-shadow: none !important;
+	color: inherit !important;
+}
+
+.cooltimeline-tab-settings .ctlb_icon_buttons_control button.active {
+	color: var(--ctlb-brand, #0d7a6f) !important;
+	background-color: var(--ctlb-brand-tint, #e9f5f3) !important;
 }
 
 .ctlb_icon_buttons_control button {
