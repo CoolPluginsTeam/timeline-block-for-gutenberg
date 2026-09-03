@@ -69,6 +69,8 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 
 			// Load plugin textdomain
 			add_action('init', array($this, 'ctlb_load_plugin_textdomain'));
+			// Translated CPFM copy must wait for init (WP 6.7+ JIT textdomain).
+			add_action( 'init', array( $this, 'ctlb_register_cpfm_notices' ) );
 			register_activation_hook( __FILE__, array( $this, 'ctlb_plugin_activate' ));
 			register_deactivation_hook( __FILE__, array( $this, 'ctlb_plugin_deactivate' ) );
 
@@ -142,30 +144,34 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 
 			require_once Timeline_Block_Dir . 'admin/cpfm-feedback/class-cpfm-loader.php';
 			CPFM_Loader::load();
-			CPFM_Usage_Cron::cpfm_register(
-				array(
-					'id'                      => 'ctlb',
-					'plugin_name'             => $name,
-					'version'                 => CTLB_V,
-					'api'                     => CTLB_FEEDBACK_API,
-					'cron_hook'               => 'ctlb_extra_data_update',
-					'consent_master_option'   => 'cpfm_opt_in_choice_cool-timeline',
-					'consent_override_option' => 'ctlb-cpfm-data-sharing',
-					'install_date_option'     => 'ctlb-install-date',
-					'initial_version_option'  => 'ctlb-initial-save-version',
-					'onboarding_data'         => 'ctlb_onboarding_telemetry',
-					'site_key'                => '31',
-				)
-			);
-			$usage_override = get_option( 'ctlb-cpfm-data-sharing' );
-			if ( 'yes' === $usage_override || ( false === $usage_override && 'yes' === get_option( 'cpfm_opt_in_choice_cool-timeline') ) ) {
-				CPFM_Usage_Cron::cpfm_schedule_event( 'ctlb_extra_data_update' );
+			if ( class_exists( 'CPFM_Usage_Cron' ) ) {
+				CPFM_Usage_Cron::cpfm_register(
+					array(
+						'id'                      => 'ctlb',
+						'plugin_name'             => $name,
+						'version'                 => CTLB_V,
+						'api'                     => CTLB_FEEDBACK_API,
+						'cron_hook'               => 'ctlb_extra_data_update',
+						'consent_master_option'   => 'cpfm_opt_in_choice_cool-timeline',
+						'consent_override_option' => 'ctlb-cpfm-data-sharing',
+						'install_date_option'     => 'ctlb-install-date',
+						'initial_version_option'  => 'ctlb-initial-save-version',
+						'onboarding_data'         => 'ctlb_onboarding_telemetry',
+						'site_key'                => '31',
+					)
+				);
+				$usage_override = get_option( 'ctlb-cpfm-data-sharing' );
+				if ( 'yes' === $usage_override || ( false === $usage_override && 'yes' === get_option( 'cpfm_opt_in_choice_cool-timeline' ) ) ) {
+					CPFM_Usage_Cron::cpfm_schedule_event( 'ctlb_extra_data_update' );
+				}
 			}
 			add_action(
 				'cpfm_after_opt_in_timeline_block',
 				static function () {
 					update_option( 'ctlb-cpfm-data-sharing', 'yes' );
-					CPFM_Usage_Cron::cpfm_schedule_event( 'ctlb_extra_data_update' );
+					if ( class_exists( 'CPFM_Usage_Cron' ) ) {
+						CPFM_Usage_Cron::cpfm_schedule_event( 'ctlb_extra_data_update' );
+					}
 				}
 			);
 			add_action(
@@ -177,35 +183,84 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 			);
 
 			if ( is_admin() ) { // Checks if the current request is for an administrative interface page.
-				$pluginpath= plugin_basename( __FILE__ );
-				add_action(
-					'cpfm_register_notice',
-					static function () {
-						CPFM_Feedback_Notice::cpfm_register_notice(
-							'cool-timeline',
-							array(
-								'plugin_name'    => 'timeline_block',
-								'title'          => __( 'Timeline Plugins by Cool Plugins', 'timeline-block' ),
-								'message'        => __( 'Help us make this plugin more compatible with your site by sharing non-sensitive site data.', 'timeline-block' ),
-								'pages'          => array(
-									'ctlb-getting-started',
-									'timeline-addons_page_ctl-getting-started',
-								),
-								'always_show_on' => array( 'ctlb-getting-started' ),
-								'i18n'           => array(
-									'panel_title'         => __( 'Help Improve Plugins', 'timeline-block' ),
-									'more_info'           => __( 'More info', 'timeline-block' ),
-									'consent_intro'       => __( 'Opt in to share basic site information that helps us improve compatibility and features. We will collect:', 'timeline-block' ),
-									'consent_item_site'   => __( 'Your website home URL and WordPress admin email.', 'timeline-block' ),
-									'consent_item_compat' => __( 'The active plugins and themes list, PHP, MySQL and WordPress versions, memory limit, multisite status, and site language.', 'timeline-block' ),
-									'consent_link'        => __( 'Click here', 'timeline-block' ),
-									'yes_label'           => __( "Yes, it's OK", 'timeline-block' ),
-									'no_label'            => __( 'No, Thanks', 'timeline-block' ),
-								),
-							)
-						);
+				$pluginpath = plugin_basename( __FILE__ );
+				add_filter( "plugin_action_links_$pluginpath", array( $this, 'ctlb_settings_link' ) );
+
+				if ( $this->ctlb_should_load_onboarding() ) {
+					require_once Timeline_Block_Dir . 'admin/ctlb-timeline-header.php';
+					require_once Timeline_Block_Dir . 'admin/cp-onboarding/loader.php';
+					cpo_onboarding_register( '1.1.4', Timeline_Block_Dir . 'admin/cp-onboarding' );
+
+					// after_setup_theme is before init; delay translated onboarding copy.
+					add_action(
+						'cpo_onboarding_loaded',
+						static function () {
+							add_action(
+								'init',
+								static function () {
+									require_once Timeline_Block_Dir . 'admin/cp-onboarding/onboarding-config.php';
+								}
+							);
+						}
+					);
+
+					add_action( 'admin_init', array( $this, 'ctlb_maybe_redirect_to_onboarding' ) );
+				}
+			}
+		}
+
+		/**
+		 * Register translated CPFM notices after init (same pattern as Cool Timeline).
+		 *
+		 * @return void
+		 */
+		public function ctlb_register_cpfm_notices() {
+			if ( ! is_admin() ) {
+				return;
+			}
+
+			static $registered = false;
+			if ( $registered ) {
+				return;
+			}
+			$registered = true;
+
+			$name = 'Timeline Block';
+
+			add_action(
+				'cpfm_register_notice',
+				static function () {
+					if ( ! class_exists( 'CPFM_Feedback_Notice' ) || ! current_user_can( 'manage_options' ) ) {
+						return;
 					}
-				);
+
+					CPFM_Feedback_Notice::cpfm_register_notice(
+						'cool-timeline',
+						array(
+							'plugin_name'    => 'timeline_block',
+							'title'          => __( 'Timeline Plugins by Cool Plugins', 'timeline-block' ),
+							'message'        => __( 'Help us make this plugin more compatible with your site by sharing non-sensitive site data.', 'timeline-block' ),
+							'pages'          => array(
+								'ctlb-getting-started',
+								'timeline-addons_page_ctl-getting-started',
+							),
+							'always_show_on' => array( 'ctlb-getting-started' ),
+							'i18n'           => array(
+								'panel_title'         => __( 'Help Improve Plugins', 'timeline-block' ),
+								'more_info'           => __( 'More info', 'timeline-block' ),
+								'consent_intro'       => __( 'Opt in to share basic site information that helps us improve compatibility and features. We will collect:', 'timeline-block' ),
+								'consent_item_site'   => __( 'Your website home URL and WordPress admin email.', 'timeline-block' ),
+								'consent_item_compat' => __( 'The active plugins and themes list, PHP, MySQL and WordPress versions, memory limit, multisite status, and site language.', 'timeline-block' ),
+								'consent_link'        => __( 'Click here', 'timeline-block' ),
+								'yes_label'           => __( "Yes, it's OK", 'timeline-block' ),
+								'no_label'            => __( 'No, Thanks', 'timeline-block' ),
+							),
+						)
+					);
+				}
+			);
+
+			if ( class_exists( 'CPFM_Deactivation_Feedback' ) ) {
 				CPFM_Deactivation_Feedback::cpfm_register(
 					array(
 						'id'                     => 'ctlb',
@@ -254,82 +309,69 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 						),
 					)
 				);
-				CPFM_Review::cpfm_register( array(
-					'id' => 'timeline-block',
-					'name' => 'Timeline Block',
-					'plugin_file' => __FILE__,
-					'review_url' => 'https://wordpress.org/plugins/timeline-block/',
-					'capability' => 'activate_plugins',
-					'quiet_days' => 1,
-					'own_screens' => array('timeline-addons_page_ctl-getting-started'),
-					'trigger' => array(
-						'type' => 'install_age',
-						'hours' => 24,
-					),
-                    'notice' => array(
-						'enabled' => true,
-						'template' => 'two_step',
-						'screens' => array(
-							'plugins',
-							'timeline-addons_page_ctl-getting-started',
-							'timeline-addons_page_cool_timeline_settings',
-							'toplevel_page_cool-plugins-timeline-addon',
-						),
-						'inline_screens' => array('timeline-addons_page_ctl-getting-started'),
-					),
-					'row' => array('enabled' => true),
-					'legacy' => array(
-						'done_options' => array(
-							'cool-timelne-ratingDiv' => 'yes',
-							'cool-timelne_review_prompt' => array('yes', 'done', 'dismissed'),
-							'cool-timelne_review_shown' => array('yes', 'done', 'dismissed'),
-						),
-						'done_user_meta' => array(
-							'eca_review_dismissed' => array('in_key' => 'countdown'),
-						),
-						'install_dates' => array('cool-timelne-installDate', 'ctl-install-date'),
-						// Keep any still-installed sibling that reads the old flag in sync.
-						'mirror_write' => array('cool-timelne-ratingDiv' => 'yes'),
-					),
-                    
-					'i18n' => array(
-						'like_question' => sprintf(
-							/* translators: %s: plugin name. */
-							__('Do you like the %s plugin?', 'timeline-block'),
-							$name
-						),
-						'yes_button' => __('Yes, I like it', 'timeline-block'),
-						'dismiss_link' => __('Not good, dismiss', 'timeline-block'),
-						'later_link' => __('Ask me later', 'timeline-block'),
-						'thanks_line' => __('That is great to hear! A quick review on WordPress.org would really help us.', 'timeline-block'),
-						'submit_button' => __('Submit review', 'timeline-block'),
-						'no_link' => __('I do not like it, dismiss', 'timeline-block'),
-						'row_question' => __('Do you like this plugin?', 'timeline-block'),
-						'inline_title' => sprintf(
-							/* translators: %s: plugin name. */
-							__('Enjoying %s?', 'timeline-block'),
-							$name
-						),
-						'inline_text' => __('A short review helps other event organisers find it.', 'timeline-block'),
-						'close_label' => __('Close', 'timeline-block'),
-					),
-				) );
-								add_filter( "plugin_action_links_$pluginpath", array( $this, 'ctlb_settings_link' ) );
+			}
 
-				if ( $this->ctlb_should_load_onboarding() ) {
-					require_once Timeline_Block_Dir . 'admin/ctlb-timeline-header.php';
-					require_once Timeline_Block_Dir . 'admin/cp-onboarding/loader.php';
-					cpo_onboarding_register( '1.1.4', Timeline_Block_Dir . 'admin/cp-onboarding' );
-
-					add_action(
-						'cpo_onboarding_loaded',
-						static function () {
-							require_once Timeline_Block_Dir . 'admin/cp-onboarding/onboarding-config.php';
-						}
-					);
-
-					add_action( 'admin_init', array( $this, 'ctlb_maybe_redirect_to_onboarding' ) );
-				}
+			if ( class_exists( 'CPFM_Review' ) ) {
+				CPFM_Review::cpfm_register(
+					array(
+						'id'          => 'timeline-block',
+						'name'        => $name,
+						'plugin_file' => Timeline_Block_File,
+						'review_url'  => 'https://wordpress.org/plugins/timeline-block/',
+						'capability'  => 'activate_plugins',
+						'quiet_days'  => 1,
+						'own_screens' => array( 'timeline-addons_page_ctl-getting-started' ),
+						'trigger'     => array(
+							'type'  => 'install_age',
+							'hours' => 24,
+						),
+						'notice'      => array(
+							'enabled'        => true,
+							'template'       => 'two_step',
+							'screens'        => array(
+								'plugins',
+								'timeline-addons_page_ctl-getting-started',
+								'timeline-addons_page_cool_timeline_settings',
+								'toplevel_page_cool-plugins-timeline-addon',
+							),
+							'inline_screens' => array( 'timeline-addons_page_ctl-getting-started' ),
+						),
+						'row'         => array( 'enabled' => true ),
+						'legacy'      => array(
+							'done_options'    => array(
+								'cool-timelne-ratingDiv'     => 'yes',
+								'cool-timelne_review_prompt' => array( 'yes', 'done', 'dismissed' ),
+								'cool-timelne_review_shown'  => array( 'yes', 'done', 'dismissed' ),
+							),
+							'done_user_meta'  => array(
+								'eca_review_dismissed' => array( 'in_key' => 'countdown' ),
+							),
+							'install_dates'   => array( 'cool-timelne-installDate', 'ctl-install-date' ),
+							'mirror_write'    => array( 'cool-timelne-ratingDiv' => 'yes' ),
+						),
+						'i18n'        => array(
+							'like_question' => sprintf(
+								/* translators: %s: plugin name. */
+								__( 'Do you like the %s plugin?', 'timeline-block' ),
+								$name
+							),
+							'yes_button'    => __( 'Yes, I like it', 'timeline-block' ),
+							'dismiss_link'  => __( 'Not good, dismiss', 'timeline-block' ),
+							'later_link'    => __( 'Ask me later', 'timeline-block' ),
+							'thanks_line'   => __( 'That is great to hear! A quick review on WordPress.org would really help us.', 'timeline-block' ),
+							'submit_button' => __( 'Submit review', 'timeline-block' ),
+							'no_link'       => __( 'I do not like it, dismiss', 'timeline-block' ),
+							'row_question'  => __( 'Do you like this plugin?', 'timeline-block' ),
+							'inline_title'  => sprintf(
+								/* translators: %s: plugin name. */
+								__( 'Enjoying %s?', 'timeline-block' ),
+								$name
+							),
+							'inline_text'   => __( 'A short review helps other event organisers find it.', 'timeline-block' ),
+							'close_label'   => __( 'Close', 'timeline-block' ),
+						),
+					)
+				);
 			}
 		}
 
