@@ -3,7 +3,7 @@
  * Plugin Name:Timeline Block
  * Plugin URI:https://cooltimeline.com
  * Description:Responsive timeline block for Gutenberg editor.
- * Version:1.9.1
+ * Version:1.9.3
  * Author:Cool Plugins
  * Author URI:https://coolplugins.net/?utm_source=tbg_plugin&utm_medium=inside&utm_campaign=author_page&utm_content=plugins_list
  * License:GPLv2 or later
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
 
 if ( ! defined( 'CTLB_V' ) ) {
-	define( 'CTLB_V', '1.9.1' );
+	define( 'CTLB_V', '1.9.3' );
 }
 define( 'Timeline_Block_File', __FILE__ );
 define( 'Timeline_Block_Url', plugin_dir_url( Timeline_Block_File ) );
@@ -28,7 +28,7 @@ if ( ! defined( 'CTLB_FEEDBACK_API' ) ) {
 	define( 'CTLB_FEEDBACK_API', 'https://feedback.coolplugins.net/' );
 }
 if ( ! defined( 'Timeline_Block_Version' ) ) {
-	define( 'Timeline_Block_Version', '1.9.1' );
+	define( 'Timeline_Block_Version', '1.9.3' );
 }
 
 // phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
