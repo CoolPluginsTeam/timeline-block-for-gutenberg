@@ -136,7 +136,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 Upgrade to Version 1.8.0 to enjoy these new features, enhancements, and bug fixes. Your feedback is invaluable as we continue to refine and improve our plugins.
 
-= Version 1.9.3| 03 September 2026 =
+= Version 1.9.3| 07 September 2026 =
 * **Improved:** Review notice and feedback form design for a better user experience..
 
 = Version 1.9.1| 03 August 2026 =
