@@ -48,6 +48,7 @@ final class Addons {
 		}
 
 		$resolved = array();
+		$td       = $config->text_domain();
 
 		foreach ( $addons as $addon ) {
 			if ( empty( $addon['slug'] ) ) {
@@ -69,7 +70,7 @@ final class Addons {
 			// 'pro' promotes a paid plugin with an external upgrade link only.
 			$type = ( isset( $addon['type'] ) && 'pro' === strtolower( (string) $addon['type'] ) ) ? 'pro' : 'free';
 
-			$state  = self::state_for( $addon['slug'] );
+			$state  = self::state_for( $addon['slug'], $td );
 			$method = self::normalize_method( isset( $addon['install_method'] ) ? $addon['install_method'] : '' );
 			$title  = isset( $addon['title'] ) ? $addon['title'] : '';
 
@@ -82,7 +83,7 @@ final class Addons {
 
 			// Pro cards never install: their button is the external upgrade link.
 			$label = 'pro' === $type
-				? ( isset( $addon['upgrade_label'] ) ? $addon['upgrade_label'] : __( 'Upgrade to Pro', 'default' ) )
+				? ( isset( $addon['upgrade_label'] ) ? $addon['upgrade_label'] : __( 'Upgrade to Pro', $td ) )
 				: $state['label'];
 
 			$resolved[] = array(
@@ -143,9 +144,10 @@ final class Addons {
 	 * Determine install/activate state for a plugin slug.
 	 *
 	 * @param string $slug Plugin folder slug.
+	 * @param string $td   Plugin text domain.
 	 * @return array{state:string,label:string}
 	 */
-	private static function state_for( $slug ) {
+	private static function state_for( $slug, $td ) {
 		$main_file = $slug . '/' . $slug . '.php';
 		$is_active = is_plugin_active( $main_file );
 		$installed = $is_active;
@@ -161,12 +163,12 @@ final class Addons {
 		}
 
 		if ( $is_active ) {
-			return array( 'state' => 'activated', 'label' => __( 'Activated', 'default' ) );
+			return array( 'state' => 'activated', 'label' => __( 'Activated', $td ) );
 		}
 		if ( $installed ) {
-			return array( 'state' => 'activate', 'label' => __( 'Activate', 'default' ) );
+			return array( 'state' => 'activate', 'label' => __( 'Activate', $td ) );
 		}
-		return array( 'state' => 'install', 'label' => __( 'Install Free', 'default' ) );
+		return array( 'state' => 'install', 'label' => __( 'Install Free', $td ) );
 	}
 
 	/**
