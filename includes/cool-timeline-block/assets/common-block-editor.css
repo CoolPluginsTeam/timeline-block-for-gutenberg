@@ -261,7 +261,8 @@
 	float: right;
     line-height: 1;
 	background: transparent !important;
-	color: var(--wp-components-color-foreground-inverted, #000) !important;
+  color: #000;
+
   }
 
 .timeline-block-typography-options .timeline-block-size-btn.timeline-block-typography-reset-btn {
