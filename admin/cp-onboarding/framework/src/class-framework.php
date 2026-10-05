@@ -207,8 +207,8 @@ final class Framework {
 			'action'  => $this->config->ajax_action( 'prepare' ),
 			'nonce'   => wp_create_nonce( $this->config->option( 'prepare' ) ),
 			'labels'  => array(
-				'loading'     => __( 'Please wait…', 'default' ),
-				'redirecting' => __( 'Redirecting…', 'default' ),
+				'loading'     => __( 'Please wait…', $td ),
+				'redirecting' => __( 'Redirecting…', $td ),
 			),
 		);
 
@@ -223,11 +223,11 @@ final class Framework {
 		$data['install'] = array(
 			'action' => $this->config->ajax_action( 'install' ),
 			'labels' => array(
-				'installing' => __( 'Activating…', 'default' ),
-				'activating' => __( 'Activating…', 'default' ),
-				'activated'  => __( 'Activated', 'default' ),
-				'setupGuide' => __( 'Check Setup Guide', 'default' ),
-				'error'      => __( 'Plugin could not be activated. Please try again.', 'default' ),
+				'installing' => __( 'Activating…', $td ),
+				'activating' => __( 'Activating…', $td ),
+				'activated'  => __( 'Activated', $td ),
+				'setupGuide' => __( 'Check Setup Guide', $td ),
+				'error'      => __( 'Plugin could not be activated. Please try again.', $td ),
 			),
 		);
 
@@ -262,8 +262,9 @@ final class Framework {
 	 * @return void
 	 */
 	public function render_page() {
+		$td = $this->config->text_domain();
 		if ( ! current_user_can( $this->config->capability() ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'default' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', $td ) );
 		}
 
 		if ( $this->telemetry ) {
@@ -312,10 +313,11 @@ final class Framework {
 	 * @return void
 	 */
 	public function ajax_prepare() {
+		$td = $this->config->text_domain();
 		check_ajax_referer( $this->config->option( 'prepare' ), 'nonce' );
 
 		if ( ! current_user_can( $this->config->capability() ) ) {
-			wp_send_json_error( array( 'message' => __( 'Unauthorized.', 'default' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'Unauthorized.', $td ) ), 403 );
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- verified above.
@@ -323,7 +325,7 @@ final class Framework {
 
 		$method = $this->find_method_by_type( $type );
 		if ( ! $method ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid selection.', 'default' ) ), 400 );
+			wp_send_json_error( array( 'message' => __( 'Invalid selection.', $td ) ), 400 );
 		}
 
 		// Method that just redirects (no demo generation).
@@ -333,7 +335,7 @@ final class Framework {
 				: ( ! empty( $method['fallback_url'] ) ? esc_url_raw( $method['fallback_url'] ) : '' );
 
 			if ( '' === $url ) {
-				wp_send_json_error( array( 'message' => __( 'No destination configured.', 'default' ) ), 400 );
+				wp_send_json_error( array( 'message' => __( 'No destination configured.', $td ) ), 400 );
 			}
 
 			wp_send_json_success(
@@ -347,10 +349,10 @@ final class Framework {
 		// Demo-generating method.
 		$demo_config = $this->config->demo();
 		if ( empty( $demo_config ) ) {
-			wp_send_json_error( array( 'message' => __( 'Demo generator is unavailable.', 'default' ) ), 500 );
+			wp_send_json_error( array( 'message' => __( 'Demo generator is unavailable.', $td ) ), 500 );
 		}
 		if ( ! class_exists( __NAMESPACE__ . '\\Demo_Generator' ) ) {
-   		 wp_send_json_error( array( 'message' => __( 'Demo generator is unavailable.', 'default' ) ), 500 );
+   		 wp_send_json_error( array( 'message' => __( 'Demo generator is unavailable.', $td ) ), 500 );
 		}
 		$generator = new Demo_Generator( $this->config, $demo_config );
 		$result    = $generator->generate();
