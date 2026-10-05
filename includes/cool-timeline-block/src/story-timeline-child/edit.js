@@ -1,4 +1,4 @@
-import {IconPicker, IconPickerItem} from "../component/Icons/index.js";
+import { IconPickerItem } from "../component/Icons/index.js";
 const { Component, Fragment } = wp.element;
 import { __ } from '@wordpress/i18n';
 
@@ -10,12 +10,9 @@ const {
 } = wp.data;
 
 const {
-	PanelBody,
-	TextControl,
 	Button,
 	ToolbarGroup,
 	ToolbarButton,
-	ButtonGroup
 } = wp.components;
 
 class Edit extends Component {
@@ -30,6 +27,9 @@ class Edit extends Component {
 		const wordpressBlock=this.props.attributes.wodpressBlock;
 		const mediaBlock=!['none',''].includes(this.props.attributes.timeLineImage);
 		!wordpressBlock && this.innerBlockTemplate(mediaBlock);
+		// "Add Story" inserts this block already selected and WordPress auto-focuses its date field,
+		// so neither the selection-change check nor the inline-typing guard applies here.
+		setTimeout(() => this.openParentStorySettings(true), 0);
    }	
 
    addBlock(e){
@@ -194,53 +194,19 @@ class Edit extends Component {
 
 		const content_control = (
 			<InspectorControls>
+				<div className="cooltimeline-tab-settings ctlb-child-settings">
 				<div style={{ 'marginBottom': 15 + 'px','textAlign':'center' }}>
 				<Button
 					isSecondary
 					icon={'arrow-left-alt'}
 					onClick={() => {
-						const parentBlockId = select( 'core/block-editor' ).getBlockHierarchyRootClientId( this.props.clientId );
+						const parentBlockId = select( 'core/block-editor' ).getBlockRootClientId( this.props.clientId );
 						wp.data.dispatch('core/block-editor').selectBlock(parentBlockId);
 					}
 					}
-				>GO TO SETTINGS</Button>
+				>{__('GO TO SETTINGS', 'timeline-block')}</Button>
 				</div>
-				<PanelBody title={__("Story Settings","timeline-block")}>
-					<TextControl
-						label="Primary Label(Date/Steps)"
-						placeholder={ __( 'Date/Steps', 'timeline-block' ) }
-						value={t_date === 'ctl_date_undefined' ? '' : t_date} 
-						onChange={ ( value ) => {
-							const date='' === value ? 'ctl_date_undefined' : value;
-							setAttributes({t_date:date })
-						}}	
-						__nextHasNoMarginBottom={true}
-						__next40pxDefaultSize={ true }
-					/>
-					<hr className="timeline-block-editor__separator"></hr>
-					<div className="timeline-block-settings-labels">{__("Story Icon", "timeline-block")}</div>
-					<ButtonGroup className="cool-timeline-content-alignment-buttons">
-						<Button isSmall onClick={(e) => { setAttributes({ iconToggle: 'false' }) }} className={iconToggle == 'false' ? 'active' : ''}>DOT</Button>
-						<Button isSmall onClick={(e) => { setAttributes({ iconToggle: 'true' }) }} className={iconToggle == 'true' ? 'active' : ''}>Icon</Button>
-					</ButtonGroup>
-					{iconToggle == "true" ?
-						<Fragment>  <div className="timeline-block-iconpicker" >
-							<IconPicker icon={icon} onChange={v => setAttributes({ icon: v })}/>
-							</div>
-						</Fragment>
-						: null}
-					{timelineLayout == "vertical" && timelineDesign == "both-sided" && storyPositionHide ? //hide story position if alternating sided on
-						<Fragment>
-							<hr className="timeline-block-editor__separator"></hr>
-							<div className="timeline-block-settings-labels">{__("Story position", "timeline-block")}</div>
-							<ButtonGroup className="cool-timeline-content-alignment-buttons">
-								<Button isSmall onClick={(e) => { setAttributes({ blockPosition: 'left', block_position_active: true }) }} className={blockPosition == 'left' ? 'active' : ''}>Left</Button>
-								<Button isSmall onClick={(e) => { setAttributes({ blockPosition: 'right', block_position_active: true }) }} className={blockPosition == 'right' ? 'active' : ''}>Right</Button>
-							</ButtonGroup>
-						</Fragment>
-						: null
-					}
-				</PanelBody>
+				</div>
 			</InspectorControls>
 		);
 		const icon_div = <div className="timeline-block-icon">
@@ -286,7 +252,7 @@ class Edit extends Component {
 		);
 	}
 
-	componentDidUpdate(){
+	componentDidUpdate(prevProps){
 		const childBlocks=select("core/block-editor").getBlock(this.props.clientId)?.innerBlocks;
 		if(childBlocks){
 			const paragraphBlock=childBlocks.filter(block=>{ return "core/paragraph" === block.name })[0];
@@ -299,6 +265,45 @@ class Edit extends Component {
 			}
 		}
 
+		// Edge-triggered so unrelated re-renders while selected don't redirect again.
+		if (this.props.isSelected && !prevProps.isSelected) {
+			this.openParentStorySettings();
+		}
+	}
+
+	openParentStorySettings(justInserted = false) {
+		if (select('core/block-editor').getSelectedBlockClientId() !== this.props.clientId) {
+			return;
+		}
+		// Skipped while typing inline, otherwise selecting the parent steals focus.
+		if (!justInserted) {
+			const docs = [document];
+			const canvasIframe = document.querySelector('iframe[name="editor-canvas"]');
+			if (canvasIframe?.contentDocument) {
+				docs.push(canvasIframe.contentDocument);
+			}
+			const editingInline = docs.some((doc) => {
+				const active = doc.activeElement;
+				return !!(
+					active?.isContentEditable ||
+					active?.closest?.('[contenteditable="true"]') ||
+					active?.closest?.('.block-editor-rich-text__editable')
+				);
+			});
+			if (editingInline) {
+				return;
+			}
+		}
+		const parentBlockId = select('core/block-editor').getBlockRootClientId(this.props.clientId);
+		if (parentBlockId) {
+			dispatch('core/block-editor').selectBlock(parentBlockId);
+			setTimeout(() => {
+				const panel = document.getElementById('ctlb-story-setting-panel');
+				if (panel) {
+					panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+				}
+			}, 100);
+		}
 	}
 
 	paragraphToolBarPosition(id){

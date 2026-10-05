@@ -1234,6 +1234,10 @@ i.fipicon-angle-left:before {
     margin-bottom: 0;
   }
 
+  .cooltimeline-tab-settings .timeline-block-typography-range-options + .timeline-block-typography-range-options {
+    margin-top: 12px;
+  }
+
   .cooltimeline-tab-settings .ctlb-typo-size-label {
     display: block;
     font-size: 11px;
@@ -2020,5 +2024,164 @@ i.fipicon-angle-left:before {
 
 .cooltimeline-tab-settings .components-tab-panel__tabs {
 	margin: 10px 16px 0 !important;
+}
+
+/* Width/Height/Border Radius: label + px/em/% pills header above a full-width input. */
+.cooltimeline-tab-settings .ctlb-unit-pills {
+	flex: none;
+	display: inline-flex;
+}
+
+.cooltimeline-tab-settings .ctlb-unit-pills .components-button {
+	min-width: 0 !important;
+	height: auto !important;
+	min-height: 0 !important;
+	padding: 5px 7px !important;
+	font-size: 10.5px !important;
+	line-height: 1 !important;
+}
+
+.cooltimeline-tab-settings .ctlb-unit-field {
+	flex: 1;
+	min-width: 0;
+}
+
+.cooltimeline-tab-settings .ctlb-unit-field--full {
+	width: 100%;
+}
+
+.cooltimeline-tab-settings .ctlb-unit-field__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	margin-bottom: 6px;
+}
+
+.cooltimeline-tab-settings .ctlb-unit-field__label {
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+	color: #1c1c1a;
+	white-space: nowrap;
+}
+
+.cooltimeline-tab-settings .cp-timeline-block-boxshadow-controller-wrapper:has(.ctlb-unit-field) {
+	flex-direction: column;
+	row-gap: 14px;
+}
+
+.cooltimeline-tab-settings .cp-timeline-block-boxshadow-controller-wrapper .cp-timeline-block-unit_control input {
+	min-width: 0 !important;
+	width: 100%;
+}
+
+.cooltimeline-tab-settings .cp-timeline-block-unit_control input {
+	font-size: 11px !important;
+	padding-left: 6px !important;
+	padding-right: 2px !important;
+}
+
+.cooltimeline-tab-settings .cp-timeline-block-unit_control input[type=number],
+.cooltimeline-tab-settings .cp-timeline-block-range__control input[type=number],
+.cooltimeline-tab-settings .ctlb-number-field__input input[type=number],
+.cooltimeline-tab-settings .ctlb-typo-size-input {
+	-moz-appearance: textfield;
+}
+
+.cooltimeline-tab-settings .cp-timeline-block-unit_control input[type=number]::-webkit-inner-spin-button,
+.cooltimeline-tab-settings .cp-timeline-block-unit_control input[type=number]::-webkit-outer-spin-button,
+.cooltimeline-tab-settings .cp-timeline-block-range__control input[type=number]::-webkit-inner-spin-button,
+.cooltimeline-tab-settings .cp-timeline-block-range__control input[type=number]::-webkit-outer-spin-button,
+.cooltimeline-tab-settings .ctlb-number-field__input input[type=number]::-webkit-inner-spin-button,
+.cooltimeline-tab-settings .ctlb-number-field__input input[type=number]::-webkit-outer-spin-button,
+.cooltimeline-tab-settings .ctlb-typo-size-input::-webkit-inner-spin-button,
+.cooltimeline-tab-settings .ctlb-typo-size-input::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Full-width segmented groups (Story position, Connector style, Media type) share the track evenly. */
+.cooltimeline-tab-settings .ctlb-segmented:not(.ctlb-typo-unit-toggle) > .ctlb-segmented-btn {
+	flex: 1 1 0;
+	min-width: 0;
+}
+
+/* Sliders: keep the number box as compact as Typography's so the track stays usable at 280px. */
+.cooltimeline-tab-settings .cp-timeline-block-range__control .components-range-control__number {
+	flex: 0 0 56px !important;
+	width: 56px !important;
+	min-width: 0 !important;
+	margin-left: 10px !important;
+}
+
+.cooltimeline-tab-settings .cp-timeline-block-range__control .components-range-control__number .components-input-control__container,
+.cooltimeline-tab-settings .cp-timeline-block-range__control .components-range-control__number input {
+	width: 100% !important;
+	min-width: 0 !important;
+}
+
+.cooltimeline-tab-settings .cp-timeline-block-range__control .components-range-control__number input {
+	padding-left: 6px !important;
+	padding-right: 6px !important;
+	text-align: center;
+}
+
+.cooltimeline-tab-settings .cp-timeline-block-range__control .components-range-control__reset {
+	height: 32px !important;
+	min-height: 0 !important;
+	padding: 0 8px !important;
+	font-size: 12px !important;
+	margin-left: 6px !important;
+}
+
+/* Plain "label ... number + Reset" row with no slider track (Year/Label Box Size/Radius). */
+.cooltimeline-tab-settings .ctlb-number-field {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+}
+
+.cooltimeline-tab-settings .ctlb-number-field__label {
+	font-size: 13px;
+	font-weight: 600;
+	color: #1c1c1a;
+	flex: 1;
+	min-width: 0;
+}
+
+.cooltimeline-tab-settings .ctlb-number-field__controls {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	flex: none;
+}
+
+.cooltimeline-tab-settings .ctlb-number-field__input {
+	width: 56px;
+	flex: none;
+}
+
+.cooltimeline-tab-settings .ctlb-number-field__input input {
+	text-align: center;
+}
+
+.cooltimeline-tab-settings .timeline-block-box-shadow-control-btn {
+	width: 30px !important;
+	height: 30px !important;
+	border-radius: 50%;
+	padding: 0 3px !important;
+	box-shadow: none !important;
+	background: var(--ctlb-badge-tint, #ebebfa) !important;
+	color: var(--ctlb-brand, #0d7a6f) !important;
+}
+
+.cooltimeline-tab-settings .timeline-block-box-shadow-reset-btn span {
+	height: 15px;
+	width: 15px;
+	font-size: 15px;
+	color: #ccc;
 }
 /* block style tab css end */

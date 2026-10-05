@@ -16,7 +16,6 @@ import { IconPicker } from "../component/Icons/index.js";
 import WebfontLoader from "../component/typography/fontloader.js";
 import VisualOptionControl, { LayoutIcons } from "../component/customComponents/VisualOptionControl.js";
 import { ProLock, ProBadge, ProOptionButton, openProUpgrade } from "../component/ProFeature.js";
-
 const { Component, Fragment, createRef } = wp.element
 
 import React from 'react';
@@ -45,9 +44,11 @@ const {
 
 const {
 	dispatch,
-	select
+	select,
+	withSelect
 } = wp.data
 const ALLOWED_BLOCKS = ["cp-timeline/content-timeline-block-child"]
+const STORY_BLOCK_NAME = "cp-timeline/content-timeline-block-child"
 
 class Edit extends Component {
 	constructor() {
@@ -55,6 +56,7 @@ class Edit extends Component {
 		this.state = {
 			stylePanel: 'heading',
 			advancedPanel: null,
+			lastStoryId: null,
 		};
 		this.onUpdateOrientation = this.onUpdateOrientation.bind(this);
 		this.timelineWrpRef = React.createRef();
@@ -230,19 +232,22 @@ class Edit extends Component {
 			setAttributes: noopSetAttributes,
 			link: { value: true, label: '_proLink' },
 		};
+		const proNumberInput = (props) => (InputControl
+			? <InputControl type="number" onChange={() => {}} {...props} />
+			: <TextControl onChange={() => {}} __nextHasNoMarginBottom={true} {...props} />
+		);
+		const proUnitPills = (active = 'px') => (
+			<ButtonGroup className="ctlb-unit-pills">
+				{['px', 'em', '%'].map((unit) => (
+					<Button key={unit} isSmall isPrimary={active === unit} isSecondary={active !== unit}>{unit}</Button>
+				))}
+			</ButtonGroup>
+		);
 		const parentBlock = select("core/block-editor").getBlock(this.props.clientId);
 		const innerStories = parentBlock?.innerBlocks || [];
-		const selectedId = select("core/block-editor").getSelectedBlockClientId();
-		const selectedBlock = selectedId ? select("core/block-editor").getBlock(selectedId) : null;
-		if (
-			selectedBlock &&
-			selectedBlock.name === "cp-timeline/content-timeline-block-child" &&
-			(select("core/block-editor").getBlockParents(selectedId) || []).includes(this.props.clientId)
-		) {
-			this._lastStoryId = selectedId;
-		}
+		const lastStoryId = this.props.selectedStoryId || this.state.lastStoryId;
 		const storyClientId =
-			(this._lastStoryId && select("core/block-editor").getBlock(this._lastStoryId)?.clientId) ||
+			(lastStoryId && select("core/block-editor").getBlock(lastStoryId)?.clientId) ||
 			innerStories[0]?.clientId ||
 			null;
 		const storyAttributes = storyClientId
@@ -448,6 +453,7 @@ class Edit extends Component {
 			</div>
 			<ProLock hideBadge compact>
 				<div className="cp-timeline-block-style-settings">
+					<h2 className="ctlb-label-heading">{__("Enable Line Filling", "timeline-block")}</h2>
 					<ToggleControl
 						className="timeline-block-Orientation_checkbox"
 						checked={false}
@@ -464,15 +470,7 @@ class Edit extends Component {
 					setAttributes={noopSetAttributes}
 				/>
 			</ProLock>
-			<hr className="ctlb-section-divider" />
-			<ColorController
-				label={__("Line Color", "timeline-block")}
-				attrLabel="LineColor"
-				className={LineColor != '' ? 'timeline-color-setting_apply' : ''}
-				color={'' === LineColor ? '#D91B3E' : LineColor}
-				setAttributes={setAttributes}
-			/>
-			<h2 className="ctlb-label-heading">{__("Line Size","timeline-block")}</h2>
+			<h2 className="ctlb-label-heading">{__("Line Width","timeline-block")}</h2>
 			<RangeControl
 				className="cp-timeline-block-range__control"
 				value={middleLineSize != '' ? middleLineSize : 0 }
@@ -483,9 +481,17 @@ class Edit extends Component {
 				max={ 10 }
 				__nextHasNoMarginBottom={ true }
 			/>
+			<hr className="ctlb-section-divider" />
+			<ColorController
+				label={__("Line Color", "timeline-block")}
+				attrLabel="LineColor"
+				className={LineColor != '' ? 'timeline-color-setting_apply' : ''}
+				color={'' === LineColor ? '#D91B3E' : LineColor}
+				setAttributes={setAttributes}
+			/>
 		</PanelBody>
 		<PanelBody title={panelTitle("marker", __("Icon Settings", "timeline-block"))} {...advancedPanelProps('icon-settings')}>
-			<h2 className="ctlb-label-heading">{__("Icon Box Size","timeline-block")}</h2>
+			<h2 className="ctlb-label-heading">{__("Box Size","timeline-block")}</h2>
 			<RangeControl
 				className="cp-timeline-block-range__control"
 				value={iconBoxSize != '' ? iconBoxSize : 0 }
@@ -496,7 +502,7 @@ class Edit extends Component {
 				max={ 100 }
 				__nextHasNoMarginBottom={ true }
 			/>
-			<h2 className="ctlb-label-heading">{__("Icon Size","timeline-block")}</h2>
+			<h2 className="ctlb-label-heading">{__("Font Size","timeline-block")}</h2>
 			<RangeControl
 				className="cp-timeline-block-range__control"
 				value={iconSize != '' ? iconSize : 0 }
@@ -509,14 +515,14 @@ class Edit extends Component {
 			/>
 			<hr className="ctlb-section-divider" />
 			<ColorController
-				label={__("Icon Background", "timeline-block")}
+				label={__("Background Color", "timeline-block")}
 				attrLabel="iconBg"
 				className={iconBg != '' ? 'timeline-color-setting_apply' : ''}
 				color={'' === iconBg ? '#D91B3E' : iconBg}
 				setAttributes={setAttributes}
 			/>
 			<ColorController
-				label={__("Icon Color", "timeline-block")}
+				label={__("Font Color", "timeline-block")}
 				attrLabel="iconColor"
 				className={iconColor != '' ? 'timeline-color-setting_apply' : ''}
 				color={iconColor}
@@ -557,6 +563,102 @@ class Edit extends Component {
 				</ButtonGroup>
 			</ProLock>
 		</PanelBody>
+		<PanelBody title={panelTitlePro("calendar-alt", __("Year/Label Settings", "timeline-block"))} {...advancedPanelProps('year-label-settings')}>
+			<ProLock hideBadge compact>
+				<div className="ctlb-number-field">
+					<span className="ctlb-number-field__label">{__("Box Size", "timeline-block")}</span>
+					<div className="ctlb-number-field__controls">
+						{proNumberInput({ className: 'ctlb-number-field__input', value: 50 })}
+						<Button isSecondary isSmall>{__("Reset", "timeline-block")}</Button>
+					</div>
+				</div>
+				<div className="ctlb-number-field">
+					<span className="ctlb-number-field__label">{__("Box Radius", "timeline-block")}</span>
+					<div className="ctlb-number-field__controls">
+						{proNumberInput({ className: 'ctlb-number-field__input', value: 50 })}
+						<Button isSecondary isSmall>{__("Reset", "timeline-block")}</Button>
+					</div>
+				</div>
+				<hr className="ctlb-section-divider" />
+				<ColorController
+					label={__("Background Color", "timeline-block")}
+					attrLabel="yearLabelColor"
+					className=""
+					color="#D91B3E"
+					setAttributes={noopSetAttributes}
+				/>
+				<div className="cp-timeline-block-style-settings">
+					<h2 className="ctlb-label-heading">{__("Year Navigation", "timeline-block")}</h2>
+					<ToggleControl
+						className="timeline-block-Orientation_checkbox"
+						checked={false}
+						onChange={() => {}}
+						__nextHasNoMarginBottom={true}
+					/>
+				</div>
+				<p className="ctlb-setting-description">{__("Please note: Year navigation change will only be reflected on the frontend.", "timeline-block")}</p>
+			</ProLock>
+		</PanelBody>
+		<PanelBody title={panelTitlePro("format-image", __("Image/Media Settings", "timeline-block"))} {...advancedPanelProps('image-media')}>
+			<ProLock hideBadge compact>
+				<div className="cp-timeline-block-boxshadow-controller-wrapper">
+					<div className="ctlb-unit-field">
+						<div className="ctlb-unit-field__header">
+							<span className="ctlb-unit-field__label">{__("Width", "timeline-block")}</span>
+							{proUnitPills('%')}
+						</div>
+						{proNumberInput({ className: 'cp-timeline-block-unit_control', placeholder: __("Auto", "timeline-block"), value: 100 })}
+					</div>
+					<div className="ctlb-unit-field">
+						<div className="ctlb-unit-field__header">
+							<span className="ctlb-unit-field__label">{__("Height", "timeline-block")}</span>
+							{proUnitPills()}
+						</div>
+						{proNumberInput({ className: 'cp-timeline-block-unit_control', placeholder: __("Auto", "timeline-block"), value: '' })}
+					</div>
+				</div>
+				<SpacingControl
+					label={__('Padding', 'timeline-block')}
+					valueTop={dummySide()}
+					valueRight={dummySide()}
+					valueBottom={dummySide()}
+					valueLeft={dummySide()}
+					{...dummySpacing}
+				/>
+				<SpacingControl
+					label={__('Margin', 'timeline-block')}
+					valueTop={dummySide()}
+					valueRight={dummySide()}
+					valueBottom={dummySide()}
+					valueLeft={dummySide()}
+					{...dummySpacing}
+				/>
+				<SpacingControl
+					label={__('Border', 'timeline-block')}
+					valueTop={dummySide()}
+					valueRight={dummySide()}
+					valueBottom={dummySide()}
+					valueLeft={dummySide()}
+					{...dummySpacing}
+				/>
+				<div className="cp-timeline-block-boxshadow-controller-wrapper">
+					<div className="ctlb-unit-field ctlb-unit-field--full">
+						<div className="ctlb-unit-field__header">
+							<span className="ctlb-unit-field__label">{__("Border Radius", "timeline-block")}</span>
+							{proUnitPills()}
+						</div>
+						{proNumberInput({ className: 'cp-timeline-block-unit_control', placeholder: '0', value: '' })}
+					</div>
+				</div>
+				<ColorController
+					label={__("Border Color", "timeline-block")}
+					attrLabel="mediaBorderColor"
+					className=""
+					color="#D91B3E"
+					setAttributes={noopSetAttributes}
+				/>
+			</ProLock>
+		</PanelBody>
 		<PanelBody title={panelTitle("editor-table", __("Container Box Settings", "timeline-block"))} {...advancedPanelProps('container-box')}>
 			{ timelineLayout == 'vertical' &&
 			<Fragment>
@@ -575,7 +677,7 @@ class Edit extends Component {
 			}
 			<SpacingControl
 				{ ...this.props }
-				label={ __( 'Container Padding', 'timeline-block' ) }
+				label={ __( 'Padding', 'timeline-block' ) }
 				valueTop={ {
 					value: containerTopPadding,
 					label: 'containerTopPadding',
@@ -596,6 +698,7 @@ class Edit extends Component {
 					value: desktopConatinerPaddingType,
 					label: 'desktopConatinerPaddingType',
 				} }
+				defaultValue=''
 				attributes={ this.props.attributes }
 				setAttributes={ setAttributes }
 				link={ {
@@ -604,7 +707,7 @@ class Edit extends Component {
 				} }
 			/>
 			<ColorController
-				label={__("Story Border Color", "timeline-block")}
+				label={__("Border Color", "timeline-block")}
 				attrLabel="storyBorderColor"
 				className={storyBorderColor != '' ? 'timeline-color-setting_apply' : ''}
 				color={'' === storyBorderColor ? '#D91B3E' : storyBorderColor}
@@ -633,111 +736,36 @@ class Edit extends Component {
 				/>
 				<SpacingControl
 					label={__('Border Radius', 'timeline-block')}
+					labels={[
+						__('Top-L', 'timeline-block'),
+						__('Top-R', 'timeline-block'),
+						__('Btm-R', 'timeline-block'),
+						__('Btm-L', 'timeline-block'),
+					]}
 					valueTop={dummySide()}
 					valueRight={dummySide()}
 					valueBottom={dummySide()}
 					valueLeft={dummySide()}
 					{...dummySpacing}
 				/>
-			</ProLock>
-		</PanelBody>
-		<PanelBody title={panelTitlePro("calendar-alt", __("Year/Label Settings", "timeline-block"))} {...advancedPanelProps('year-label-settings')}>
-			<ProLock hideBadge compact>
-				<h2 className="ctlb-label-heading">{__("Box Size","timeline-block")}</h2>
-				<RangeControl
-					className="cp-timeline-block-range__control"
-					value={50}
-					onChange={() => {}}
-					resetFallbackValue={0}
-					allowReset={true}
-					min={30}
-					max={150}
-					__nextHasNoMarginBottom={true}
-				/>
-				<h2 className="ctlb-label-heading">{__("Box Radius","timeline-block")}</h2>
-				<RangeControl
-					className="cp-timeline-block-range__control"
-					value={50}
-					onChange={() => {}}
-					resetFallbackValue={50}
-					allowReset={true}
-					min={0}
-					max={50}
-					__nextHasNoMarginBottom={true}
-				/>
-				<hr className="ctlb-section-divider" />
 				<ColorController
 					label={__("Background Color", "timeline-block")}
-					attrLabel="yearLabelColor"
+					attrLabel="containerColor"
 					className=""
-					color="#D91B3E"
+					color="#ffffff"
 					setAttributes={noopSetAttributes}
 				/>
-				<div className="cp-timeline-block-style-settings">
-					<h2 className="ctlb-label-heading">{__("Year Navigation", "timeline-block")}</h2>
-					<ToggleControl
-						className="timeline-block-Orientation_checkbox"
-						checked={false}
-						onChange={() => {}}
-						__nextHasNoMarginBottom={true}
-					/>
+				<div className="timeline-block-box-shadow-options">
+					<div className="timeline-block-box-shadow-option-actions">
+						<h2>{__("Box Shadow", "timeline-block")}</h2>
+						<div className="components-button timeline-block-size-btn timeline-block-box-shadow-reset-btn is-small">
+							<span className="dashicons dashicons-image-rotate"></span>
+						</div>
+						<Button className="timeline-block-size-btn timeline-block-box-shadow-control-btn" isSmall>
+							<span className="dashicons dashicons-admin-tools"></span>
+						</Button>
+					</div>
 				</div>
-				<p className="ctlb-setting-description">{__("Please note: Year navigation change will only be reflected on the frontend.", "timeline-block")}</p>
-			</ProLock>
-		</PanelBody>
-		<PanelBody title={panelTitlePro("format-image", __("Image/Media Settings", "timeline-block"))} {...advancedPanelProps('image-media')}>
-			<ProLock hideBadge compact>
-				<div className="cp-timeline-block-boxshadow-controller-wrapper">
-					{InputControl ?
-					<>
-					<InputControl
-						className={'cp-timeline-block-unit_control'}
-						type="number"
-						label={__("Width", "timeline-block")}
-						value={100}
-						onChange={() => {}}
-					/>
-					<InputControl
-						className={'cp-timeline-block-unit_control'}
-						type="number"
-						label={__("Height", "timeline-block")}
-						value={''}
-						onChange={() => {}}
-					/>
-					</>
-					:
-					<>
-					<TextControl
-						label={__("Width", "timeline-block")}
-						value="100"
-						onChange={() => {}}
-						__nextHasNoMarginBottom={true}
-					/>
-					<TextControl
-						label={__("Height", "timeline-block")}
-						value=""
-						onChange={() => {}}
-						__nextHasNoMarginBottom={true}
-					/>
-					</>
-					}
-				</div>
-				<SpacingControl
-					label={__('Padding', 'timeline-block')}
-					valueTop={dummySide()}
-					valueRight={dummySide()}
-					valueBottom={dummySide()}
-					valueLeft={dummySide()}
-					{...dummySpacing}
-				/>
-				<SpacingControl
-					label={__('Margin', 'timeline-block')}
-					valueTop={dummySide()}
-					valueRight={dummySide()}
-					valueBottom={dummySide()}
-					valueLeft={dummySide()}
-					{...dummySpacing}
-				/>
 			</ProLock>
 		</PanelBody>
 		<PanelBody title={panelTitlePro("controls-play", __("Timeline Animation", "timeline-block"))} {...advancedPanelProps('timeline-animation')}>
@@ -1122,5 +1150,25 @@ class Edit extends Component {
 		}
 		 
 	}
-} export default
-	(Edit)
+
+	componentDidUpdate(prevProps) {
+		const { selectedStoryId } = this.props;
+		if (selectedStoryId && selectedStoryId !== prevProps.selectedStoryId) {
+			this.setState({ lastStoryId: selectedStoryId });
+		}
+	}
+} export default withSelect((select, ownProps) => {
+	const editor = select("core/block-editor");
+	const selectedId = editor.getSelectedBlockClientId();
+	if (!selectedId) {
+		return { selectedStoryId: null };
+	}
+	const block = editor.getBlock(selectedId);
+	if (!block || block.name !== STORY_BLOCK_NAME) {
+		return { selectedStoryId: null };
+	}
+	if (!editor.getBlockParents(selectedId).includes(ownProps.clientId)) {
+		return { selectedStoryId: null };
+	}
+	return { selectedStoryId: selectedId };
+})(Edit)

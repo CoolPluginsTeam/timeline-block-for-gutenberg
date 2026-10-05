@@ -67,7 +67,7 @@ registerBlockType("cp-timeline/content-timeline-block", {
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
 	title: __('Timeline Block', 'timeline-block'), // Block title.
 	apiVersion: 3,
-	description: __("Create a stunning timeline with ease to showcase your story, journey, or roadmap.", 'timeline-block'),
+	description: __("Build beautiful timelines for your story, journey, or roadmap in minutes.", 'timeline-block'),
 	keywords: [
 		__("Content Timeline", 'timeline-block'),
 		__("Timeline", 'timeline-block'),

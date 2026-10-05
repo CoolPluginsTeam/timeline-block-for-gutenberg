@@ -210,19 +210,26 @@ function ctlb_timeline_get_font_url( $font_set ) {
  * - editor_script → editor only
  */
 function cltb_cp_timeline_cgb_block_assets() { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+	$ctlb_block_dir  = Timeline_Block_Dir . 'includes/cool-timeline-block/';
+	$ctlb_asset_path = $ctlb_block_dir . 'dist/block.build.asset.php';
+	$ctlb_asset      = file_exists( $ctlb_asset_path ) ? include $ctlb_asset_path : array();
+	$ctlb_build_ver  = ! empty( $ctlb_asset['version'] ) ? $ctlb_asset['version'] : Timeline_Block_Version;
+	$ctlb_common_css = $ctlb_block_dir . 'assets/common-block-editor.css';
+	$ctlb_common_ver = file_exists( $ctlb_common_css ) ? (string) filemtime( $ctlb_common_css ) : Timeline_Block_Version;
+
 	// Frontend / shared block CSS — no editor/admin dependencies.
 	wp_register_style(
 		'cltb_cp_timeline-cgb-style',
 		Timeline_Block_Url . 'includes/cool-timeline-block/dist/style-index.css',
 		array(),
-		null // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+		$ctlb_build_ver
 	);
 
 	wp_register_script(
 		'cltb_cp_timeline-cgb-block-js',
 		Timeline_Block_Url . 'includes/cool-timeline-block/dist/block.build.js',
 		array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-block-editor' ),
-		null, // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+		$ctlb_build_ver,
 		true
 	);
 
@@ -240,7 +247,7 @@ function cltb_cp_timeline_cgb_block_assets() { // phpcs:ignore WordPress.NamingC
 		'timeline-block-common-editor-css',
 		Timeline_Block_Url . 'includes/cool-timeline-block/assets/common-block-editor.css',
 		array( 'wp-edit-blocks' ),
-		null // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+		$ctlb_common_ver
 	);
 
 	// Built editor CSS from webpack.
@@ -248,7 +255,7 @@ function cltb_cp_timeline_cgb_block_assets() { // phpcs:ignore WordPress.NamingC
 		'cltb_cp_timeline-cgb-block-editor-css',
 		Timeline_Block_Url . 'includes/cool-timeline-block/dist/index.css',
 		array( 'wp-edit-blocks', 'timeline-block-common-editor-css' ),
-		null // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+		$ctlb_build_ver
 	);
 
 	if ( function_exists( 'register_block_type' ) ) {
