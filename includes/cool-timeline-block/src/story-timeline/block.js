@@ -84,9 +84,10 @@ registerBlockType("cp-timeline/content-timeline-block", {
 		const blockProps = useBlockProps({
 			className: 'Cool-Content-Timeline-' + props.attributes.timelineDesign,
 		});
+		const isNewDesign = typeof cgbGlobal !== 'undefined' && !! cgbGlobal.isNewDesign;
 		return (
 			<div {...blockProps}>
-				<Edit {...props} />
+				<Edit {...props} isNewDesign={ isNewDesign } />
 			</div>);
 	},
 	save: props => {

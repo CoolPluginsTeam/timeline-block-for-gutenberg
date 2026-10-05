@@ -181,6 +181,7 @@ class Edit extends Component {
 				timelineNavItems
 			},
 		} = this.props
+		const newDesignClass = this.props.isNewDesign ? 'ctlb-new-design' : '';
 		if(this.getDocument()){
 			var element = this.getDocument().getElementById("cool-vertical-timeline-style-" + this.props.clientId)
 			
@@ -1089,7 +1090,7 @@ class Edit extends Component {
 			{loadDateGoogleFonts }
 		
 			<div className={"cool-timeline-block-" + this.props.clientId + " cool-timeline-block"} ref={this.ref}>
-							<div className={`cool-${timelineLayout}-timeline-body ctlb-wrapper ${timelineDesign} ${Orientation}`}>
+							<div className={`cool-${timelineLayout}-timeline-body ctlb-wrapper ${newDesignClass} ${timelineDesign} ${Orientation}`}>
 								<div className="cool-timeline-block-list">
 									<InnerBlocks
 									allowedBlocks={ALLOWED_BLOCKS}

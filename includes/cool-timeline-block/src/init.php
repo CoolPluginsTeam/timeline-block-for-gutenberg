@@ -6,6 +6,59 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Whether timelines should render with the new design.
+ *
+ * Old installs keep the legacy design until an admin opts in from the welcome notice.
+ *
+ * @return bool
+ */
+function ctlb_is_new_design() {
+	if ( 'yes' === get_option( 'ctlb_migrate_new_design' ) ) {
+		return true;
+	}
+
+	if ( 'yes' === get_option( 'ctlb_keep_legacy_design' ) ) {
+		return false;
+	}
+
+	$initial_version = trim( (string) get_option( 'ctlb-initial-save-version', '' ) );
+	if ( '' === $initial_version ) {
+		return false;
+	}
+
+	$refresh_version = defined( 'CTLB_DESIGN_REFRESH_VERSION' ) ? CTLB_DESIGN_REFRESH_VERSION : '2.0.0';
+
+	return version_compare( $initial_version, $refresh_version, '>=' );
+}
+
+add_filter( 'render_block', 'ctlb_add_new_design_class', 10, 2 );
+/**
+ * Add the ctlb-new-design class to the timeline wrapper at render time, so saved post content never changes.
+ *
+ * @param string $block_content Rendered block HTML.
+ * @param array  $block         Parsed block.
+ * @return string
+ */
+function ctlb_add_new_design_class( $block_content, $block ) {
+	if ( ! isset( $block['blockName'] ) || 'cp-timeline/content-timeline-block' !== $block['blockName'] ) {
+		return $block_content;
+	}
+
+	if ( ! ctlb_is_new_design() || false !== strpos( $block_content, 'ctlb-new-design' ) ) {
+		return $block_content;
+	}
+
+	$patched = preg_replace(
+		'/(<div\b[^>]*\bclass="[^"]*\bctlb-wrapper\b)/',
+		'$1 ctlb-new-design',
+		$block_content,
+		1
+	);
+
+	return ( null === $patched ) ? $block_content : $patched;
+}
+
 add_action( 'wp_head', 'cltb_timeline_block_load_post_assets' );
 function ctlb_get_all_blocks( $blocks ) {
 	$all_blocks = array();
@@ -171,6 +224,14 @@ function cltb_cp_timeline_cgb_block_assets() { // phpcs:ignore WordPress.NamingC
 		array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-block-editor' ),
 		null, // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 		true
+	);
+
+	wp_localize_script(
+		'cltb_cp_timeline-cgb-block-js',
+		'cgbGlobal',
+		array(
+			'isNewDesign' => ctlb_is_new_design(),
+		)
 	);
 
 	// Editor-only CSS — loaded via register_block_type() editor_style (not block.json;

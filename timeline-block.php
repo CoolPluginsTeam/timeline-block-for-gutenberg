@@ -30,6 +30,13 @@ if ( ! defined( 'CTLB_FEEDBACK_API' ) ) {
 if ( ! defined( 'Timeline_Block_Version' ) ) {
 	define( 'Timeline_Block_Version', '1.9.3' );
 }
+// First install on this version or newer gets the new design; older installs see the migrate notice.
+if ( ! defined( 'CTLB_DESIGN_REFRESH_VERSION' ) ) {
+	define( 'CTLB_DESIGN_REFRESH_VERSION', '2.0.0' );
+}
+if ( ! defined( 'CTLB_CPFM_ID' ) ) {
+	define( 'CTLB_CPFM_ID', 'timeline-block' );
+}
 
 // phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
 
@@ -77,6 +84,11 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 			if ( is_admin() && $this->ctlb_should_load_onboarding() ) {
 				add_action( 'enqueue_block_editor_assets', array( $this, 'ctlb_enqueue_onboarding_inserter' ) );
 			}
+
+			if ( is_admin() ) {
+				// Must run before CPFM_Welcome_Notice::cpfm_handle_dismiss (admin_init, 10).
+				add_action( 'admin_init', array( $this, 'ctlb_handle_design_upgrade' ), 5 );
+			}
 		}
 
 		/**
@@ -110,12 +122,63 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 		 */
 		private function ctlb_ensure_install_options() {
 			if ( ! get_option( 'ctlb-initial-save-version' ) ) {
+				// Sites that ran a release older than this option already have timelines; keep their legacy design.
+				if ( $this->ctlb_has_existing_timelines() ) {
+					add_option( 'ctlb_keep_legacy_design', 'yes' );
+				}
 				add_option( 'ctlb-initial-save-version', Timeline_Block_Version );
 			}
 			if ( ! get_option( 'ctlb-install-date' ) ) {
 				add_option( 'ctlb-install-date', gmdate( 'Y-m-d H:i:s' ) );
 			}
 			// update_option( 'ctlb-install-date', gmdate( 'Y-m-d H:i:s' ) );
+		}
+
+		/**
+		 * Whether any post already contains a Timeline Block.
+		 *
+		 * @return bool
+		 */
+		private function ctlb_has_existing_timelines() {
+			global $wpdb;
+
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- one-time check while seeding install options.
+			$post_id = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT ID FROM {$wpdb->posts} WHERE post_content LIKE %s LIMIT 1",
+					'%' . $wpdb->esc_like( '<!-- wp:cp-timeline/content-timeline-block' ) . '%'
+				)
+			);
+
+			return ! empty( $post_id );
+		}
+
+		/**
+		 * Save the new-design opt-in when an admin clicks "Yes, Upgrade Design" in the welcome notice.
+		 *
+		 * @return void
+		 */
+		public function ctlb_handle_design_upgrade() {
+			// phpcs:disable WordPress.Security.NonceVerification.Recommended -- nonce checked below once the request is ours.
+			if ( empty( $_GET['cpfm-welcome'] ) || empty( $_GET['ctlb_upgrade_design'] ) ) {
+				return;
+			}
+			if ( CTLB_CPFM_ID !== sanitize_key( wp_unslash( $_GET['cpfm-welcome'] ) ) ) {
+				return;
+			}
+			// phpcs:enable WordPress.Security.NonceVerification.Recommended
+			if ( ! current_user_can( 'manage_options' ) ) {
+				return;
+			}
+
+			check_admin_referer( 'cpfm_welcome_' . CTLB_CPFM_ID );
+
+			update_option( 'ctlb_migrate_new_design', 'yes' );
+			update_option( 'ctlb_v2_welcome', 'done' );
+
+			$referer = wp_get_referer();
+			wp_safe_redirect( $referer ? $referer : admin_url( 'plugins.php' ) );
+			exit;
 		}
 
 		public function ctlb_plugin_activate() {
@@ -226,6 +289,34 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 			$registered = true;
 
 			$name = 'Timeline Block';
+
+			if ( class_exists( 'CPFM_Welcome_Notice' ) && function_exists( 'ctlb_is_new_design' ) && ! ctlb_is_new_design() ) {
+				add_option( 'ctlb_v2_welcome', 'show' );
+
+				CPFM_Welcome_Notice::cpfm_register(
+					array(
+						'id'           => CTLB_CPFM_ID,
+						'option'       => 'ctlb_v2_welcome',
+						// Must be a screen every admin can open, or WP dies before admin_init runs the upgrade handler.
+						'settings_url' => admin_url( 'plugins.php?ctlb_upgrade_design=1' ),
+						'screens'      => array(
+							'dashboard',
+							'plugins',
+							'toplevel_page_cool-plugins-timeline-addon',
+							'timeline-addons_page_ctl-getting-started',
+							'settings_page_ctlb-getting-started',
+						),
+						'i18n'         => array(
+							/* translators: %s: design refresh version number. */
+							'headline'    => sprintf( __( 'Timeline Block %s – Major Design Enhancement!', 'timeline-block' ), CTLB_DESIGN_REFRESH_VERSION ),
+							'body'        => __( 'Would you like to upgrade your existing timelines to the new design?', 'timeline-block' ),
+							'cta'         => __( 'Yes, Upgrade Design', 'timeline-block' ),
+							'dismiss'     => __( 'No, Keep Current Design', 'timeline-block' ),
+							'close_label' => __( 'Close', 'timeline-block' ),
+						),
+					)
+				);
+			}
 
 			add_action(
 				'cpfm_register_notice',

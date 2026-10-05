@@ -1000,3 +1000,113 @@ transform: translate(0%);
   }
   // Deprecated version responsive css end
 }
+
+// New design css start
+// Every rule is scoped to .ctlb-new-design (added only after migrate or on new installs),
+// so the legacy design above stays untouched for everyone else.
+
+// :where() keeps these defaults at the base selector's specificity, so per-block settings still win.
+.cool-vertical-timeline-body:where(.ctlb-new-design) {
+  --ctlb-content-alignment: left;
+  --ctlb-date-font-weight: 600;
+  --ctlb-head-font-weight: 700;
+  --ctlb-titile-bt-spacing: 8px;
+  --ctlb-sub-head-font-size: 17px;
+  --ctlb-sub-head-line-height: 30px;
+  --ctlb-sub-heading-color: #333;
+  --ctlb-line-color: #C7374B;
+  --ctlb-icon-bg: #C7374B;
+  --ctlb-story-border-color: #ccc;
+}
+
+.ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper::before {
+  background: var(--ctlb-line-color);
+  opacity: 1;
+  border-radius: var(--ctlb-middle-line-size);
+}
+
+.ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper .timeline-content .ctl-row .story-details {
+  padding: var(--ctlb-container-top-padding, 22px) var(--ctlb-container-right-padding, 22px) var(--ctlb-container-bottom-padding, 22px) var(--ctlb-container-left-padding, 22px);
+  background: #fff;
+  border: 1px solid var(--ctlb-story-border-color);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.1);
+}
+
+// Arrow: rotated square instead of the legacy 15px border triangle. The half-fill gradient
+// covers the card border where the arrow joins the card.
+.ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper .timeline-content .ctl-row .story-details::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 16px;
+  width: 30px;
+  height: 30px;
+  margin: 0;
+  border: 0 solid var(--ctlb-story-border-color);
+  transform: rotate(45deg);
+  z-index: 2;
+}
+
+.ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper:is(.both-sided, .alternating-sided) .timeline-content .position-right .story-details::before,
+.ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper.one-sided.left .timeline-content .ctl-row .story-details::before {
+  left: -16px;
+  right: auto;
+  border-width: 0 0 1px 1px;
+  background: linear-gradient(to top right, #fff 52%, transparent 48%);
+}
+
+.ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper:is(.both-sided, .alternating-sided) .timeline-content .position-left .story-details::before,
+.ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper.one-sided.right .timeline-content .ctl-row .story-details::before {
+  left: auto;
+  right: -16px;
+  border-width: 1px 1px 0 0;
+  background: linear-gradient(to bottom left, #fff 52%, transparent 48%);
+}
+
+.ctlb-new-design.cool-vertical-timeline-body .story-details :where(.timeline-block_title, .ctlb-block-title) {
+  font-size: var(--ctlb-head-font-size, 20px);
+  line-height: var(--ctlb-head-line-height, 30px);
+}
+
+.ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper .timeline-content.icon-true .timeline-block-icon {
+  box-shadow: 0 0 0 4px #fff, 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+.ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper .timeline-content.icon-false .timeline-block-icon svg {
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px #fff;
+}
+
+// Media radius follows the card radius at 75%, same as Timeline Block Pro.
+.ctlb-new-design.cool-vertical-timeline-body .story-details .story-image {
+  margin-bottom: 16px;
+}
+
+.ctlb-new-design.cool-vertical-timeline-body .story-details .story-image img,
+.ctlb-new-design.cool-vertical-timeline-body .story-content .wp-block-image img {
+  display: block;
+  width: 100%;
+  border-radius: 15px;
+}
+
+.ctlb-new-design.cool-vertical-timeline-body .story-content > :where(.wp-block-image, .wp-block-embed, .wp-block-video) {
+  margin-bottom: 16px;
+}
+
+@media (max-width: 767px) {
+
+  // Legacy mobile rules force the arrow transform with !important.
+  .ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper .timeline-content .ctl-row .story-details::before {
+    transform: rotate(45deg) !important;
+  }
+
+  // Mobile stacks every card to the right of the line, so left-side cards point left too.
+  .ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper:is(.both-sided, .alternating-sided) .timeline-content .position-left .story-details::before {
+    left: -16px;
+    right: auto;
+    border-width: 0 0 1px 1px;
+    background: linear-gradient(to top right, #fff 52%, transparent 48%);
+  }
+}
+// New design css end
