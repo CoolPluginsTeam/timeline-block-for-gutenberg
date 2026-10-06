@@ -305,7 +305,12 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 							'toplevel_page_cool-plugins-timeline-addon',
 							'timeline-addons_page_ctl-getting-started',
 							'settings_page_ctlb-getting-started',
-						),
+							),
+							// Getting Started prunes admin_notices. Render inside the
+							// header slot instead, and keep the notice from being moved.
+							'inline_screens' => array(
+								'settings_page_ctlb-getting-started',
+							),
 						'i18n'         => array(
 							/* translators: %s: design refresh version number. */
 							'headline'    => sprintf( __( 'Timeline Block %s – Major Design Enhancement!', 'timeline-block' ), CTLB_DESIGN_REFRESH_VERSION ),
