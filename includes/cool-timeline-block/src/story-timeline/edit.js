@@ -428,7 +428,7 @@ class Edit extends Component {
 </CardBody>
 		const advanced_setting =
 		<CardBody className="ctlb-panel-stack">
-		<PanelBody title={panelTitle("align-wide", __("Center Line Settings", "timeline-block"))} {...advancedPanelProps('center-line')}>
+		<PanelBody title={panelTitle("align-wide", __("Center Line", "timeline-block"))} {...advancedPanelProps('center-line')}>
 			<div className="ctlb-pro-field-header">
 				<h2 className="ctlb-label-heading">{__("Line Filling", "timeline-block")}</h2>
 				<ProBadge />
@@ -472,7 +472,7 @@ class Edit extends Component {
 				setAttributes={setAttributes}
 			/>
 		</PanelBody>
-		<PanelBody title={panelTitle("marker", __("Icon Settings", "timeline-block"))} {...advancedPanelProps('icon-settings')}>
+		<PanelBody title={panelTitle("marker", __("Icons", "timeline-block"))} {...advancedPanelProps('icon-settings')}>
 			<h2 className="ctlb-label-heading">{__("Box Size","timeline-block")}</h2>
 			<RangeControl
 				className="cp-timeline-block-range__control"
@@ -545,7 +545,7 @@ class Edit extends Component {
 				</ButtonGroup>
 			</ProLock>
 		</PanelBody>
-		<PanelBody title={panelTitlePro("calendar-alt", __("Year/Label Settings", "timeline-block"))} {...advancedPanelProps('year-label-settings')}>
+		<PanelBody title={panelTitlePro("calendar-alt", __("Year / Label", "timeline-block"))} {...advancedPanelProps('year-label-settings')}>
 			<ProLock hideBadge compact>
 				<div className="ctlb-number-field">
 					<span className="ctlb-number-field__label">{__("Box Size", "timeline-block")}</span>
@@ -581,7 +581,7 @@ class Edit extends Component {
 				<p className="ctlb-setting-description">{__("Please note: Year navigation change will only be reflected on the frontend.", "timeline-block")}</p>
 			</ProLock>
 		</PanelBody>
-		<PanelBody title={panelTitlePro("format-image", __("Image/Media Settings", "timeline-block"))} {...advancedPanelProps('image-media')}>
+		<PanelBody title={panelTitlePro("format-image", __("Media", "timeline-block"))} {...advancedPanelProps('image-media')}>
 			<ProLock hideBadge compact>
 				<div className="cp-timeline-block-boxshadow-controller-wrapper">
 					<div className="ctlb-unit-field">
@@ -641,7 +641,7 @@ class Edit extends Component {
 				/>
 			</ProLock>
 		</PanelBody>
-		<PanelBody title={panelTitle("editor-table", __("Container Box Settings", "timeline-block"))} {...advancedPanelProps('container-box')}>
+		<PanelBody title={panelTitle("editor-table", __("Story Box", "timeline-block"))} {...advancedPanelProps('container-box')}>
 			{ timelineLayout == 'vertical' &&
 			<Fragment>
 				<h2 className="ctlb-label-heading">{__("Item Spacing","timeline-block")}</h2>
@@ -750,7 +750,7 @@ class Edit extends Component {
 				</div>
 			</ProLock>
 		</PanelBody>
-		<PanelBody title={panelTitlePro("controls-play", __("Timeline Animation", "timeline-block"))} {...advancedPanelProps('timeline-animation')}>
+		<PanelBody title={panelTitlePro("controls-play", __("Animation", "timeline-block"))} {...advancedPanelProps('timeline-animation')}>
 			<ProLock hideBadge compact>
 				<SelectControl
 					value="none"
