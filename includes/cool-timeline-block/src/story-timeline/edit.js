@@ -44,11 +44,9 @@ const {
 
 const {
 	dispatch,
-	select,
-	withSelect
+	select
 } = wp.data
 const ALLOWED_BLOCKS = ["cp-timeline/content-timeline-block-child"]
-const STORY_BLOCK_NAME = "cp-timeline/content-timeline-block-child"
 
 class Edit extends Component {
 	constructor() {
@@ -56,7 +54,6 @@ class Edit extends Component {
 		this.state = {
 			stylePanel: 'heading',
 			advancedPanel: null,
-			lastStoryId: null,
 		};
 		this.onUpdateOrientation = this.onUpdateOrientation.bind(this);
 		this.timelineWrpRef = React.createRef();
@@ -243,21 +240,6 @@ class Edit extends Component {
 				))}
 			</ButtonGroup>
 		);
-		const parentBlock = select("core/block-editor").getBlock(this.props.clientId);
-		const innerStories = parentBlock?.innerBlocks || [];
-		const lastStoryId = this.props.selectedStoryId || this.state.lastStoryId;
-		const storyClientId =
-			(lastStoryId && select("core/block-editor").getBlock(lastStoryId)?.clientId) ||
-			innerStories[0]?.clientId ||
-			null;
-		const storyAttributes = storyClientId
-			? select("core/block-editor").getBlockAttributes(storyClientId)
-			: null;
-		const setStoryAttributes = (partial) => {
-			if (storyClientId) {
-				dispatch("core/block-editor").updateBlockAttributes(storyClientId, partial);
-			}
-		};
 		const stylePanelProps = (panelId) => ({
 			opened: this.state.stylePanel === panelId,
 			onToggle: (willOpen) => {
@@ -908,113 +890,6 @@ class Edit extends Component {
 					))}
 				</ButtonGroup>
 			</div>
-			<hr className="ctlb-section-divider" />
-			{storyClientId && storyAttributes ? (
-				<div id="ctlb-story-setting-panel">
-					<PanelBody title={panelTitle("admin-generic", __("Story Setting", "timeline-block"))} initialOpen={true}>
-						<div className="ctlb-pro-field-header">
-							<span className="timeline-block-settings-labels">{__("Year Label", "timeline-block")}</span>
-							<ProBadge />
-						</div>
-						<ProLock hideBadge compact>
-							<div className="cp-timeline-block-style-settings ctlb-row">
-								<label className="timeline-block-settings-labels">
-									{__("Year Label(Show/Hide)", "timeline-block")}
-								</label>
-								<ToggleControl
-									className="timeline-block-Orientation_checkbox"
-									checked={false}
-									onChange={() => {}}
-									__nextHasNoMarginBottom={true}
-								/>
-							</div>
-							<TextControl
-								label="Year Label"
-								placeholder={__("Year/Label", "timeline-block")}
-								value=""
-								onChange={() => {}}
-								__nextHasNoMarginBottom={true}
-							/>
-						</ProLock>
-						<TextControl
-							label="Primary Label(Date/Steps)"
-							placeholder={__("Date/Steps", "timeline-block")}
-							value={storyAttributes.t_date === "ctl_date_undefined" ? "" : (storyAttributes.t_date || "")}
-							onChange={(value) => {
-								const date = "" === value ? "ctl_date_undefined" : value;
-								setStoryAttributes({ t_date: date });
-							}}
-							__nextHasNoMarginBottom={true}
-						/>
-						<div className="ctlb-row ctlb-row--stack">
-							<div className="timeline-block-settings-labels">{__("Story Icon", "timeline-block")}</div>
-							<ButtonGroup className="ctlb_icon_buttons_control ctlb-segmented">
-								<Button
-									isSmall
-									onClick={() => setStoryAttributes({ iconToggle: "false" })}
-									className={`ctlb-segmented-btn${["false", "dot"].includes(storyAttributes.iconToggle) ? " is-active" : ""}`}
-								>
-									Dot
-								</Button>
-								<Button
-									isSmall
-									onClick={() => setStoryAttributes({ iconToggle: "true" })}
-									className={`ctlb-segmented-btn${["true", "icon"].includes(storyAttributes.iconToggle) ? " is-active" : ""}`}
-								>
-									Icon
-								</Button>
-								<ProOptionButton>Image</ProOptionButton>
-								<ProOptionButton>Text</ProOptionButton>
-							</ButtonGroup>
-						</div>
-						{["true", "icon"].includes(storyAttributes.iconToggle) ?
-							<div className="timeline-block-iconpicker">
-								<IconPicker icon={storyAttributes.icon} onChange={(v) => setStoryAttributes({ icon: v })} />
-							</div>
-							: null}
-						{(timelineLayout == "vertical" && timelineDesign == "both-sided" && storyAttributes.storyPositionHide) ?
-							<Fragment>
-								<hr className="ctlb-section-divider" />
-								<div className="timeline-block-settings-labels">{__("Story position", "timeline-block")}</div>
-								<ButtonGroup className="cool-timeline-content-alignment-buttons ctlb-segmented">
-									<Button
-										isSmall
-										onClick={() => setStoryAttributes({ blockPosition: "left", block_position_active: true })}
-										className={`ctlb-segmented-btn${storyAttributes.blockPosition == "left" ? " is-active" : ""}`}
-									>Left</Button>
-									<Button
-										isSmall
-										onClick={() => setStoryAttributes({ blockPosition: "right", block_position_active: true })}
-										className={`ctlb-segmented-btn${storyAttributes.blockPosition == "right" ? " is-active" : ""}`}
-									>Right</Button>
-								</ButtonGroup>
-							</Fragment>
-							: null}
-						<hr className="ctlb-section-divider" />
-						<div className="ctlb-pro-field-header">
-							<span className="timeline-block-settings-labels">{__("Choose Media Type", "timeline-block")}</span>
-							<ProBadge />
-						</div>
-						<ProLock hideBadge compact>
-							<ButtonGroup className="ctl_media_control ctlb-segmented">
-								<Button isSmall className="ctlb-segmented-btn is-active">
-									<span className="dashicons dashicons-format-image"></span>
-								</Button>
-								<Button isSmall className="ctlb-segmented-btn">
-									<span className="dashicons dashicons-video-alt3"></span>
-								</Button>
-								<Button isSmall className="ctlb-segmented-btn">
-									<span className="dashicons dashicons-images-alt2"></span>
-								</Button>
-							</ButtonGroup>
-						</ProLock>
-					</PanelBody>
-				</div>
-			) : (
-				<p className="ctlb-setting-description">
-					{__("Select a story below to edit its settings here.", "timeline-block")}
-				</p>
-			)}
 			</div>
 		</CardBody>
 		);
@@ -1117,6 +992,9 @@ class Edit extends Component {
 			{settingTabs}
 			{loadDateGoogleFonts }
 		
+			<p className="ctlb-editor-notice" role="note">
+				{__("Editor preview may look a little different from the frontend. Your theme styles can be applied on the editor page.", "timeline-block")}
+			</p>
 			<div className={"cool-timeline-block-" + this.props.clientId + " cool-timeline-block"} ref={this.ref}>
 							<div className={`cool-${timelineLayout}-timeline-body ctlb-wrapper ${newDesignClass} ${timelineDesign} ${Orientation}`}>
 								<div className="cool-timeline-block-list">
@@ -1150,25 +1028,5 @@ class Edit extends Component {
 		}
 		 
 	}
-
-	componentDidUpdate(prevProps) {
-		const { selectedStoryId } = this.props;
-		if (selectedStoryId && selectedStoryId !== prevProps.selectedStoryId) {
-			this.setState({ lastStoryId: selectedStoryId });
-		}
-	}
-} export default withSelect((select, ownProps) => {
-	const editor = select("core/block-editor");
-	const selectedId = editor.getSelectedBlockClientId();
-	if (!selectedId) {
-		return { selectedStoryId: null };
-	}
-	const block = editor.getBlock(selectedId);
-	if (!block || block.name !== STORY_BLOCK_NAME) {
-		return { selectedStoryId: null };
-	}
-	if (!editor.getBlockParents(selectedId).includes(ownProps.clientId)) {
-		return { selectedStoryId: null };
-	}
-	return { selectedStoryId: selectedId };
-})(Edit)
+}
+export default Edit;

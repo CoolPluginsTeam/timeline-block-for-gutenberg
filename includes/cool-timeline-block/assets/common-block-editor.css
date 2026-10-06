@@ -2185,3 +2185,162 @@ i.fipicon-angle-left:before {
 	color: #ccc;
 }
 /* block style tab css end */
+/* Toggle: keep the original design, only drop the outer focus ring/outline. */
+.cooltimeline-tab-settings .components-form-toggle .components-form-toggle__input:focus + .components-form-toggle__track,
+.cooltimeline-tab-settings .components-form-toggle.is-checked .components-form-toggle__input:focus + .components-form-toggle__track {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Timeline Story selected: show its settings directly, without the block card and "Advanced". */
+.block-editor-block-inspector:has(.ctlb-child-settings) .block-editor-block-card,
+.block-editor-block-inspector:has(.ctlb-child-settings) .block-editor-block-inspector__advanced {
+  display: none;
+}
+
+/* Selected story sidebar: nav row back to the timeline's settings. */
+.ctlb-child-settings .ctlb-settings-link-wrap {
+  padding: 16px 16px 0;
+}
+
+.ctlb-child-settings .ctlb-settings-link-wrap::after {
+  content: "";
+  display: block;
+  margin: 16px -16px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.ctlb-child-settings .ctlb-settings-link-wrap + .components-card__body {
+  padding-top: 16px !important;
+}
+
+.ctlb-child-settings .ctlb-settings-link.components-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: auto;
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.ctlb-child-settings .ctlb-settings-link.components-button:hover:not(:disabled),
+.ctlb-child-settings .ctlb-settings-link.components-button:focus-visible {
+  background: #f8f8f8;
+  border-color: #0f766e;
+  box-shadow: none;
+}
+
+.ctlb-child-settings .ctlb-settings-link.components-button:focus-visible {
+  outline: 2px solid var(--wp-admin-theme-color, #3858e9);
+  outline-offset: 2px;
+}
+
+.ctlb-child-settings .ctlb-settings-link__icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: #e6f4f1;
+  color: #0f766e;
+}
+
+.ctlb-child-settings .ctlb-settings-link__icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.ctlb-child-settings .ctlb-settings-link__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ctlb-child-settings .ctlb-settings-link__title {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: #1e1e1e;
+}
+
+.ctlb-child-settings .ctlb-settings-link__subtitle {
+  font-size: 12px;
+  line-height: 1.4;
+  color: #757575;
+}
+
+.ctlb-child-settings .ctlb-settings-link__chevron {
+  flex: none;
+  fill: #949494;
+}
+
+/* Story Setting without the collapse toggle: same stack rhythm as an open PanelBody. */
+.cooltimeline-tab-settings .ctlb-static-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ctlb-stack-gap);
+  padding: 4px 0 8px;
+}
+
+.cooltimeline-tab-settings .ctlb-static-panel > *,
+.cooltimeline-tab-settings .ctlb-static-panel .components-base-control {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.cooltimeline-tab-settings .ctlb-static-panel .components-base-control .components-base-control__label {
+  margin-bottom: var(--ctlb-label-gap);
+}
+
+.cooltimeline-tab-settings .ctlb-static-panel-title .ctlb-panel-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ctlb-brand, #0d7a6f);
+}
+
+/* Story settings panel: sentence-case labels (13px / 500) instead of small caps. */
+#ctlb-story-setting-panel .timeline-block-settings-labels,
+#ctlb-story-setting-panel .components-base-control__label,
+#ctlb-story-setting-panel .components-input-control__label {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #1e1e1e;
+}
+
+/* Media type: icon + text, like the other segmented controls. */
+#ctlb-story-setting-panel .ctl_media_control .ctlb-segmented-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+#ctlb-story-setting-panel .ctl_media_control .ctlb-segmented-btn .dashicons {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+/* Editor-only notice shown above the timeline. */
+.ctlb-editor-notice {
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #1e1e1e;
+  background: #fff;
+  border: 1px solid #2271b1;
+}
