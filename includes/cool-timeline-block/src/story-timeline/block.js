@@ -13,6 +13,7 @@
 // //  Import CSS.
 // import ".././style.scss"
 import "./style.scss"
+import "./editor-chrome.scss"
 import v1 from "../deprecated/parent-block-v1.js"
 import v2 from "../deprecated/parent-block-v2.js"
 import Save from "./save.js"
