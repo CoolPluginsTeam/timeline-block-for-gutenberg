@@ -117,12 +117,16 @@ class Edit extends Component {
 			return undefined !==  block;
 		})
 		
+		// The legacy design zeroes the story text blocks' padding inline; the new design sets its own spacing.
+		const isNewDesign = typeof cgbGlobal !== 'undefined' && !! cgbGlobal.isNewDesign;
+		const legacySpacing = isNewDesign ? {} : { style: { spacing: { padding: { top: '0px', left: '0px', bottom: '0px', right: '0px' } } } };
+
 		// Add media block inside the mediaBlocks.
 		const imageUrl='none' === this.props.attributes.timeLineImage ? '' : this.props.attributes.timeLineImage;
 		mediaBlock && mediaBlocks.push(['core/image', { url: imageUrl, className: 'ctlb-block-image',aspectRatio: "4/3", scale: "cover", }]); // Default: Image block with a default image URL
 		newBlocks.push(
-			['core/heading', { level: headingLevel(), content: this.props.attributes.time_heading, className: 'ctlb-block-title', style: {spacing: {padding:{top: '0px',left: '0px',bottom: '0px', right: '0px'}}}}], // Default: Heading block with level 2 and default content
-			['core/paragraph', { content: this.props.attributes.time_desc, placeholder: __('Add your description here','timeline-block'), className: 'ctlb-block-desc', style: {spacing : {padding:{top: '0px',left: '0px',bottom: '0px', right: '0px'}}}}], // Default: Paragraph block with default content
+			['core/heading', { level: headingLevel(), content: this.props.attributes.time_heading, className: 'ctlb-block-title', ...legacySpacing}], // Default: Heading block with level 2 and default content
+			['core/paragraph', { content: this.props.attributes.time_desc, placeholder: __('Add your description here','timeline-block'), className: 'ctlb-block-desc', ...legacySpacing}], // Default: Paragraph block with default content
 		);
 
 		

@@ -997,7 +997,39 @@ class Edit extends Component {
 	)
 	}
 
+	/**
+	 * One-time "Reset all" of the Dimensions panel (padding, margin, block gap) on every story's
+	 * heading and paragraph, done when the timeline is opened with the new design on. Older timelines
+	 * carry inline spacing on those blocks, which the new design's own spacing must not be overridden
+	 * by. Other block styles (colour, typography, ...) are kept, and a flag stops it running again.
+	 */
+	resetLegacyCoreSpacing() {
+		const { attributes, setAttributes, clientId, isNewDesign } = this.props;
+		if (!isNewDesign || attributes.coreSpacingReset) {
+			return;
+		}
+		const stories = select("core/block-editor").getBlock(clientId)?.innerBlocks || [];
+		if (!stories.length) {
+			return;
+		}
+		stories.forEach((story) => {
+			story.innerBlocks.forEach((block) => {
+				const style = block.attributes?.style;
+				if (!["core/heading", "core/paragraph"].includes(block.name) || !style?.spacing) {
+					return;
+				}
+				const { spacing: _legacy, ...rest } = style;
+				dispatch("core/block-editor").updateBlockAttributes(block.clientId, {
+					style: Object.keys(rest).length ? rest : undefined,
+				});
+			});
+		});
+		setAttributes({ coreSpacingReset: true });
+	}
+
 	componentDidMount() {
+		// Inner blocks are available once the block has mounted.
+		window.setTimeout(() => this.resetLegacyCoreSpacing(), 0);
 		// //Store client id.
 		this.props.setAttributes( { block_id: this.props.clientId } )
 		

@@ -472,6 +472,12 @@ const attributes = {
 		type:"boolean",
 		default:false,
 	},
+	// Set once the legacy inline spacing (padding/margin) on the stories' title/description blocks has
+	// been reset after moving to the new design (see Edit.resetLegacyCoreSpacing).
+	coreSpacingReset:{
+		type:"boolean",
+		default:false,
+	},
 	ImagePopup:{
 		type:"boolean",
 		default:false

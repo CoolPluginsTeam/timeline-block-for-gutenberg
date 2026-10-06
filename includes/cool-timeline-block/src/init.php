@@ -45,7 +45,17 @@ function ctlb_add_new_design_class( $block_content, $block ) {
 		return $block_content;
 	}
 
-	if ( ! ctlb_is_new_design() || false !== strpos( $block_content, 'ctlb-new-design' ) ) {
+	if ( ! ctlb_is_new_design() ) {
+		return $block_content;
+	}
+
+	// Mirrors the editor's one-time "Reset all" of story padding/margin: until a post has been opened
+	// and saved after migrating (coreSpacingReset), drop that inline spacing at render time instead.
+	if ( empty( $block['attrs']['coreSpacingReset'] ) ) {
+		$block_content = ctlb_strip_legacy_story_spacing( $block_content );
+	}
+
+	if ( false !== strpos( $block_content, 'ctlb-new-design' ) ) {
 		return $block_content;
 	}
 
@@ -57,6 +67,40 @@ function ctlb_add_new_design_class( $block_content, $block ) {
 	);
 
 	return ( null === $patched ) ? $block_content : $patched;
+}
+
+/**
+ * Removes inline padding/margin from the headings and paragraphs of a timeline.
+ *
+ * Older timelines store spacing on every story's title and description block (style="padding-top:0px;..."),
+ * which the new design's own spacing must not be overridden by. Other inline styles (colour, font size, ...)
+ * are kept, and a style attribute left empty is dropped.
+ *
+ * @param string $html Rendered timeline block HTML.
+ * @return string
+ */
+function ctlb_strip_legacy_story_spacing( $html ) {
+	$stripped = preg_replace_callback(
+		'/<(h[1-6]|p)\b([^>]*?)\sstyle="([^"]*)"([^>]*)>/i',
+		function ( $matches ) {
+			$kept = array();
+			foreach ( explode( ';', $matches[3] ) as $declaration ) {
+				$declaration = trim( $declaration );
+				if ( '' === $declaration ) {
+					continue;
+				}
+				if ( preg_match( '/^(padding|margin)(-(top|right|bottom|left|block|inline)(-(start|end))?)?\s*:/i', $declaration ) ) {
+					continue;
+				}
+				$kept[] = $declaration;
+			}
+			$style = $kept ? ' style="' . implode( ';', $kept ) . '"' : '';
+			return '<' . $matches[1] . $matches[2] . $style . $matches[4] . '>';
+		},
+		$html
+	);
+
+	return ( null === $stripped ) ? $html : $stripped;
 }
 
 add_action( 'wp_head', 'cltb_timeline_block_load_post_assets' );
