@@ -76,6 +76,16 @@ registerBlockType("cp-timeline/content-timeline-block", {
 		__("Roadmap Timeline", 'timeline-block'),
 	],
 	icon: CoolTMIcon,
+	// New timelines start on the right. Variation attributes apply only to blocks inserted from now on,
+	// so existing blocks (and the unchanged attribute defaults they rely on) are not affected.
+	variations: [
+		{
+			name: 'default',
+			title: __('Timeline Block', 'timeline-block'),
+			isDefault: true,
+			attributes: { Orientation: 'right' },
+		},
+	],
 	supports: {
 		anchor: true,
 	},

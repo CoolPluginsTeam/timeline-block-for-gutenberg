@@ -16,6 +16,7 @@ import { IconPicker } from "../component/Icons/index.js";
 import WebfontLoader from "../component/typography/fontloader.js";
 import VisualOptionControl, { LayoutIcons } from "../component/customComponents/VisualOptionControl.js";
 import { ProLock, ProBadge, ProOptionButton, openProUpgrade } from "../component/ProFeature.js";
+import StorySidePicker from "../component/sidePicker/StorySidePicker.js";
 const { Component, Fragment, createRef } = wp.element
 
 import React from 'react';
@@ -44,7 +45,8 @@ const {
 
 const {
 	dispatch,
-	select
+	select,
+	withSelect
 } = wp.data
 const ALLOWED_BLOCKS = ["cp-timeline/content-timeline-block-child"]
 
@@ -84,15 +86,14 @@ class Edit extends Component {
 			const blocks = select("core/block-editor").getBlock(this.props.clientId).innerBlocks,
 			evenPosition = newOrientation,
 			oddPosition = newOrientation === 'left' ? 'right' : 'left';
-			blocks.forEach((block, index) => {block.attributes.blockPosition = index % 2 ? oddPosition : evenPosition, block.attributes.storyPositionHide=!position});
+			// Dispatch (instead of mutating the block objects) so subscribers such as the side picker update.
+			blocks.forEach((block, index) => {
+				dispatch("core/block-editor").updateBlockAttributes(block.clientId, {
+					blockPosition: index % 2 ? oddPosition : evenPosition,
+					storyPositionHide: !position,
+				});
+			});
 		}
-	}
-
-	// story position set depends on first story
-	OrientationCheck = (e) => {
-		const blocks = select("core/block-editor").getBlock(this.props.clientId).innerBlocks
-		const position = blocks[0]['attributes']['blockPosition'];
-		this.onUpdateOrientation(position,e);
 	}
 
 	onUpdateHeadingTag = (e) => {
@@ -189,19 +190,16 @@ class Edit extends Component {
 		}
 		}
 		
-		const orientation_setting = ((timelineLayout == "vertical" && timelineDesign == 'one-sided') || (timelineLayout == "vertical" && timelineDesign == 'both-sided' && OrientationCheckBox)) ?
-			<Fragment><SelectControl
-			label={ timelineDesign == "both-sided" ? __("first story Based","timeline-block") : __( "Alignment","timeline-block" ) }
-			value={ Orientation }
-			onChange={ this.onUpdateOrientation }
-			options={ [
-				{ value: "right", label: __( "Right Sided","timeline-block") },
-				{ value: "left", label: __( "Left Sided","timeline-block") },
-			] }
-			__nextHasNoMarginBottom={ true }
-			__next40pxDefaultSize={ true }
-			/>
-			</Fragment>:null;
+		// The first story's own position is what the frontend renders, so Both sides reads it;
+		// One side reads the Orientation attribute (it is saved in the body class).
+		const alternatingSides = timelineDesign == "both-sided";
+		const orientation_setting = (timelineLayout == "vertical" && ["one-sided", "both-sided"].includes(timelineDesign)) ?
+			<StorySidePicker
+				value={alternatingSides ? (this.props.firstStorySide || Orientation) : Orientation}
+				// Keep each block's own per-story position mode (OrientationCheckBox) as saved.
+				onChange={(side) => this.onUpdateOrientation(side, OrientationCheckBox)}
+				alternating={alternatingSides}
+			/> : null;
 		const panelTitle = (icon, label) => (
 			<span className="ctlb-panel-title">
 				<span className="ctlb-panel-title-badge">
@@ -797,8 +795,8 @@ class Edit extends Component {
 			</div>
 		);
 		const verticalDesignOptions = [
-			{ value: "both-sided", label: __("Both Sided", "timeline-block") },
-			{ value: "one-sided", label: __("One Sided", "timeline-block") },
+			{ value: "both-sided", label: __("Both sides", "timeline-block") },
+			{ value: "one-sided", label: __("One side", "timeline-block") },
 		];
 		const alignmentOptions = [
 			{ value: "left", label: __("Left", "timeline-block"), icon: "editor-alignleft" },
@@ -854,23 +852,6 @@ class Edit extends Component {
 							</Button>
 						))}
 					</div>
-				</div>
-				: null
-			}
-			{(timelineLayout == "vertical" && timelineDesign == "both-sided") ?
-				<div className="ctlb-row">
-					<span className="ctlb-row-label-group">
-						<span className="ctlb-row-label">{__("Alternating sides", "timeline-block")}</span>
-						<span className="ctlb-row-hint">{__("Zig-zag entries left and right", "timeline-block")}</span>
-					</span>
-					<ToggleControl
-						className="timeline-block-Orientation_checkbox"
-						checked={OrientationCheckBox}
-						onChange={(state) => {
-							setAttributes({ OrientationCheckBox: state }), this.OrientationCheck(state);
-						}}
-						__nextHasNoMarginBottom={true}
-					/>
 				</div>
 				: null
 			}
@@ -976,11 +957,11 @@ class Edit extends Component {
 					label="Layout"
 					controls={ [
 						{
-							title: 'Both Sided',                  
+							title: __('Both sides', 'timeline-block'),                  
 							onClick: () => setAttributes({timelinDesign:"both-sided"}) ,
 						},
 						{
-							title: 'One Sided',
+							title: __('One side', 'timeline-block'),
 							onClick: () => setAttributes({timelinDesign:"one-sided"}),
 						},
 					] }
@@ -1029,4 +1010,6 @@ class Edit extends Component {
 		 
 	}
 }
-export default Edit;
+export default withSelect((select, ownProps) => ({
+	firstStorySide: select("core/block-editor").getBlock(ownProps.clientId)?.innerBlocks?.[0]?.attributes?.blockPosition,
+}))(Edit);

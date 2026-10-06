@@ -1693,9 +1693,11 @@ i.fipicon-angle-left:before {
 }
 
 .cooltimeline-tab-settings .ctlb-visual-options .components-base-control__label {
-	font-size: 11px;
+	/* same size/weight as the other sidebar row labels (Design, Content alignment, Story side) */
+	font-size: 13px;
 	font-weight: 500;
-	text-transform: uppercase;
+	line-height: 1.4;
+	text-transform: none;
 	margin-bottom: var(--ctlb-label-gap);
 	color: #3d3d38;
 }
@@ -2344,4 +2346,191 @@ i.fipicon-angle-left:before {
 #ctlb-story-setting-panel .ctl_media_control .ctlb-segmented-btn .ctlb-segmented-btn-label {
   width: auto;
   flex: none;
+}
+
+/* Timeline sidebar: visual left/right side picker (replaces the "first story based" dropdown). */
+.cooltimeline-tab-settings .ctlb-side-picker {
+  display: flex;
+  flex-direction: column;
+}
+
+.cooltimeline-tab-settings .ctlb-side-picker__label {
+  /* same label-to-control gap as the Layout / Design labels */
+  margin-bottom: var(--ctlb-label-gap);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: #3d3d38;
+}
+
+.cooltimeline-tab-settings .ctlb-side-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+/* Cards share the Layout cards' look (.ctlb-visual-option): neutral border, brand border + ring when selected. */
+.cooltimeline-tab-settings .ctlb-side-picker__card.components-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 72px;
+  padding: 6px 8px;
+  border: 1px solid #e5e5e1;
+  border-radius: 8px;
+  background: #fff;
+  color: #1e1e1e;
+  box-shadow: none;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.cooltimeline-tab-settings .ctlb-side-picker__card.components-button:hover:not(.is-selected) {
+  border-color: #c8c8c2;
+  background: #fff;
+}
+
+.cooltimeline-tab-settings .ctlb-side-picker__card.components-button.is-selected {
+  border-color: var(--ctlb-brand, #0d7a6f);
+  box-shadow: 0 0 0 1px var(--ctlb-brand, #0d7a6f) !important;
+  background: #fff;
+  color: #1e1e1e;
+}
+
+/* No second ring: drop WordPress' own focus outline/shadow on the cards (the selected card already
+   carries the brand ring). Keyboard focus on a non-selected card gets a brand outline instead. */
+.cooltimeline-tab-settings .ctlb-side-picker__card.components-button:focus:not(:disabled) {
+  outline: none;
+}
+
+.cooltimeline-tab-settings .ctlb-side-picker__card.components-button:focus:not(.is-selected) {
+  box-shadow: none;
+}
+
+.cooltimeline-tab-settings .ctlb-side-picker__card.components-button:focus-visible:not(.is-selected) {
+  outline: 2px solid var(--ctlb-brand, #0d7a6f);
+  outline-offset: 1px;
+}
+
+.cooltimeline-tab-settings .ctlb-side-picker__preview {
+  width: 100%;
+  max-width: 52px;
+  height: auto;
+}
+
+/* Same look as the Layout card previews: faint line/boxes, red and teal dots. */
+.cooltimeline-tab-settings .ctlb-side-picker__line {
+  stroke: currentColor;
+  stroke-width: 1.5;
+  opacity: 0.35;
+}
+
+.cooltimeline-tab-settings .ctlb-side-picker__box {
+  fill: currentColor;
+  opacity: 0.18;
+}
+
+.cooltimeline-tab-settings .ctlb-side-picker__dot--odd {
+  fill: #d91b3e;
+}
+
+.cooltimeline-tab-settings .ctlb-side-picker__dot--even {
+  fill: #01c5bd;
+}
+
+.cooltimeline-tab-settings .ctlb-side-picker__card-label {
+  font-size: 11px;
+  line-height: 1.3;
+  color: #3d3d38;
+}
+
+.cooltimeline-tab-settings .ctlb-side-picker__help {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #757575;
+}
+
+/* ---- Story settings panel (selected story's sidebar) ---- */
+
+/* Header icon box matches the Timeline settings row. */
+#ctlb-story-setting-panel .ctlb-panel-title-badge {
+  background: #e6f4f1;
+}
+
+/* One rhythm: 16px between groups, 1px #e0e0e0 dividers. */
+.cooltimeline-tab-settings .ctlb-static-panel {
+  --ctlb-stack-gap: 16px;
+}
+
+#ctlb-story-setting-panel .ctlb-section-divider {
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Help text under a field. */
+#ctlb-story-setting-panel .ctlb-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#ctlb-story-setting-panel .ctlb-field-help,
+#ctlb-story-setting-panel .components-base-control__help {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #757575;
+}
+
+#ctlb-story-setting-panel .ctlb-field .ctlb-field-help {
+  margin: 0;
+}
+
+/* Every label in the panel (including "Story side") shares one look. */
+#ctlb-story-setting-panel .ctlb-side-picker__label {
+  color: #1e1e1e;
+}
+
+/* Media type: icon + text with room to spare. */
+#ctlb-story-setting-panel .ctl_media_control .ctlb-segmented-btn {
+  gap: 4px;
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+}
+
+#ctlb-story-setting-panel .ctl_media_control .ctlb-segmented-btn .dashicons,
+#ctlb-story-setting-panel .ctl_media_control .ctlb-segmented-btn .dashicons::before {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  font-size: 14px;
+  line-height: 14px;
+}
+
+#ctlb-story-setting-panel .ctl_media_control .ctlb-segmented-btn .dashicons {
+  margin-right: 2px;
+}
+
+#ctlb-story-setting-panel .ctl_media_control .ctlb-segmented-btn .ctlb-segmented-btn-label {
+  font-size: 12px;
+}
+
+/* Compact picker used for a single story. */
+.cooltimeline-tab-settings .ctlb-side-picker--compact .ctlb-side-picker__grid {
+  gap: 6px;
+}
+
+.cooltimeline-tab-settings .ctlb-side-picker--compact .ctlb-side-picker__card.components-button {
+  height: 64px;
+  padding: 8px;
+  gap: 6px;
+}
+
+.cooltimeline-tab-settings .ctlb-side-picker--compact .ctlb-side-picker__preview {
+  max-width: 40px;
+}
+
+.cooltimeline-tab-settings .ctlb-side-picker--compact .ctlb-side-picker__card-label {
+  font-size: 12px;
 }
