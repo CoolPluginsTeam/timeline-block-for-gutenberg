@@ -503,89 +503,92 @@ i.fipicon-angle-left:before {
     margin-bottom: 8px;
   }
   
-  /* Inspector footer */
-  .ctlb-footer {
-    padding: 12px 16px 14px;
-    border-top: 1px solid #ecece6;
-    background: #fbfbf9;
-  }
-
-  .ctlb-footer-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  /* Inspector footer (SidebarFooter.js): Free = outline demos/rate + solid upgrade; Pro = solid demos + outline rate. */
+  .block-editor-block-inspector .ctl-sidebar-footer,
+  .ctl-sidebar-footer {
+    display: grid;
     gap: 8px;
-    margin-bottom: 10px;
+    padding: 14px 16px 16px;
+    border-top: 1px solid #e0e0e0;
   }
 
-  .ctlb-footer-links-group {
-    display: flex;
-    align-items: center;
+  .ctl-sidebar-footer__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
-    min-width: 0;
-    flex: 1;
   }
 
-  .ctlb-footer-links-group a,
-  .ctlb-footer-rate {
-    font-size: 12px;
-    font-weight: 500;
-    color: #3d3d38;
-    text-decoration: none;
-    line-height: 1.4;
-    white-space: nowrap;
-  }
-
-  .ctlb-footer-links-group a:hover,
-  .ctlb-footer-rate:hover {
-    color: var(--ctlb-brand, #0d7a6f);
-    text-decoration: underline;
-  }
-
-  .ctlb-footer-sep {
-    color: #c8c8c2;
-    font-size: 12px;
-    line-height: 1;
-    user-select: none;
-  }
-
-  .ctlb-footer-rate {
-    flex-shrink: 0;
-    font-weight: 400;
-    color: #757575;
-  }
-
-  .ctlb-footer-star {
-    color: #dba617;
-    font-size: 11px;
-  }
-
-  .ctlb-footer-upgrade {
+  .ctl-sidebar-footer .ctl-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    min-height: 34px;
-    padding: 7px 12px;
-    border: 1px solid rgba(13, 122, 111, 0.28);
+    gap: 6px;
+    box-sizing: border-box;
+    min-width: 0;
+    height: 36px;
+    padding: 0 10px;
+    border: 1px solid transparent;
     border-radius: 8px;
-    background: linear-gradient(180deg, #ffffff 0%, #f3faf9 100%);
-    color: var(--ctlb-brand, #0d7a6f);
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1;
     text-decoration: none;
-    line-height: 1.3;
-    box-shadow: 0 1px 2px rgba(13, 122, 111, 0.08);
-    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    transition: background 0.15s, border-color 0.15s;
   }
 
-  .ctlb-footer-upgrade:hover,
-  .ctlb-footer-upgrade:focus {
-    color: #0a6359;
-    border-color: rgba(13, 122, 111, 0.45);
-    background: linear-gradient(180deg, #ffffff 0%, #e9f5f3 100%);
-    box-shadow: 0 2px 4px rgba(13, 122, 111, 0.12);
-    text-decoration: none;
+  .ctl-sidebar-footer .ctl-btn__label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ctl-sidebar-footer .ctl-btn svg {
+    flex-shrink: 0;
+    fill: currentColor;
+  }
+
+  .ctl-sidebar-footer .ctl-btn--solid {
+    background: #0f766e;
+    border-color: #0f766e;
+    color: #fff;
+  }
+
+  .ctl-sidebar-footer .ctl-btn--solid:hover,
+  .ctl-sidebar-footer .ctl-btn--solid:focus {
+    background: #0b5e57;
+    border-color: #0b5e57;
+    color: #fff;
+  }
+
+  .ctl-sidebar-footer .ctl-btn--outline {
+    background: #fff;
+    border-color: #ddd;
+    color: #1e1e1e;
+  }
+
+  .ctl-sidebar-footer .ctl-btn--outline:hover,
+  .ctl-sidebar-footer .ctl-btn--outline:focus {
+    border-color: #0f766e;
+    color: #0f766e;
+  }
+
+  .ctl-sidebar-footer .ctl-btn--rate:hover,
+  .ctl-sidebar-footer .ctl-btn--rate:focus {
+    border-color: #f59e0b;
+    color: #1e1e1e;
+  }
+
+  .ctl-sidebar-footer .ctl-stars {
+    flex-shrink: 0;
+    color: #f59e0b;
+    font-size: 12px;
+    letter-spacing: -0.5px;
+  }
+
+  .ctl-sidebar-footer .ctl-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #0f766e;
   }
 
   .timeline-block-add-story button {
@@ -2533,4 +2536,70 @@ i.fipicon-angle-left:before {
 
 .cooltimeline-tab-settings .ctlb-side-picker--compact .ctlb-side-picker__card-label {
   font-size: 12px;
+}
+
+/* Typography controls: every label (Font size, Font family, Font weight, Line height, Font subset)
+   shares one look and one rhythm — 13px / 500, sentence case, 8px to its field, 14px between groups. */
+.ctlb-typo-size-label,
+.cooltimeline-tab-settings .ctlb-typo-size-label,
+.timeline-block-typography-font-family-label,
+.timeline-block-typography-font-family-options label,
+.timeline-block-typography-font-family-options .components-input-control__label,
+.timeline-block-typography-font-family-options .components-base-control__label {
+  display: block;
+  margin: 0 0 8px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: #1e1e1e !important;
+}
+
+.cooltimeline-tab-settings .ctlb-typo-size-row {
+  margin-bottom: 14px;
+}
+
+.timeline-block-typography-options .timeline-block-typography-font-family-options {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 14px !important;
+}
+
+/* The family label sits right above its select, so it must not take part in the 14px group gap. */
+.timeline-block-typography-font-family-options > .timeline-block-typography-font-family-label {
+  margin-bottom: -6px !important;
+}
+
+/* ---- One label standard for every sidebar setting: 13px / 500 / #1e1e1e, sentence case ---- */
+.cooltimeline-tab-settings :is(
+  .ctlb-label-heading,
+  .ctlb-number-field__label,
+  .ctlb-unit-field__label,
+  .ctlb-row-label,
+  .timeline-block-settings-labels,
+  .ctlb-side-picker__label,
+  .ctlb-typo-size-label,
+  .timeline-block-control__actions_label,
+  .ctlb-visual-options .components-base-control__label
+) {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #1e1e1e;
+}
+
+/* ColorController renders an empty <div></div> between colour rows; inside the flex stack it
+   would add a second 20px gap (40px between rows). */
+.cooltimeline-tab-settings .components-panel__body > div:empty,
+.cooltimeline-tab-settings .components-panel__body-content > div:empty {
+  display: none;
+}
+
+/* Timeline Story toolbar: hide WP's block switcher (the story icon). It only offers "Transform to", which a story cannot use. */
+.block-editor-block-toolbar:has([aria-label="Add Block"]) .block-editor-block-switcher {
+  display: none;
 }

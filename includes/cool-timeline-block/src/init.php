@@ -285,6 +285,15 @@ function cltb_cp_timeline_cgb_block_assets() { // phpcs:ignore WordPress.NamingC
 		)
 	);
 
+	// Sidebar footer: the Pro plugin turns this on through the filter (no upgrade button, solid "View demos").
+	wp_localize_script(
+		'cltb_cp_timeline-cgb-block-js',
+		'ctlBlockData',
+		array(
+			'isPro' => (bool) apply_filters( 'ctlb_is_pro', false ),
+		)
+	);
+
 	// Editor-only CSS — loaded via register_block_type() editor_style (not block.json;
 	// this block is registered by name, so block.json asset fields are unused at runtime).
 	wp_register_style(

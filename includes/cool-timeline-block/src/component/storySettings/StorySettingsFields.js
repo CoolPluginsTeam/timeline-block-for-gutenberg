@@ -8,6 +8,17 @@ const { useSelect } = wp.data;
 
 const TIMELINE_BLOCK = 'cp-timeline/content-timeline-block';
 
+// The date is plain text (a date, a year, a short label): drop anything that looks like an HTML tag before it is
+// stored, so markup such as <script> can never end up in the post content.
+const stripTags = (value) => String(value).replace(/<\/?[a-z!][^>]*>?/gi, '');
+
+// A value saved before the check above (or typed on the canvas, where basic formatting is allowed) may still carry
+// script-like markup; remove just that and keep harmless formatting such as <strong>.
+const removeUnsafeHtml = (value) =>
+	String(value)
+		.replace(/<(script|style|iframe|object|embed)\b[\s\S]*?(<\/\1\s*>|$)/gi, '')
+		.replace(/\son\w+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '');
+
 /**
  * Fields of the "Story settings" panel. Pro-only options are shown locked.
  *
@@ -27,6 +38,17 @@ const StorySettingsFields = ({ attributes, setAttributes, clientId }) => {
 		},
 		[clientId]
 	);
+	// Clean an already-saved unsafe date once, when the story's settings are shown.
+	wp.element.useEffect(() => {
+		const current = attributes.t_date;
+		if ('string' !== typeof current || 'ctl_date_undefined' === current) {
+			return;
+		}
+		const cleaned = removeUnsafeHtml(current);
+		if (cleaned !== current) {
+			setAttributes({ t_date: '' === cleaned ? 'ctl_date_undefined' : cleaned });
+		}
+	}, [attributes.t_date]);
 	const showStorySide = !!parentAttrs && 'vertical' === parentAttrs.timelineLayout && 'both-sided' === parentAttrs.timelineDesign;
 
 	return (
@@ -36,7 +58,8 @@ const StorySettingsFields = ({ attributes, setAttributes, clientId }) => {
 				placeholder={__('Date/Steps', 'timeline-block')}
 				value={attributes.t_date === 'ctl_date_undefined' ? '' : (attributes.t_date || '')}
 				onChange={(value) => {
-					const date = '' === value ? 'ctl_date_undefined' : value;
+					const clean = stripTags(value);
+					const date = '' === clean ? 'ctl_date_undefined' : clean;
 					setAttributes({ t_date: date });
 				}}
 				help={__("Use a date, year, or step, like 'Step 1'.", 'timeline-block')}

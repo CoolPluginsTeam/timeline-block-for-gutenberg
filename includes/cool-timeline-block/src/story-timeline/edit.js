@@ -17,6 +17,7 @@ import WebfontLoader from "../component/typography/fontloader.js";
 import VisualOptionControl, { LayoutIcons } from "../component/customComponents/VisualOptionControl.js";
 import { ProLock, ProBadge, ProOptionButton, openProUpgrade } from "../component/ProFeature.js";
 import StorySidePicker from "../component/sidePicker/StorySidePicker.js";
+import SidebarFooter from "./SidebarFooter.js";
 const { Component, Fragment, createRef } = wp.element
 
 import React from 'react';
@@ -287,11 +288,7 @@ class Edit extends Component {
 			max={ 200 }
 			__nextHasNoMarginBottom={ true }
 		/>
-		<div className="ctlb-pro-field-header">
-			<span className="ctlb-label-heading">{__("Spacing", "timeline-block")}</span>
-			<ProBadge />
-		</div>
-		<ProLock hideBadge compact>
+		<ProLock compact>
 			<SpacingControl
 				label={__('Margin', 'timeline-block')}
 				valueTop={dummySide()}
@@ -346,11 +343,7 @@ class Edit extends Component {
 			max={ 200 }
 			__nextHasNoMarginBottom={ true }
 		/>
-		<div className="ctlb-pro-field-header">
-			<span className="ctlb-label-heading">{__("Spacing", "timeline-block")}</span>
-			<ProBadge />
-		</div>
-		<ProLock hideBadge compact>
+		<ProLock compact>
 			<SpacingControl
 				label={__('Margin', 'timeline-block')}
 				valueTop={dummySide()}
@@ -545,20 +538,28 @@ class Edit extends Component {
 		</PanelBody>
 		<PanelBody title={panelTitlePro("calendar-alt", __("Year / Label", "timeline-block"))} {...advancedPanelProps('year-label-settings')}>
 			<ProLock hideBadge compact>
-				<div className="ctlb-number-field">
-					<span className="ctlb-number-field__label">{__("Box Size", "timeline-block")}</span>
-					<div className="ctlb-number-field__controls">
-						{proNumberInput({ className: 'ctlb-number-field__input', value: 50 })}
-						<Button isSecondary isSmall>{__("Reset", "timeline-block")}</Button>
-					</div>
-				</div>
-				<div className="ctlb-number-field">
-					<span className="ctlb-number-field__label">{__("Box Radius", "timeline-block")}</span>
-					<div className="ctlb-number-field__controls">
-						{proNumberInput({ className: 'ctlb-number-field__input', value: 50 })}
-						<Button isSecondary isSmall>{__("Reset", "timeline-block")}</Button>
-					</div>
-				</div>
+				<h2 className="ctlb-label-heading">{__("Box Size", "timeline-block")}</h2>
+				<RangeControl
+					className="cp-timeline-block-range__control"
+					value={0}
+					onChange={() => {}}
+					resetFallbackValue={0}
+					allowReset={true}
+					min={30}
+					max={150}
+					__nextHasNoMarginBottom={true}
+				/>
+				<h2 className="ctlb-label-heading">{__("Box Radius", "timeline-block")}</h2>
+				<RangeControl
+					className="cp-timeline-block-range__control"
+					value={50}
+					onChange={() => {}}
+					resetFallbackValue={50}
+					allowReset={true}
+					min={0}
+					max={50}
+					__nextHasNoMarginBottom={true}
+				/>
 				<hr className="ctlb-section-divider" />
 				<ColorController
 					label={__("Background Color", "timeline-block")}
@@ -767,32 +768,7 @@ class Edit extends Component {
 		</PanelBody>
 		</CardBody>
 		const footer_links = (
-			<div className="ctlb-footer">
-				<div className="ctlb-footer-row">
-					<div className="ctlb-footer-links-group">
-						<a target="_blank" rel="noopener noreferrer" href="https://cooltimeline.com/demo/gutenberg-timeline-block?utm_source=tbg_plugin&utm_medium=inside&utm_campaign=demo&utm_content=timeline_block">{__("View demos", "timeline-block")}</a>
-						<span className="ctlb-footer-sep" aria-hidden="true">·</span>
-						<a target="_blank" rel="noopener noreferrer" href="https://cooltimeline.com/docs/timeline-block-pro/video-tutorials/free-plugin-video/?utm_source=tbg_plugin&utm_medium=inside&utm_campaign=docs&utm_content=timeline_block">{__("Watch videos", "timeline-block")}</a>
-					</div>
-					<a
-						className="ctlb-footer-rate"
-						target="_blank"
-						rel="noopener noreferrer"
-						href="https://wordpress.org/support/plugin/timeline-block/reviews/#new-post"
-						title={__("Enjoying the plugin? Rate it on WordPress.org", "timeline-block")}
-					>
-						{__("Rate", "timeline-block")} <span className="ctlb-footer-star" aria-hidden="true">★</span>
-					</a>
-				</div>
-				<a
-					className="ctlb-footer-upgrade"
-					target="_blank"
-					rel="noopener noreferrer"
-					href="https://cooltimeline.com/plugin/timeline-block-pro/?utm_source=tbg_plugin&utm_medium=inside&utm_campaign=upgrade&utm_content=timeline_block"
-				>
-					{__("Upgrade to Pro", "timeline-block")}
-				</a>
-			</div>
+			<SidebarFooter layout={timelineLayout} isPro={!!window.ctlBlockData?.isPro} />
 		);
 		const verticalDesignOptions = [
 			{ value: "both-sided", label: __("Both sides", "timeline-block") },
