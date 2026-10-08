@@ -1458,8 +1458,9 @@ i.fipicon-angle-left:before {
     width: 23px !important;
     height: 23px !important;
     margin: 0 0 0 auto !important;
-    padding: 0 !important;
+    padding: 2px !important;
     float: none !important;
+    justify-content: center;
   }
 
   .cooltimeline-tab-settings .timeline-block-typography-control-btn,
