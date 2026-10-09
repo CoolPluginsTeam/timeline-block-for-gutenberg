@@ -1310,35 +1310,21 @@ i.fipicon-angle-left:before {
 
   .cooltimeline-tab-settings .timeline-block-typography-advanced {
     position: absolute;
-    top: calc(100% + 8px);
-    right: -4px;
-    left: auto;
-    width: 360px;
-    max-width: min(360px, 90vw);
-    z-index: 100;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 30;
     display: flex;
     flex-direction: column;
     gap: 16px;
     margin: 0 !important;
-    padding: 16px;
+    padding: 12px;
     min-height: 0 !important;
     height: auto;
     border: 1px solid #e2e4e7;
     border-radius: 8px;
     background: #fff;
     box-shadow: 0 8px 28px rgba(25, 30, 35, 0.14);
-  }
-
-  /* Let the open panel paint outside the narrow sidebar. */
-  .interface-complementary-area:has(.timeline-block-typography-advanced),
-  .block-editor-block-inspector:has(.timeline-block-typography-advanced),
-  .editor-sidebar:has(.timeline-block-typography-advanced),
-  .cooltimeline-tab-settings:has(.timeline-block-typography-advanced),
-  .cooltimeline-tab-settings:has(.timeline-block-typography-advanced) .components-panel,
-  .cooltimeline-tab-settings:has(.timeline-block-typography-advanced) .components-card,
-  .cooltimeline-tab-settings:has(.timeline-block-typography-advanced) .components-panel__body.is-opened,
-  .cooltimeline-tab-settings:has(.timeline-block-typography-advanced) .components-panel__body-content {
-    overflow: visible !important;
   }
 
   .cooltimeline-tab-settings .timeline-block-typography-advanced::before {
