@@ -162,7 +162,7 @@ class TypographyControl extends Component {
 				<Button
 					className="timeline-block-size-btn timeline-block-typography-control-btn"
 					isSmall
-					aria-pressed={ ( this.state !== null && this.state.showAdvancedControls === true ) }
+					aria-pressed={ ( this.state !== null ) }
 					onClick={ this.onAdvancedControlClick }
 				><Dashicon icon="admin-tools" /></Button>
 			)
@@ -173,19 +173,25 @@ class TypographyControl extends Component {
 					onClick={ this.onAdvancedControlReset }
 				><Dashicon icon="image-rotate" /></div>
 			)
+		} else {
+			showAdvancedFontControls = (
+				<Fragment>
+					{ fontSize }
+					{ fontFamily }
+					{ fontWeight }
+				</Fragment>
+			)
 		}
 
-		showAdvancedFontControls = (
-			<Fragment>
-				{ fontSize }
-				{ fontWeight }
-				{ this.state !== null && this.state.showAdvancedControls === true && fontFamily && (
-					<div className="timeline-block-typography-advanced">
-						{ fontFamily }
-					</div>
-				) }
-			</Fragment>
-		)
+		if( this.state !== null && this.state.showAdvancedControls === true ) {
+			showAdvancedFontControls = (
+				<div className="timeline-block-typography-advanced">
+					{ fontSize }
+					{ fontFamily }
+					{ fontWeight }
+				</div>
+			)
+		}
 
 		if( true !== disableFontFamily && true !== disableFontSize ) {
 			fontTypoAdvancedControls =  (
