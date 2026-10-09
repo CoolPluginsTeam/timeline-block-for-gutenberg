@@ -1309,22 +1309,20 @@ i.fipicon-angle-left:before {
   }
 
   .cooltimeline-tab-settings .timeline-block-typography-advanced {
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 0;
-    right: 0;
-    z-index: 30;
+    position: relative;
+    z-index: 2;
     display: flex;
     flex-direction: column;
-    gap: var(--ctlb-stack-gap);
-    margin: 0 !important;
+    gap: 14px;
+    margin: 12px 0 0 !important;
     padding: 12px;
     min-height: 0 !important;
     height: auto;
+    overflow: visible;
     border: 1px solid #e2e4e7;
     border-radius: 8px;
     background: #fff;
-    box-shadow: 0 8px 28px rgba(25, 30, 35, 0.14);
+    box-shadow: 0 3px 30px rgba(25, 30, 35, 0.1);
   }
 
   .cooltimeline-tab-settings .timeline-block-typography-advanced::before {
@@ -1391,8 +1389,13 @@ i.fipicon-angle-left:before {
     margin-bottom: 6px;
   }
 
-  .cooltimeline-tab-settings .timeline-block-typography-font-family-options .components-base-control:last-child {
-    display: none;
+  .cooltimeline-tab-settings .timeline-block-typography-font-family-options .react-select__menu {
+    z-index: 40;
+  }
+
+  .cooltimeline-tab-settings .timeline-block-typography-font-family-options .components-select-control__input,
+  .cooltimeline-tab-settings .timeline-block-typography-font-family-options select {
+    min-height: 36px;
   }
 
   .cooltimeline-tab-settings .ctlb-typo-unit-toggle .ctlb-segmented-btn {
