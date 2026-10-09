@@ -130,10 +130,7 @@ function FontFamilyControl( props ) {
 				options={ fonts }
 				value={ { value: props.fontFamily.value, label: props.fontFamily.value, weight: fontWeightObj } }
 				isMulti={ false }
-				maxMenuHeight={ 220 }
-				menuPortalTarget={ typeof document !== "undefined" ? document.body : null }
-				menuPosition="fixed"
-				styles={{ menuPortal: (base) => ({ ...base, zIndex: 1000000 }) }}
+				maxMenuHeight={ 300 }
 				onChange={ onFontfamilyChange }
 				className="react-select-container" 
 				classNamePrefix="react-select"
