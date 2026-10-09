@@ -5,7 +5,7 @@
 import { __ } from '@wordpress/i18n';
 
 const DEMOS = {
-	vertical: 'https://coolplugins.net/demos/vertical-timeline/',
+	vertical: 'https://cooltimeline.com/demo/timeline-block-pro/',
 	horizontal: 'https://coolplugins.net/demos/horizontal-timeline/',
 	tabs: 'https://coolplugins.net/demos/tabs-timeline/',
 };
