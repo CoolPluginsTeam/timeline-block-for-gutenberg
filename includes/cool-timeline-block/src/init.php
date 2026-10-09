@@ -104,38 +104,73 @@ function ctlb_strip_legacy_story_spacing( $html ) {
 }
 
 add_action( 'wp_head', 'cltb_timeline_block_load_post_assets' );
-function ctlb_get_all_blocks( $blocks ) {
-	$all_blocks = array();
 
-	foreach ( $blocks as $block ) {
+function ctlb_get_all_blocks( $blocks, &$seen = array(), $depth = 0 ) {
 
-		$all_blocks[] = $block;
+    // Prevent unbounded recursion.
+    if ( $depth > 10 || ! is_array( $blocks ) ) {
+        return array();
+    }
 
-		if ( ! empty( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) ) {
-			$all_blocks = array_merge(
-				$all_blocks,
-				ctlb_get_all_blocks( $block['innerBlocks'] )
-			);
-		}
+    $all_blocks = array();
 
-		// Resolve reusable blocks and synced patterns (core/block with ref).
-		if ( isset( $block['blockName'] ) && 'core/block' === $block['blockName'] && ! empty( $block['attrs']['ref'] ) ) {
-			$reusable_id = absint( $block['attrs']['ref'] );
-			if ( $reusable_id && 'wp_block' === get_post_type( $reusable_id ) ) {
-				$reusable_post = get_post( $reusable_id );
-				if ( $reusable_post && ! empty( $reusable_post->post_content ) ) {
-					$reusable_blocks = parse_blocks( $reusable_post->post_content );
-					$all_blocks      = array_merge(
-						$all_blocks,
-						ctlb_get_all_blocks( $reusable_blocks )
-					);
-				}
-			}
-		}
-	}
+    foreach ( $blocks as $block ) {
 
-	return $all_blocks;
+        if ( ! is_array( $block ) ) {
+            continue;
+        }
+
+        $all_blocks[] = $block;
+
+        // Process nested blocks.
+        if ( ! empty( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) ) {
+            $all_blocks = array_merge(
+                $all_blocks,
+                ctlb_get_all_blocks(
+                    $block['innerBlocks'],
+                    $seen,
+                    $depth + 1
+                )
+            );
+        }
+
+        // Resolve reusable blocks and synced patterns.
+        if (
+            isset( $block['blockName'] ) &&
+            'core/block' === $block['blockName'] &&
+            ! empty( $block['attrs']['ref'] )
+        ) {
+            $reusable_id = absint( $block['attrs']['ref'] );
+
+            if (
+                $reusable_id &&
+                ! isset( $seen[ $reusable_id ] ) &&
+                'wp_block' === get_post_type( $reusable_id )
+            ) {
+                // Mark as visited before recursion to prevent circular references.
+                $seen[ $reusable_id ] = true;
+
+                $reusable_post = get_post( $reusable_id );
+
+                if ( $reusable_post && ! empty( $reusable_post->post_content ) ) {
+                    $reusable_blocks = parse_blocks( $reusable_post->post_content );
+
+                    $all_blocks = array_merge(
+                        $all_blocks,
+                        ctlb_get_all_blocks(
+                            $reusable_blocks,
+                            $seen,
+                            $depth + 1
+                        )
+                    );
+                }
+            }
+        }
+    }
+
+    return $all_blocks;
 }
+
 
 function cltb_timeline_block_load_post_assets() {// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 	global $post;
