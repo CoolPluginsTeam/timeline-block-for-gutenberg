@@ -1253,7 +1253,7 @@ i.fipicon-angle-left:before {
   .cooltimeline-tab-settings .ctlb-typo-size-controls {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 3px;
   }
 
   .cooltimeline-tab-settings .ctlb-typo-size-input {
