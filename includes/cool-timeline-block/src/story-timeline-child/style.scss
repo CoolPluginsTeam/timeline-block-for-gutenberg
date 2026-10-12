@@ -423,6 +423,10 @@
   width: 70%;
 }
 
+.ctlb-new-design.cool-vertical-timeline-body.one-sided.right .timeline-content .timeline-block-detail {
+  padding:0 5px 0 0;
+}
+
 .cool-vertical-timeline-body.one-sided.right .timeline-content .timeline-block-time {
   width: 30%;
   min-width: 30%;
@@ -767,7 +771,7 @@ transform: translate(0%);
     margin-bottom: 0px;
   }
 
-  .cool-vertical-timeline-body .timeline-content.icon-true .timeline-block-icon {
+  .cool-vertical-timeline-body:not(.ctlb-new-design) .timeline-content.icon-true .timeline-block-icon {
     top: 71px;
     max-height: 40px;
     max-width: 40px;
@@ -775,6 +779,16 @@ transform: translate(0%);
     transform: translate(-50%, -50%) !important;
     margin-top: 21px !important;
   }
+  .ctlb-new-design.cool-vertical-timeline-body .timeline-content.icon-true .timeline-block-icon {
+    top: 71px;
+    max-height: 40px;
+    max-width: 40px;
+    left: -1px;
+    transform: translate(-50%, -50%) !important;
+    margin-top: 46px !important;
+    z-index:2;
+  }
+
 
   .cool-vertical-timeline-body.ctlb-wrapper .timeline-content.icon-true .timeline-block-icon{
     min-width: unset;
@@ -798,6 +812,16 @@ transform: translate(0%);
     margin-top: 21px !important;
     min-width: unset !important;
   }
+  .ctlb-new-design.cool-vertical-timeline-body.one-sided.right .timeline-content.icon-true .timeline-block-icon {
+    top: 81px !important;
+    left: auto !important;
+    right: 4px !important;
+    margin-left: 0 !important;
+    transform: unset !important;
+    margin-top: 21px !important;
+    min-width: unset !important;
+  }
+
 
   .cool-vertical-timeline-body.one-sided.left .timeline-content.icon-false .timeline-block-icon {
     top: 88px;
@@ -866,6 +890,7 @@ transform: translate(0%);
   .cool-vertical-timeline-body.one-sided .ctl-6.timeline-block-time {
     margin-bottom: 20px;
   }
+ 
 
   .cool-vertical-timeline-body:before {
     margin: 13px;
@@ -947,6 +972,12 @@ transform: translate(0%);
     width: 100%;
     padding: 0 60px 0 0;
   }
+  .ctlb-new-design.cool-vertical-timeline-body.one-sided.right .timeline-content .timeline-block-detail,
+  .ctlb-new-design.cool-vertical-timeline-body.one-sided.right .timeline-content.icon-true .timeline-block-detail {
+    width: 100%;
+    padding: 0 72px 0 0;
+  }
+
 
   .cool-vertical-timeline-body.one-sided.right .timeline-content .timeline-block-time {
     width: 100%;
@@ -1049,6 +1080,7 @@ transform: translate(0%);
   border: 1px solid var(--ctlb-story-border-color);
   border-radius: 20px;
   box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.1);
+  margin:0 0 0 4px;
 }
 
 // Arrow: rotated square instead of the legacy 15px border triangle. The half-fill gradient
