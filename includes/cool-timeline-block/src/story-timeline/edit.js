@@ -9,10 +9,15 @@ import contentTimelineStyle from "./styling.js";
 import TypographyControl from "../component/typography/index.js";
 // Import different sides unts controler
 import SpacingControl from "../component/customComponents/MultipleUnits.js";
+import ColorController from "../component/colorComponent/index.js";
+import { IconPicker } from "../component/Icons/index.js";
 
 // // Import Web font loader for google fonts.y
 import WebfontLoader from "../component/typography/fontloader.js";
-
+import VisualOptionControl, { LayoutIcons } from "../component/customComponents/VisualOptionControl.js";
+import { ProLock, ProBadge, ProOptionButton, openProUpgrade } from "../component/ProFeature.js";
+import StorySidePicker from "../component/sidePicker/StorySidePicker.js";
+import SidebarFooter from "./SidebarFooter.js";
 const { Component, Fragment, createRef } = wp.element
 
 import React from 'react';
@@ -30,23 +35,29 @@ const {
 	RangeControl,
 	TabPanel,
 	ToolbarDropdownMenu,
-	ColorPalette,
 	Card,
 	CardBody,
 	Button,
 	ButtonGroup,
-	ToggleControl
+	ToggleControl,
+	TextControl,
+	__experimentalInputControl: InputControl
 } = wp.components
 
 const {
 	dispatch,
-	select
+	select,
+	withSelect
 } = wp.data
 const ALLOWED_BLOCKS = ["cp-timeline/content-timeline-block-child"]
 
 class Edit extends Component {
 	constructor() {
 		super();
+		this.state = {
+			stylePanel: 'heading',
+			advancedPanel: null,
+		};
 		this.onUpdateOrientation = this.onUpdateOrientation.bind(this);
 		this.timelineWrpRef = React.createRef();
 		this.ref =createRef();
@@ -76,26 +87,31 @@ class Edit extends Component {
 			const blocks = select("core/block-editor").getBlock(this.props.clientId).innerBlocks,
 			evenPosition = newOrientation,
 			oddPosition = newOrientation === 'left' ? 'right' : 'left';
-			blocks.forEach((block, index) => {block.attributes.blockPosition = index % 2 ? oddPosition : evenPosition, block.attributes.storyPositionHide=!position});
+			// Dispatch (instead of mutating the block objects) so subscribers such as the side picker update.
+			blocks.forEach((block, index) => {
+				dispatch("core/block-editor").updateBlockAttributes(block.clientId, {
+					blockPosition: index % 2 ? oddPosition : evenPosition,
+					storyPositionHide: !position,
+				});
+			});
 		}
 	}
 
-	// custom color reset option
-	resetcolorpalate = (e) => {
-		this.props.setAttributes( e )
-	};
-	// story position set depends on first story
-	OrientationCheck = (e) => {
-		const blocks = select("core/block-editor").getBlock(this.props.clientId).innerBlocks
-		const position = blocks[0]['attributes']['blockPosition'];
-		this.onUpdateOrientation(position,e);
-	}
+			
+		onUpdateHeadingTag = (e) => {
+			this.props.setAttributes({ headingTag: e });
 
-	onUpdateHeadingTag = (e) => {
-		this.props.setAttributes({headingTag: e});
-		const blocks = select("core/block-editor").getBlock(this.props.clientId).innerBlocks
-		blocks.forEach((block, index) => {block.attributes.headingTag=e});
-	};
+			const blocks = select("core/block-editor")
+				.getBlock(this.props.clientId)?.innerBlocks || [];
+
+			blocks.forEach((block) => {
+				dispatch("core/block-editor").updateBlockAttributes(
+					block.clientId,
+					{ headingTag: e }
+				);
+			});
+		};
+
 	getDocument(){
 		if(this.ref.current && this.ref.current.ownerDocument){
 		return this.ref.current.ownerDocument;
@@ -115,6 +131,7 @@ class Edit extends Component {
 				headingColor,
 				subHeadingColor,
 				titileBtSpacing,
+				titileBtSpacingType,
 				headFontSizeType,
 				headFontSize,
 				headFontSizeTablet,
@@ -129,6 +146,7 @@ class Edit extends Component {
 				headLoadGoogleFonts,
 				timelineItem,
 				descBtSpacing,
+				descBtSpacingType,
 				subHeadFontSizeType,
 				subHeadFontSize,
 				subHeadFontSizeTablet,
@@ -174,6 +192,7 @@ class Edit extends Component {
 				timelineNavItems
 			},
 		} = this.props
+		const newDesignClass = this.props.isNewDesign ? 'ctlb-new-design' : '';
 		if(this.getDocument()){
 			var element = this.getDocument().getElementById("cool-vertical-timeline-style-" + this.props.clientId)
 			
@@ -182,21 +201,68 @@ class Edit extends Component {
 		}
 		}
 		
-		const orientation_setting = ((timelineLayout == "vertical" && timelineDesign == 'one-sided') || (timelineLayout == "vertical" && timelineDesign == 'both-sided' && OrientationCheckBox)) ?
-			<Fragment><SelectControl
-			label={ timelineDesign == "both-sided" ? __("first story Based","timeline-block") : __( "Alignment","timeline-block" ) }
-			value={ Orientation }
-			onChange={ this.onUpdateOrientation }
-			options={ [
-				{ value: "right", label: __( "Right Sided","timeline-block") },
-				{ value: "left", label: __( "Left Sided","timeline-block") },
-			] }
-			__nextHasNoMarginBottom={ true }
-			__next40pxDefaultSize={ true }
-			/>
-			</Fragment>:null;
-		const general_setting=<CardBody>
-		<h2 className="timeline-block-settings-labels">Story Heading</h2>
+		// The first story's own position is what the frontend renders, so Both sides reads it;
+		// One side reads the Orientation attribute (it is saved in the body class).
+		const alternatingSides = timelineDesign == "both-sided";
+		const orientation_setting = (timelineLayout == "vertical" && ["one-sided", "both-sided"].includes(timelineDesign)) ?
+			<StorySidePicker
+				value={alternatingSides ? (this.props.firstStorySide || Orientation) : Orientation}
+				// Keep each block's own per-story position mode (OrientationCheckBox) as saved.
+				onChange={(side) => this.onUpdateOrientation(side, OrientationCheckBox)}
+				alternating={alternatingSides}
+			/> : null;
+		const panelTitle = (icon, label) => (
+			<span className="ctlb-panel-title">
+				<span className="ctlb-panel-title-badge">
+					<span className={`dashicons dashicons-${icon}`}></span>
+				</span>
+				{label}
+			</span>
+		);
+		const panelTitlePro = (icon, label) => (
+			<span className="ctlb-panel-title">
+				<span className="ctlb-panel-title-badge">
+					<span className={`dashicons dashicons-${icon}`}></span>
+				</span>
+				{label}
+				<ProBadge />
+			</span>
+		);
+		const openProUpgradeHandler = openProUpgrade;
+		const noopSetAttributes = () => {};
+		const dummySide = (value = '') => ({ value, label: '_proLock' });
+		const dummySpacing = {
+			unit: { value: 'px', label: '_proUnit' },
+			defaultValue: '',
+			attributes: this.props.attributes,
+			setAttributes: noopSetAttributes,
+			link: { value: true, label: '_proLink' },
+		};
+		const proNumberInput = (props) => (InputControl
+			? <InputControl type="number" onChange={() => {}} {...props} />
+			: <TextControl onChange={() => {}} __nextHasNoMarginBottom={true} {...props} />
+		);
+		const proUnitPills = (active = 'px') => (
+			<ButtonGroup className="ctlb-unit-pills">
+				{['px', 'em', '%'].map((unit) => (
+					<Button key={unit} isSmall isPrimary={active === unit} isSecondary={active !== unit}>{unit}</Button>
+				))}
+			</ButtonGroup>
+		);
+		const stylePanelProps = (panelId) => ({
+			opened: this.state.stylePanel === panelId,
+			onToggle: (willOpen) => {
+				this.setState({ stylePanel: willOpen ? panelId : null });
+			},
+		});
+		const advancedPanelProps = (panelId) => ({
+			opened: this.state.advancedPanel === panelId,
+			onToggle: (willOpen) => {
+				this.setState({ advancedPanel: willOpen ? panelId : null });
+			},
+		});
+		const general_setting=<CardBody className="ctlb-panel-stack">
+		<PanelBody title={panelTitle("heading", __("Heading", "timeline-block"))} {...stylePanelProps('heading')}>
 		<TypographyControl
 			label={ __( "Typography",'timeline-block' ) }
 			attributes = { this.props.attributes }
@@ -214,34 +280,44 @@ class Edit extends Component {
 			lineHeightMobile = { { value: headLineHeightMobile, label: 'headLineHeightMobile' } }
 			lineHeightTablet= { { value: headLineHeightTablet, label: 'headLineHeightTablet' } }
 		/>
-		<div style={{ 'marginTop': 10 + 'px' }}></div>
-			<CardBody className="cp-timeline-block-style-settings">
-				<div>{__("Text Color", "timeline-block")}</div>
-				<div className={`components-button timeline-block-colorpallete-reset is-small ${headingColor != '' && 'timeline-color-setting_apply'}`} onClick={e => this.resetcolorpalate({ headingColor: '' })}><span className="dashicon dashicons dashicons-image-rotate"></span></div>
-				<ColorPalette className="cp-timeline-block-color-palates"
-					clearable={false}
-					colors={
-						[
-							{ name: 'default', color: headingColor }
-						]
-					}
-					value={headingColor}
-					onChange={(colorValue) => setAttributes({ headingColor: colorValue })}
-				/>
-			</CardBody>
-	<div style ={{'marginTop':15 +'px'}}>{__("Bottom Spacing","timeline-block")}</div>
-	<RangeControl
-	className="cp-timeline-block-range__control"
-	value={ titileBtSpacing != '' ? titileBtSpacing : 0 }
-	onChange={ (value) => setAttributes({titileBtSpacing: value}) }
-	resetFallbackValue={0}
-	allowReset={ true }
-	min={ 0 }
-	max={ 200 }
-	__next40pxDefaultSize={ true }
-	/>
-	<hr className="timeline-block-editor__separator"></hr>
-	<h2 className="timeline-block-settings-labels">Story Description</h2>
+		<ColorController
+			label={__("Text Color", "timeline-block")}
+			attrLabel="headingColor"
+			className={headingColor != '' ? 'timeline-color-setting_apply' : ''}
+			color={'' === headingColor ? '#333' : headingColor}
+			setAttributes={setAttributes}
+		/>
+		<h2 className="ctlb-label-heading">{__("Bottom Spacing", "timeline-block")}</h2>
+		<RangeControl
+			className="cp-timeline-block-range__control"
+			value={ titileBtSpacing != '' ? titileBtSpacing : 0 }
+			onChange={ (value) => setAttributes({titileBtSpacing: value}) }
+			resetFallbackValue={0}
+			allowReset={ true }
+			min={ 0 }
+			max={ 200 }
+			__nextHasNoMarginBottom={ true }
+		/>
+		<ProLock compact>
+			<SpacingControl
+				label={__('Margin', 'timeline-block')}
+				valueTop={dummySide()}
+				valueRight={dummySide()}
+				valueBottom={dummySide()}
+				valueLeft={dummySide()}
+				{...dummySpacing}
+			/>
+			<SpacingControl
+				label={__('Padding', 'timeline-block')}
+				valueTop={dummySide()}
+				valueRight={dummySide()}
+				valueBottom={dummySide()}
+				valueLeft={dummySide()}
+				{...dummySpacing}
+			/>
+		</ProLock>
+		</PanelBody>
+		<PanelBody title={panelTitle("editor-paragraph", __("Description", "timeline-block"))} {...stylePanelProps('description')}>
 	<TypographyControl
 		label={ __( "Typography",'timeline-block' ) }
 		attributes = { this.props.attributes }
@@ -259,34 +335,44 @@ class Edit extends Component {
 		lineHeightMobile = { { value: subHeadLineHeightMobile, label: 'subHeadLineHeightMobile' } }
 		lineHeightTablet= { { value: subHeadLineHeightTablet, label: 'subHeadLineHeightTablet' } }
 	/>
-		<div style={{ 'marginTop': 15 + 'px' }}></div>
-			<CardBody className="cp-timeline-block-style-settings">
-				<div>{__("Text Color", "timeline-block")}</div>
-				<div className={`components-button timeline-block-colorpallete-reset is-small ${subHeadingColor != '' && 'timeline-color-setting_apply'}`} onClick={e => this.resetcolorpalate({ subHeadingColor: '' })}><span className="dashicon dashicons dashicons-image-rotate"></span></div>
-				<ColorPalette className="cp-timeline-block-color-palates"
-					clearable={false}
-					colors={
-						[
-							{ name: 'default', color: subHeadingColor }
-						]
-					}
-					value={subHeadingColor}
-					onChange={(colorValue) => setAttributes({ subHeadingColor: colorValue })}
-				/>
-			</CardBody>
-	<div style ={{'marginTop':15 +'px'}}>{__("Bottom Spacing","timeline-block")}</div>
-	<RangeControl
-	className="cp-timeline-block-range__control"
-	value={descBtSpacing != '' ? descBtSpacing : 0 }
-	onChange={ (value) => setAttributes({descBtSpacing: value}) }
-	resetFallbackValue = {0}
-	allowReset={ true }
-	min={ 0 }
-	max={ 200 }
-	__next40pxDefaultSize={ true }
-	/>
-	<hr className="timeline-block-editor__separator"></hr>
-	<h2 className="timeline-block-settings-labels">Primary Label(Date/Steps)</h2>
+		<ColorController
+			label={__("Text Color", "timeline-block")}
+			attrLabel="subHeadingColor"
+			className={subHeadingColor != '' ? 'timeline-color-setting_apply' : ''}
+			color={'' === subHeadingColor ? '#333' : subHeadingColor}
+			setAttributes={setAttributes}
+		/>
+		<h2 className="ctlb-label-heading">{__("Bottom Spacing", "timeline-block")}</h2>
+		<RangeControl
+			className="cp-timeline-block-range__control"
+			value={descBtSpacing != '' ? descBtSpacing : 0 }
+			onChange={ (value) => setAttributes({descBtSpacing: value}) }
+			resetFallbackValue = {0}
+			allowReset={ true }
+			min={ 0 }
+			max={ 200 }
+			__nextHasNoMarginBottom={ true }
+		/>
+		<ProLock compact>
+			<SpacingControl
+				label={__('Margin', 'timeline-block')}
+				valueTop={dummySide()}
+				valueRight={dummySide()}
+				valueBottom={dummySide()}
+				valueLeft={dummySide()}
+				{...dummySpacing}
+			/>
+			<SpacingControl
+				label={__('Padding', 'timeline-block')}
+				valueTop={dummySide()}
+				valueRight={dummySide()}
+				valueBottom={dummySide()}
+				valueLeft={dummySide()}
+				{...dummySpacing}
+			/>
+		</ProLock>
+		</PanelBody>
+		<PanelBody title={panelTitle("calendar-alt", __("Date label", "timeline-block"))} {...stylePanelProps('date-label')}>
 		<TypographyControl
 		label={ __( "Typography",'timeline-block' ) }
 		attributes = { this.props.attributes }
@@ -304,247 +390,477 @@ class Edit extends Component {
 		lineHeightMobile = { { value: dateLineHeightMobile, label: 'dateLineHeightMobile' } }
 		lineHeightTablet= { { value: dateLineHeightTablet, label: 'dateLineHeightTablet' } }
 	/>
-	<div style ={{'marginTop':10 +'px'}}></div>
-	<div className="cp-timeline-block-style-settings">
-	<div>{__("Text Color","timeline-block")}</div>
-	<div className={`components-button timeline-block-colorpallete-reset is-small ${dateColor != '' && 'timeline-color-setting_apply'}`} onClick={e => this.resetcolorpalate({dateColor : ''}) }><span className="dashicon dashicons dashicons-image-rotate"></span></div>
-	<ColorPalette className="cp-timeline-block-color-palates"
-		clearable={false}
-		colors={
-			[
-				{ name: 'default', color: dateColor }
-			]
-		}
-		value={dateColor}
-		onChange = {( colorValue ) => setAttributes( { dateColor: colorValue} )}
+	<ColorController
+		label={__("Text Color", "timeline-block")}
+		attrLabel="dateColor"
+		className={dateColor != '' ? 'timeline-color-setting_apply' : ''}
+		color={'' === dateColor ? '#333' : dateColor}
+		setAttributes={setAttributes}
 	/>
-	</div>
+	</PanelBody>
+		<PanelBody title={panelTitlePro("calendar", __("Year label", "timeline-block"))} {...stylePanelProps('year-label')}>
+	<ProLock hideBadge compact>
+		<TypographyControl
+			label={ __( "Typography",'timeline-block' ) }
+			attributes = { this.props.attributes }
+			setAttributes = { noopSetAttributes }
+			loadGoogleFonts = { { value: false, label: 'yearLoadGoogleFonts' } }
+			fontFamily = { { value: 'Default', label: 'yearFontFamily' } }
+			fontWeight = { { value: undefined, label: 'yearFontWeight' } }
+			fontSubset = { { value: '', label: 'yearFontSubset' } }
+			fontSizeType = { { value: 'px', label: 'yearFontSizeType' } }
+			fontSize = { { value: undefined, label: 'yearFontSize' } }
+			fontSizeMobile = { { value: undefined, label: 'yearFontSizeMobile' } }
+			fontSizeTablet= { { value: undefined, label: 'yearFontSizeTablet' } }
+			lineHeightType = { { value: 'px', label: 'yearLineHeightType' } }
+			lineHeight = { { value: undefined, label: 'yearLineHeight' } }
+			lineHeightMobile = { { value: undefined, label: 'yearLineHeightMobile' } }
+			lineHeightTablet= { { value: undefined, label: 'yearLineHeightTablet' } }
+		/>
+		<ColorController
+			label={__("Text Color", "timeline-block")}
+			attrLabel="yearLabelTextColor"
+			className=""
+			color="#fff"
+			setAttributes={noopSetAttributes}
+		/>
+	</ProLock>
+		</PanelBody>
 </CardBody>
 		const advanced_setting =
-		<CardBody>
-		<div className="cp-timeline-block-style-settings">
-		<h2>Line Color</h2>
-		<div className={`components-button timeline-block-colorpallete-reset is-small ${LineColor != '' && 'timeline-color-setting_apply'}`} onClick={e => this.resetcolorpalate({LineColor : ''}) }><span className="dashicon dashicons dashicons-image-rotate"></span></div>
-		<ColorPalette className="cp-timeline-block-color-palates"
-		clearable={false}
-		colors={
-			[
-				{ name: 'default', color: LineColor }
-			]
-		}
-		value={LineColor}
-		onChange = {( colorValue ) => setAttributes( { LineColor: colorValue} )}
-		/>
-		</div>
-		<div className="cp-timeline-block-style-settings">
-		<h2>Icon Color</h2>
-		<div className={`components-button timeline-block-colorpallete-reset is-small ${iconColor != '' && 'timeline-color-setting_apply'}`} onClick={e => this.resetcolorpalate({iconColor : ''}) }><span className="dashicon dashicons dashicons-image-rotate"></span></div>
-		<ColorPalette className="cp-timeline-block-color-palates"
-		clearable={false}
-		colors={
-			[
-				{ name: 'default', color: iconColor }
-			]
-		}
-		value={iconColor}
-		onChange = {( colorValue ) => setAttributes( { iconColor: colorValue } )}
-		/>
-		</div>
-		<div className="cp-timeline-block-style-settings">
-		<h2>Icon Background</h2>
-		<div className={`components-button timeline-block-colorpallete-reset is-small ${iconBg != '' && 'timeline-color-setting_apply'}`} onClick={e => this.resetcolorpalate({iconBg : ''}) }><span className="dashicon dashicons dashicons-image-rotate"></span></div>
-		<ColorPalette className="cp-timeline-block-color-palates"
-		clearable={false}
-		colors={
-			[
-				{ name: 'default', color: iconBg }
-			]
-		}
-		value={iconBg}
-		onChange = {( colorValue ) => setAttributes( { iconBg: colorValue } )}
-		/>
-		</div>
-		<div className="cp-timeline-block-style-settings">
-		<h2>Story Border Color</h2>
-		<div className={`components-button timeline-block-colorpallete-reset is-small ${storyBorderColor != '' && 'timeline-color-setting_apply'}`} onClick={e => this.resetcolorpalate({storyBorderColor : ''}) }><span className="dashicon dashicons dashicons-image-rotate"></span></div>
-		<ColorPalette className="cp-timeline-block-color-palates"
-		clearable={false}
-		colors={
-			[
-				{ name: 'default', color: storyBorderColor }
-			]
-		}
-		value={storyBorderColor}
-		onChange = {( colorValue ) => setAttributes( { storyBorderColor: colorValue } )}
-		/>
-		</div>
-		{/* Item spacing controller*/}
-		{
-		timelineLayout == 'vertical' &&
-		<Fragment>
-		<h2>{__("Item Spacing","timeline-block")}</h2>
-		<RangeControl
-		className="cp-timeline-block-range__control"
-		value={itemSpacing != '' ? itemSpacing : 0 }
-		onChange={ (value) => setAttributes({itemSpacing: value}) }
-		resetFallbackValue = {0}
-		allowReset={ true }
-		min={ 0 }
-		max={ 200 }
-		__next40pxDefaultSize={ true }
-		/>
-		</Fragment>
-		}
-		{/* Icon Box size controller */}
-		<h2>{__("Icon Box Size","timeline-block")}</h2>
-		<RangeControl
-		className="cp-timeline-block-range__control"
-		value={iconBoxSize != '' ? iconBoxSize : 0 }
-		onChange={ (value) => setAttributes({iconBoxSize: value}) }
-		resetFallbackValue = {0}
-		allowReset={ true }
-		min={ 20 }
-		max={ 100 }
-		__next40pxDefaultSize={ true }
-		/>
-		{/* Icon font size controller */}
-		<h2>{__("Icon Size","timeline-block")}</h2>
-		<RangeControl
-		className="cp-timeline-block-range__control"
-		value={iconSize != '' ? iconSize : 0 }
-		onChange={ (value) => setAttributes({iconSize: value}) }
-		resetFallbackValue = {0}
-		allowReset={ true }
-		min={ 0 }
-		max={ 100 }
-		__next40pxDefaultSize={ true }
-		/>
-		{/* middle line size controller */}
-		<h2>{__("Line Size","timeline-block")}</h2>
-		<RangeControl
-		className="cp-timeline-block-range__control"
-		value={middleLineSize != '' ? middleLineSize : 0 }
-		onChange={ (value) => setAttributes({middleLineSize: value}) }
-		resetFallbackValue = {0}
-		allowReset={ true }
-		min={ 0 }
-		max={ 10 }
-		__next40pxDefaultSize={ true }
-		/>
-
-		{/* contaier box padding controler */}
-		<SpacingControl
-			{ ...this.props }
-			label={ __( 'Container Padding', 'timeline-block' ) }
-			valueTop={ {
-				value: containerTopPadding,
-				label: 'containerTopPadding',
-			} }
-			valueRight={ {
-				value: containerRightPadding,
-				label: 'containerRightPadding',
-			} }
-			valueBottom={ {
-				value: containerBottomPadding,
-				label: 'containerBottomPadding',
-			} }
-			valueLeft={ {
-				value: containerLeftPadding,
-				label: 'containerLeftPadding',
-			} }
-			unit={ {
-				value: desktopConatinerPaddingType,
-				label: 'desktopConatinerPaddingType',
-			} }
-			attributes={ this.props.attributes }
-			setAttributes={ setAttributes }
-			link={ {
-				value: marginLink,
-				label: 'marginLink',
-			} }
-		/>
-	</CardBody>
-		const rating_box = <PanelBody title={__("Please Share Your Valuable Feedback.", "timeline-block")}>
-			<CardBody className={"cool-timeline-gt-block-review-tab"}>{__("We hope you liked our plugin created timelines. Please share your valuable feedback.", "timeline-block")}<br></br><a href="https://wordpress.org/support/plugin/timeline-block/reviews/#new-post" className="components-button is-primary is-small" target="_blank" rel="noopener noreferrer" >Rate Us<span> ★★★★★</span></a>
-			</CardBody>
-		</PanelBody>
-		const timeline_setting = <CardBody>
-		<SelectControl
-					label={ __( "Timeline Layout",'timeline-block' ) }
-					value={ timelineLayout }
-					onChange={(value)=>{
-						if(value == "vertical"){
-						setAttributes({timelineLayout:value, sliderActive:false})
-						}
-						select('core/block-editor').getBlocksByClientId(this.props.clientId)[0].innerBlocks.forEach(function (block,key) {
-							dispatch('core/block-editor').updateBlockAttributes(block.clientId, ({ timelineLayout: value}))
-						})
-					}
-				}
-					options={ [
-						{ value: "vertical", label: __( "Vertical","timeline-block") },
-						// { value: "horizontal", label: __( "Horizontal (PRO)","timeline-block"), disabled: true }
-					] }
-					__nextHasNoMarginBottom={ true }
-					__next40pxDefaultSize={ true }
-					/>
-				{timelineLayout == "vertical" ?
-				<SelectControl
-				label={ __( "Timeline Design","timeline-block" ) }
-					value={ timelineDesign }
-					onChange={ ( value ) => {setAttributes( { timelineDesign: value } )
-					select('core/block-editor').getBlocksByClientId(this.props.clientId)[0].innerBlocks.forEach(function (block,key) {
-						dispatch('core/block-editor').updateBlockAttributes(block.clientId, ({ timelineDesign: value }))
-					})
-				} }
-					options={ [
-						{ value: "both-sided", label: __( "Both Sided","timeline-block") },
-						{ value: "one-sided", label: __( "One Sided","timeline-block") },
-						
-					] }
-					__nextHasNoMarginBottom={ true }
-					__next40pxDefaultSize={ true }
-					/>:
-					<RangeControl
-						label="Slides"
-						value={ slidePerView }
-						onChange={ ( value ) => {
-							setAttributes({slidePerView: value,sliderActive:false})
-						}
-						}
-						min={ 1 }
-						max={ 6 }
-						step={ 1 }
-						__next40pxDefaultSize={ true }
-					/>
-				}
-
-				{
-					(timelineLayout == "vertical" && timelineDesign == 'both-sided') ? 
-					<div className="components-base-control">
-					<label className="timeline-block-settings-labels">{__("Alternating Sided","timeline-block")}</label>
+		<CardBody className="ctlb-panel-stack">
+		<PanelBody title={panelTitle("align-wide", __("Center Line", "timeline-block"))} {...advancedPanelProps('center-line')}>
+			<div className="ctlb-pro-field-header">
+				<h2 className="ctlb-label-heading">{__("Line Filling", "timeline-block")}</h2>
+				<ProBadge />
+			</div>
+			<ProLock hideBadge compact>
+				<div className="cp-timeline-block-style-settings">
+					<h2 className="ctlb-label-heading">{__("Enable Line Filling", "timeline-block")}</h2>
 					<ToggleControl
-					className="timeline-block-Orientation_checkbox"
-					checked={ OrientationCheckBox }
-					onChange={ (state) => {
-						setAttributes({OrientationCheckBox : state}),this.OrientationCheck(state);
-					} }
-					__nextHasNoMarginBottom={ true }
+						className="timeline-block-Orientation_checkbox"
+						checked={false}
+						onChange={() => {}}
+						__nextHasNoMarginBottom={true}
 					/>
-					</div>
-					: null
-				}
-
-				{/* {((timelineDesign == "one-sided" && timelineLayout == "vertical") || (timelineLayout == "vertical" && timelineDesign == 'both-sided' && OrientationCheckBox)) ? orientation_setting : null } */}
-				{ ["one-sided",'both-sided'].includes(timelineDesign) && timelineLayout == "vertical" ? orientation_setting : null }
-				<div className="timeline-block-settings-labels">{__("Content Alignment","timeline-block")}</div>
-				<ButtonGroup className="cool-timeline-content-alignment-buttons">
-					<Button onClick={(e) => {setAttributes({contentAlignment: 'left'})}} className={contentAlignment == 'left' ? 'active': ''}><span className="dashicons dashicons-editor-alignleft"></span></Button>
-					<Button onClick={(e) => {setAttributes({contentAlignment: 'center'})}} className={contentAlignment == 'center' ? 'active': ''}><span className="dashicons dashicons-editor-aligncenter"></span></Button>
-					<Button onClick={(e) => {setAttributes({contentAlignment: 'right'})}} className={contentAlignment == 'right' ? 'active': ''}><span className="dashicons dashicons-editor-alignright"></span></Button>
+				</div>
+				<p className="ctlb-setting-description">{__("Please note: Line filling change will only be reflected on the frontend.", "timeline-block")}</p>
+				<ColorController
+					label={__("Line Filling Color", "timeline-block")}
+					attrLabel="lineFillingColor"
+					className=""
+					color="#D91B3E"
+					setAttributes={noopSetAttributes}
+				/>
+			</ProLock>
+			<h2 className="ctlb-label-heading">{__("Line Width","timeline-block")}</h2>
+			<RangeControl
+				className="cp-timeline-block-range__control"
+				value={middleLineSize != '' ? middleLineSize : 0 }
+				onChange={ (value) => setAttributes({middleLineSize: value}) }
+				resetFallbackValue = {0}
+				allowReset={ true }
+				min={ 0 }
+				max={ 10 }
+				__nextHasNoMarginBottom={ true }
+			/>
+			<hr className="ctlb-section-divider" />
+			<ColorController
+				label={__("Line Color", "timeline-block")}
+				attrLabel="LineColor"
+				className={LineColor != '' ? 'timeline-color-setting_apply' : ''}
+				color={'' === LineColor ? '#D91B3E' : LineColor}
+				setAttributes={setAttributes}
+			/>
+		</PanelBody>
+		<PanelBody title={panelTitle("marker", __("Icons", "timeline-block"))} {...advancedPanelProps('icon-settings')}>
+			<h2 className="ctlb-label-heading">{__("Box Size","timeline-block")}</h2>
+			<RangeControl
+				className="cp-timeline-block-range__control"
+				value={iconBoxSize != '' ? iconBoxSize : 0 }
+				onChange={ (value) => setAttributes({iconBoxSize: value}) }
+				resetFallbackValue = {0}
+				allowReset={ true }
+				min={ 20 }
+				max={ 100 }
+				__nextHasNoMarginBottom={ true }
+			/>
+			<h2 className="ctlb-label-heading">{__("Font Size","timeline-block")}</h2>
+			<RangeControl
+				className="cp-timeline-block-range__control"
+				value={iconSize != '' ? iconSize : 0 }
+				onChange={ (value) => setAttributes({iconSize: value}) }
+				resetFallbackValue = {0}
+				allowReset={ true }
+				min={ 0 }
+				max={ 100 }
+				__nextHasNoMarginBottom={ true }
+			/>
+			<hr className="ctlb-section-divider" />
+			<ColorController
+				label={__("Background Color", "timeline-block")}
+				attrLabel="iconBg"
+				className={iconBg != '' ? 'timeline-color-setting_apply' : ''}
+				color={'' === iconBg ? '#D91B3E' : iconBg}
+				setAttributes={setAttributes}
+			/>
+			<ColorController
+				label={__("Font Color", "timeline-block")}
+				attrLabel="iconColor"
+				className={iconColor != '' ? 'timeline-color-setting_apply' : ''}
+				color={iconColor}
+				setAttributes={setAttributes}
+			/>
+			<div className="ctlb-pro-field-header">
+				<span className="ctlb-label-heading">{__("Icon extras", "timeline-block")}</span>
+				<ProBadge />
+			</div>
+			<ProLock hideBadge compact>
+				<h2 className="ctlb-label-heading">{__("Box Radius","timeline-block")}</h2>
+				<RangeControl
+					className="cp-timeline-block-range__control"
+					value={50}
+					onChange={() => {}}
+					resetFallbackValue={50}
+					allowReset={true}
+					min={0}
+					max={50}
+					__nextHasNoMarginBottom={true}
+				/>
+				<h2 className="ctlb-label-heading">{__("Icon/Label Position","timeline-block")}</h2>
+				<RangeControl
+					className="cp-timeline-block-range__control"
+					value={0}
+					onChange={() => {}}
+					resetFallbackValue={0}
+					allowReset={true}
+					min={0}
+					max={100}
+					__nextHasNoMarginBottom={true}
+				/>
+				<h2 className="ctlb-label-heading">{__("Connector Style", "timeline-block")}</h2>
+				<ButtonGroup className="ctl_media_control ctlb-segmented">
+					<Button isSmall className="ctlb-segmented-btn is-active">Arrow</Button>
+					<Button isSmall className="ctlb-segmented-btn">Line</Button>
+					<Button isSmall className="ctlb-segmented-btn">None</Button>
 				</ButtonGroup>
+			</ProLock>
+		</PanelBody>
+		<PanelBody title={panelTitlePro("calendar-alt", __("Year / Label", "timeline-block"))} {...advancedPanelProps('year-label-settings')}>
+			<ProLock hideBadge compact>
+				<h2 className="ctlb-label-heading">{__("Box Size", "timeline-block")}</h2>
+				<RangeControl
+					className="cp-timeline-block-range__control"
+					value={0}
+					onChange={() => {}}
+					resetFallbackValue={0}
+					allowReset={true}
+					min={30}
+					max={150}
+					__nextHasNoMarginBottom={true}
+				/>
+				<h2 className="ctlb-label-heading">{__("Box Radius", "timeline-block")}</h2>
+				<RangeControl
+					className="cp-timeline-block-range__control"
+					value={50}
+					onChange={() => {}}
+					resetFallbackValue={50}
+					allowReset={true}
+					min={0}
+					max={50}
+					__nextHasNoMarginBottom={true}
+				/>
+				<hr className="ctlb-section-divider" />
+				<ColorController
+					label={__("Background Color", "timeline-block")}
+					attrLabel="yearLabelColor"
+					className=""
+					color="#D91B3E"
+					setAttributes={noopSetAttributes}
+				/>
+				<div className="cp-timeline-block-style-settings">
+					<h2 className="ctlb-label-heading">{__("Year Navigation", "timeline-block")}</h2>
+					<ToggleControl
+						className="timeline-block-Orientation_checkbox"
+						checked={false}
+						onChange={() => {}}
+						__nextHasNoMarginBottom={true}
+					/>
+				</div>
+				<p className="ctlb-setting-description">{__("Please note: Year navigation change will only be reflected on the frontend.", "timeline-block")}</p>
+			</ProLock>
+		</PanelBody>
+		<PanelBody title={panelTitlePro("format-image", __("Media", "timeline-block"))} {...advancedPanelProps('image-media')}>
+			<ProLock hideBadge compact>
+				<div className="cp-timeline-block-boxshadow-controller-wrapper">
+					<div className="ctlb-unit-field">
+						<div className="ctlb-unit-field__header">
+							<span className="ctlb-unit-field__label">{__("Width", "timeline-block")}</span>
+							{proUnitPills('%')}
+						</div>
+						{proNumberInput({ className: 'cp-timeline-block-unit_control', placeholder: __("Auto", "timeline-block"), value: 100 })}
+					</div>
+					<div className="ctlb-unit-field">
+						<div className="ctlb-unit-field__header">
+							<span className="ctlb-unit-field__label">{__("Height", "timeline-block")}</span>
+							{proUnitPills()}
+						</div>
+						{proNumberInput({ className: 'cp-timeline-block-unit_control', placeholder: __("Auto", "timeline-block"), value: '' })}
+					</div>
+				</div>
+				<SpacingControl
+					label={__('Padding', 'timeline-block')}
+					valueTop={dummySide()}
+					valueRight={dummySide()}
+					valueBottom={dummySide()}
+					valueLeft={dummySide()}
+					{...dummySpacing}
+				/>
+				<SpacingControl
+					label={__('Margin', 'timeline-block')}
+					valueTop={dummySide()}
+					valueRight={dummySide()}
+					valueBottom={dummySide()}
+					valueLeft={dummySide()}
+					{...dummySpacing}
+				/>
+				<SpacingControl
+					label={__('Border', 'timeline-block')}
+					valueTop={dummySide()}
+					valueRight={dummySide()}
+					valueBottom={dummySide()}
+					valueLeft={dummySide()}
+					{...dummySpacing}
+				/>
+				<div className="cp-timeline-block-boxshadow-controller-wrapper">
+					<div className="ctlb-unit-field ctlb-unit-field--full">
+						<div className="ctlb-unit-field__header">
+							<span className="ctlb-unit-field__label">{__("Border Radius", "timeline-block")}</span>
+							{proUnitPills()}
+						</div>
+						{proNumberInput({ className: 'cp-timeline-block-unit_control', placeholder: '0', value: '' })}
+					</div>
+				</div>
+				<ColorController
+					label={__("Border Color", "timeline-block")}
+					attrLabel="mediaBorderColor"
+					className=""
+					color="#D91B3E"
+					setAttributes={noopSetAttributes}
+				/>
+			</ProLock>
+		</PanelBody>
+		<PanelBody title={panelTitle("editor-table", __("Story Box", "timeline-block"))} {...advancedPanelProps('container-box')}>
+			{ timelineLayout == 'vertical' &&
+			<Fragment>
+				<h2 className="ctlb-label-heading">{__("Item Spacing","timeline-block")}</h2>
+				<RangeControl
+					className="cp-timeline-block-range__control"
+					value={itemSpacing != '' ? itemSpacing : 0 }
+					onChange={ (value) => setAttributes({itemSpacing: value}) }
+					resetFallbackValue = {0}
+					allowReset={ true }
+					min={ 0 }
+					max={ 200 }
+					__nextHasNoMarginBottom={ true }
+				/>
+			</Fragment>
+			}
+			<SpacingControl
+				{ ...this.props }
+				label={ __( 'Padding', 'timeline-block' ) }
+				valueTop={ {
+					value: containerTopPadding,
+					label: 'containerTopPadding',
+				} }
+				valueRight={ {
+					value: containerRightPadding,
+					label: 'containerRightPadding',
+				} }
+				valueBottom={ {
+					value: containerBottomPadding,
+					label: 'containerBottomPadding',
+				} }
+				valueLeft={ {
+					value: containerLeftPadding,
+					label: 'containerLeftPadding',
+				} }
+				unit={ {
+					value: desktopConatinerPaddingType,
+					label: 'desktopConatinerPaddingType',
+				} }
+				defaultValue=''
+				attributes={ this.props.attributes }
+				setAttributes={ setAttributes }
+				link={ {
+					value: marginLink,
+					label: 'marginLink',
+				} }
+			/>
+			<ColorController
+				label={__("Border Color", "timeline-block")}
+				attrLabel="storyBorderColor"
+				className={storyBorderColor != '' ? 'timeline-color-setting_apply' : ''}
+				color={'' === storyBorderColor ? '#D91B3E' : storyBorderColor}
+				setAttributes={setAttributes}
+			/>
+			<div className="ctlb-pro-field-header">
+				<span className="ctlb-label-heading">{__("Container extras", "timeline-block")}</span>
+				<ProBadge />
+			</div>
+			<ProLock hideBadge compact>
+				<SpacingControl
+					label={__('Margin', 'timeline-block')}
+					valueTop={dummySide()}
+					valueRight={dummySide()}
+					valueBottom={dummySide()}
+					valueLeft={dummySide()}
+					{...dummySpacing}
+				/>
+				<SpacingControl
+					label={__('Border Width', 'timeline-block')}
+					valueTop={dummySide()}
+					valueRight={dummySide()}
+					valueBottom={dummySide()}
+					valueLeft={dummySide()}
+					{...dummySpacing}
+				/>
+				<SpacingControl
+					label={__('Border Radius', 'timeline-block')}
+					labels={[
+						__('Top-L', 'timeline-block'),
+						__('Top-R', 'timeline-block'),
+						__('Btm-R', 'timeline-block'),
+						__('Btm-L', 'timeline-block'),
+					]}
+					valueTop={dummySide()}
+					valueRight={dummySide()}
+					valueBottom={dummySide()}
+					valueLeft={dummySide()}
+					{...dummySpacing}
+				/>
+				<ColorController
+					label={__("Background Color", "timeline-block")}
+					attrLabel="containerColor"
+					className=""
+					color="#ffffff"
+					setAttributes={noopSetAttributes}
+				/>
+				<div className="timeline-block-box-shadow-options">
+					<div className="timeline-block-box-shadow-option-actions">
+						<h2>{__("Box Shadow", "timeline-block")}</h2>
+						<div className="components-button timeline-block-size-btn timeline-block-box-shadow-reset-btn is-small">
+							<span className="dashicons dashicons-image-rotate"></span>
+						</div>
+						<Button className="timeline-block-size-btn timeline-block-box-shadow-control-btn" isSmall>
+							<span className="dashicons dashicons-admin-tools"></span>
+						</Button>
+					</div>
+				</div>
+			</ProLock>
+		</PanelBody>
+		<PanelBody title={panelTitlePro("controls-play", __("Animation", "timeline-block"))} {...advancedPanelProps('timeline-animation')}>
+			<ProLock hideBadge compact>
+				<SelectControl
+					value="none"
+					onChange={() => {}}
+					options={[
+						{ label: "None", value: "none" },
+						{ label: "fade", value: "fade" },
+						{ label: "slide-up", value: "slide-up" },
+						{ label: "zoom-in", value: "zoom-in" },
+					]}
+					__nextHasNoMarginBottom={true}
+					__next40pxDefaultSize={true}
+				/>
+				<p className="ctlb-setting-description">{__("Please note: This change will only be reflected on the frontend.", "timeline-block")}</p>
+			</ProLock>
+		</PanelBody>
 		</CardBody>
-		let settingTabs = 
+		const footer_links = (
+			<SidebarFooter layout={timelineLayout} isPro={!!window.ctlBlockData?.isPro} />
+		);
+		const verticalDesignOptions = [
+			{ value: "both-sided", label: __("Both sides", "timeline-block") },
+			{ value: "one-sided", label: __("One side", "timeline-block") },
+		];
+		const alignmentOptions = [
+			{ value: "left", label: __("Left", "timeline-block"), icon: "editor-alignleft" },
+			{ value: "center", label: __("Center", "timeline-block"), icon: "editor-aligncenter" },
+			{ value: "right", label: __("Right", "timeline-block"), icon: "editor-alignright" },
+		];
+		const handleLayoutChange = (value) => {
+			if (value !== "vertical") {
+				openProUpgradeHandler();
+				return;
+			}
+			setAttributes({ timelineLayout: value, sliderActive: false });
+			select("core/block-editor").getBlocksByClientId(this.props.clientId)[0].innerBlocks.forEach(function (block) {
+				dispatch("core/block-editor").updateBlockAttributes(block.clientId, { timelineLayout: value });
+			});
+		};
+		const handleDesignChange = (value) => {
+			setAttributes({ timelineDesign: value });
+			select("core/block-editor").getBlocksByClientId(this.props.clientId)[0].innerBlocks.forEach(function (block) {
+				dispatch("core/block-editor").updateBlockAttributes(block.clientId, { timelineDesign: value });
+			});
+		};
+		const contentAlignmentHandler = (value) => {
+			setAttributes({ contentAlignment: value });
+			select("core/block-editor").getBlocksByClientId(this.props.clientId)[0].innerBlocks.forEach(function (block) {
+				dispatch("core/block-editor").updateBlockAttributes(block.clientId, { contentAlignment: value });
+			});
+		};
+		const timeline_setting = (
+		<CardBody>
+			<div className="ctlb-style-element-card ctlb-general-card">
+			<VisualOptionControl
+				label={__("Layout", "timeline-block")}
+				value={timelineLayout}
+				onChange={handleLayoutChange}
+				options={[
+					{ value: "vertical", label: __("Vertical", "timeline-block"), icon: LayoutIcons.vertical },
+					{ value: "horizontal", label: __("Horizontal", "timeline-block"), icon: LayoutIcons.horizontal, pro: true },
+					{ value: "modern-vertical", label: __("Tabs", "timeline-block"), icon: LayoutIcons['modern-vertical'], pro: true },
+				]}
+			/>
+			{timelineLayout == "vertical" ?
+				<div className="ctlb-row ctlb-row--stack">
+					<span className="ctlb-row-label">{__("Design", "timeline-block")}</span>
+					<div className="ctlb-segmented">
+						{verticalDesignOptions.map((opt) => (
+							<Button
+								key={opt.value}
+								onClick={() => handleDesignChange(opt.value)}
+								className={`ctlb-segmented-btn${timelineDesign === opt.value ? " is-active" : ""}`}
+							>
+								<span className="ctlb-segmented-btn-label">{opt.label}</span>
+							</Button>
+						))}
+					</div>
+				</div>
+				: null
+			}
+			{["one-sided", "both-sided"].includes(timelineDesign) && timelineLayout == "vertical" ? orientation_setting : null}
+			<div className="ctlb-row ctlb-row--stack">
+				<span className="ctlb-row-label">{__("Content alignment", "timeline-block")}</span>
+				<ButtonGroup className="cool-timeline-content-alignment-buttons ctlb-segmented">
+					{alignmentOptions.map((opt) => (
+						<Button
+							key={opt.value}
+							title={opt.label}
+							onClick={() => contentAlignmentHandler(opt.value)}
+							className={`ctlb-segmented-btn${contentAlignment == opt.value ? " is-active" : ""}`}
+						>
+							<span className={`dashicons dashicons-${opt.icon}`}></span>
+						</Button>
+					))}
+				</ButtonGroup>
+			</div>
+			</div>
+		</CardBody>
+		);
+		let settingTabs =
 		<InspectorControls>
 			<TabPanel
 				className="cooltimeline-tab-settings"
@@ -572,14 +888,7 @@ class Edit extends Component {
 			>
 				{ ( tab ) => <Card>{tab.content}</Card> }
 			</TabPanel>
-			{/* demo video link button */}
-			<PanelBody title={__("View Timeline Demos","timeline-block")} initialOpen={false}>
-				<CardBody className="cp-timeline-block-demo-button">
-					<a target="_blank" rel="noopener noreferrer" className="button button-primary" href="https://cooltimeline.com/demo/gutenberg-timeline-block?utm_source=tbg_plugin&utm_medium=inside&utm_campaign=demo&utm_content=timeline_block">View Demos</a>
-					<a target="_blank" rel="noopener noreferrer" className="button button-primary" href="https://cooltimeline.com/docs/timeline-block-pro/video-tutorials/free-plugin-video/?utm_source=tbg_plugin&utm_medium=inside&utm_campaign=docs&utm_content=timeline_block">Watch Videos</a>
-				</CardBody>
-			</PanelBody>
-			{rating_box}
+			{footer_links}
 		</InspectorControls>
 		const getContentTimelineTemplate = memoize((icon_block, tm_content) => {
 			return times(icon_block, n => ['cp-timeline/content-timeline-block-child', tm_content[n]])
@@ -627,31 +936,16 @@ class Edit extends Component {
 			isPreview ? <img width='100%' src={ preview } alt=''/>:
 			<Fragment>
 				  <div>
-					  { timelineDesign == "vertical" ?
-			  <BlockControls group="block">
-				<ToolbarDropdownMenu
-					icon="layout"
-					label="Layout"
-					controls={ [
-						{
-							title: 'Both Sided',                  
-							onClick: () => setAttributes({timelinDesign:"both-sided"}) ,
-						},
-						{
-							title: 'One Sided',
-							onClick: () => setAttributes({timelinDesign:"one-sided"}),
-						},
-					] }
-					/>
-			</BlockControls>
-				:null}
 			{ loadHeadGoogleFonts }
 			 {loadSubHeadGoogleFonts }
 			{settingTabs}
 			{loadDateGoogleFonts }
 		
+			<p className="ctlb-editor-notice" role="note">
+				{__("Editor preview may look a little different from the frontend. Your theme styles can be applied on the editor page.", "timeline-block")}
+			</p>
 			<div className={"cool-timeline-block-" + this.props.clientId + " cool-timeline-block"} ref={this.ref}>
-							<div className={`cool-${timelineLayout}-timeline-body ctlb-wrapper ${timelineDesign} ${Orientation}`}>
+							<div className={`cool-${timelineLayout}-timeline-body ctlb-wrapper ${newDesignClass} ${timelineDesign} ${Orientation}`}>
 								<div className="cool-timeline-block-list">
 									<InnerBlocks
 									allowedBlocks={ALLOWED_BLOCKS}
@@ -671,7 +965,39 @@ class Edit extends Component {
 	)
 	}
 
+	/**
+	 * One-time "Reset all" of the Dimensions panel (padding, margin, block gap) on every story's
+	 * heading and paragraph, done when the timeline is opened with the new design on. Older timelines
+	 * carry inline spacing on those blocks, which the new design's own spacing must not be overridden
+	 * by. Other block styles (colour, typography, ...) are kept, and a flag stops it running again.
+	 */
+	resetLegacyCoreSpacing() {
+		const { attributes, setAttributes, clientId, isNewDesign } = this.props;
+		if (!isNewDesign || attributes.coreSpacingReset) {
+			return;
+		}
+		const stories = select("core/block-editor").getBlock(clientId)?.innerBlocks || [];
+		if (!stories.length) {
+			return;
+		}
+		stories.forEach((story) => {
+			story.innerBlocks.forEach((block) => {
+				const style = block.attributes?.style;
+				if (!["core/heading", "core/paragraph"].includes(block.name) || !style?.spacing) {
+					return;
+				}
+				const { spacing: _legacy, ...rest } = style;
+				dispatch("core/block-editor").updateBlockAttributes(block.clientId, {
+					style: Object.keys(rest).length ? rest : undefined,
+				});
+			});
+		});
+		setAttributes({ coreSpacingReset: true });
+	}
+
 	componentDidMount() {
+		// Inner blocks are available once the block has mounted.
+		window.setTimeout(() => this.resetLegacyCoreSpacing(), 0);
 		// //Store client id.
 		this.props.setAttributes( { block_id: this.props.clientId } )
 		
@@ -683,5 +1009,7 @@ class Edit extends Component {
 		}
 		 
 	}
-} export default
-	(Edit)
+}
+export default withSelect((select, ownProps) => ({
+	firstStorySide: select("core/block-editor").getBlock(ownProps.clientId)?.innerBlocks?.[0]?.attributes?.blockPosition,
+}))(Edit);

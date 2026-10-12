@@ -194,12 +194,6 @@
 	color: var(--cpo-text-muted);
 }
 
-.wrap.cpo-onboarding-page .cpo-badge-pro {
-	background: var(--cpo-star-soft);
-	border-color: var(--cpo-star-border);
-	color: var(--cpo-star);
-}
-
 .wrap.cpo-onboarding-page .cpo-method-desc {
 	margin: 0 0 14px;
 	font-size: 14px;
@@ -535,12 +529,7 @@
 	display: block;
 }
 
-.wrap.cpo-onboarding-page .cpo-substep-tabs {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 8px;
-	margin: 0 0 22px;
-}
+
 .cpo-box .cpo-content-grid{
 	padding: 22px;
     background: #F9FBFB;
@@ -584,11 +573,6 @@
 
 .wrap.cpo-onboarding-page .cpo-substeps.active {
 	display: block;
-}
-
-.wrap.cpo-onboarding-page .cpo-block-tutorials,
-.wrap.cpo-onboarding-page .cpo-shortcode-tutorials {
-	display: none;
 }
 
 .wrap.cpo-onboarding-page .cpo-addon-section {

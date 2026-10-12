@@ -13,6 +13,7 @@
 // //  Import CSS.
 // import ".././style.scss"
 import "./style.scss"
+import "./editor-chrome.scss"
 import v1 from "../deprecated/parent-block-v1.js"
 import v2 from "../deprecated/parent-block-v2.js"
 import Save from "./save.js"
@@ -67,7 +68,7 @@ registerBlockType("cp-timeline/content-timeline-block", {
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
 	title: __('Timeline Block', 'timeline-block'), // Block title.
 	apiVersion: 3,
-	description: __("Create an ultimate timeline easily and share your story or roadmap.", 'timeline-block'),
+	description: __("Build beautiful timelines for your story, journey, or roadmap in minutes.", 'timeline-block'),
 	keywords: [
 		__("Content Timeline", 'timeline-block'),
 		__("Timeline", 'timeline-block'),
@@ -75,6 +76,16 @@ registerBlockType("cp-timeline/content-timeline-block", {
 		__("Roadmap Timeline", 'timeline-block'),
 	],
 	icon: CoolTMIcon,
+	// New timelines start on the right. Variation attributes apply only to blocks inserted from now on,
+	// so existing blocks (and the unchanged attribute defaults they rely on) are not affected.
+	variations: [
+		{
+			name: 'default',
+			title: __('Timeline Block', 'timeline-block'),
+			isDefault: true,
+			attributes: { Orientation: 'right' },
+		},
+	],
 	supports: {
 		anchor: true,
 	},
@@ -84,9 +95,10 @@ registerBlockType("cp-timeline/content-timeline-block", {
 		const blockProps = useBlockProps({
 			className: 'Cool-Content-Timeline-' + props.attributes.timelineDesign,
 		});
+		const isNewDesign = typeof cgbGlobal !== 'undefined' && !! cgbGlobal.isNewDesign;
 		return (
 			<div {...blockProps}>
-				<Edit {...props} />
+				<Edit {...props} isNewDesign={ isNewDesign } />
 			</div>);
 	},
 	save: props => {

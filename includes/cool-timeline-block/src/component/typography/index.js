@@ -168,12 +168,6 @@ class TypographyControl extends Component {
 			)
 
 			resetFontAdvancedControls =  (
-				// <Button
-				// 	className="timeline-block-size-btn timeline-block-typography-reset-btn"
-				// 	isSmall
-				// 	aria-pressed={ ( this.state !== null ) }
-				// 	onClick={ this.onAdvancedControlReset }
-				// ><Dashicon icon="image-rotate" /></Button>
 				<div
 					className="components-button timeline-block-size-btn timeline-block-typography-reset-btn is-small"
 					onClick={ this.onAdvancedControlReset }
@@ -189,9 +183,7 @@ class TypographyControl extends Component {
 			)
 		}
 
-
 		if( this.state !== null && this.state.showAdvancedControls === true ) {
-
 			showAdvancedFontControls = (
 				<div className="timeline-block-typography-advanced">
 					{ fontSize }
@@ -204,7 +196,7 @@ class TypographyControl extends Component {
 		if( true !== disableFontFamily && true !== disableFontSize ) {
 			fontTypoAdvancedControls =  (
 				<div className="timeline-block-typography-option-actions">
-					<div>{ this.props.label }</div>
+					<h2>{ this.props.label }</h2>
 					{ resetFontAdvancedControls }
 					{ fontAdvancedControls }
 				</div>

@@ -1,4 +1,7 @@
-import {IconPicker, IconPickerItem} from "../component/Icons/index.js";
+import { IconPickerItem } from "../component/Icons/index.js";
+import TimelineSettingsLink from './timeline-settings-link.js';
+import { openProUpgrade } from '../component/ProFeature.js';
+import StorySettingsPanel from '../component/storySettings/StorySettingsPanel.js';
 const { Component, Fragment } = wp.element;
 import { __ } from '@wordpress/i18n';
 
@@ -10,13 +13,24 @@ const {
 } = wp.data;
 
 const {
-	PanelBody,
-	TextControl,
 	Button,
+	CardBody,
 	ToolbarGroup,
 	ToolbarButton,
-	ButtonGroup
 } = wp.components;
+
+// Inline icons: the dashicons font is not loaded inside the editor canvas of this plugin.
+const TOOLBAR_ICONS = {
+	image: 'M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM5 4.5h14c.3 0 .5.2.5.5v8.4l-3-2.9c-.3-.3-.8-.3-1 0L11.9 14 9 12c-.3-.2-.6-.2-.8 0l-3.6 2.6V5c-.1-.3.1-.5.4-.5zm14 15H5c-.3 0-.5-.2-.5-.5v-2.4l4.1-3 3 1.9c.3.2.7.2.9-.1L16 12l3.5 3.4V19c0 .3-.2.5-.5.5z',
+	video: 'M18.7 3H5.3C4 3 3 4 3 5.3v13.4C3 20 4 21 5.3 21h13.4c1.3 0 2.3-1 2.3-2.3V5.3C21 4 20 3 18.7 3zm.8 15.7c0 .4-.4.8-.8.8H5.3c-.4 0-.8-.4-.8-.8V5.3c0-.4.4-.8.8-.8h13.4c.4 0 .8.4.8.8v13.4zM10 15l5-3-5-3v6z',
+	gallery: 'M16.375 4.5H4.625a.125.125 0 0 0-.125.125v8.254l2.859-1.54a.75.75 0 0 1 .68-.016l2.384 1.142 2.89-2.074a.75.75 0 0 1 .874 0l2.313 1.66V4.625a.125.125 0 0 0-.125-.125Zm.125 9.398-2.75-1.975-2.813 2.02a.75.75 0 0 1-.76.067l-2.444-1.17L4.5 14.583v1.792c0 .069.056.125.125.125h11.75a.125.125 0 0 0 .125-.125v-2.477ZM4.625 3C3.728 3 3 3.728 3 4.625v11.75C3 17.272 3.728 18 4.625 18h11.75c.897 0 1.625-.728 1.625-1.625V4.625C18 3.728 17.272 3 16.375 3H4.625ZM20 8v11c0 .69-.31 1-.999 1H6v1.5h13.001c1.52 0 2.499-.982 2.499-2.5V8H20Z',
+	trash: 'M20 5h-5V4c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v1H4v1.5h1l.8 12.4c.1 1.1 1 1.9 2 1.9h8.4c1 0 1.9-.8 2-1.9L19 6.5h1V5zM10.5 4c0-.3.2-.5.5-.5h2c.3 0 .5.2.5.5v1h-3V4zm6.4 14.8c0 .3-.2.5-.5.5H7.6c-.3 0-.5-.2-.5-.5L6.4 6.5h11.2l-.7 12.3z',
+};
+const ToolbarIcon = ({ name }) => (
+	<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" focusable="false">
+		<path d={TOOLBAR_ICONS[name]} />
+	</svg>
+);
 
 class Edit extends Component {
 	constructor(props) {
@@ -65,7 +79,10 @@ class Edit extends Component {
 			innerBlocks.forEach((block, index) => {
 				if(index > (currentIndex + 1)){
 					const blockpostion=index % 2 !== currentPostion ? currentBlockPostion : this.props.attributes.blockPosition;
-					block.attributes.blockPosition = blockpostion, block.attributes.storyPositionHide=!parentAttribute.OrientationCheckBox
+					dispatch('core/block-editor').updateBlockAttributes(block.clientId, {
+						blockPosition: blockpostion,
+						storyPositionHide: !parentAttribute.OrientationCheckBox,
+					});
 				}
 			});
 		}
@@ -103,12 +120,16 @@ class Edit extends Component {
 			return undefined !==  block;
 		})
 		
+		// The legacy design zeroes the story text blocks' padding inline; the new design sets its own spacing.
+		const isNewDesign = typeof cgbGlobal !== 'undefined' && !! cgbGlobal.isNewDesign;
+		const legacySpacing = isNewDesign ? {} : { style: { spacing: { padding: { top: '0px', left: '0px', bottom: '0px', right: '0px' } } } };
+
 		// Add media block inside the mediaBlocks.
 		const imageUrl='none' === this.props.attributes.timeLineImage ? '' : this.props.attributes.timeLineImage;
 		mediaBlock && mediaBlocks.push(['core/image', { url: imageUrl, className: 'ctlb-block-image',aspectRatio: "4/3", scale: "cover", }]); // Default: Image block with a default image URL
 		newBlocks.push(
-			['core/heading', { level: headingLevel(), content: this.props.attributes.time_heading, className: 'ctlb-block-title', style: {spacing: {padding:{top: '0px',left: '0px',bottom: '0px', right: '0px'}}}}], // Default: Heading block with level 2 and default content
-			['core/paragraph', { content: this.props.attributes.time_desc, placeholder: __('Add your description here','timeline-block'), className: 'ctlb-block-desc', style: {spacing : {padding:{top: '0px',left: '0px',bottom: '0px', right: '0px'}}}}], // Default: Paragraph block with default content
+			['core/heading', { level: headingLevel(), content: this.props.attributes.time_heading, className: 'ctlb-block-title', ...legacySpacing}], // Default: Heading block with level 2 and default content
+			['core/paragraph', { content: this.props.attributes.time_desc, placeholder: __('Add your description here','timeline-block'), className: 'ctlb-block-desc', ...legacySpacing}], // Default: Paragraph block with default content
 		);
 
 		
@@ -149,29 +170,57 @@ class Edit extends Component {
 				'cp-timeline/timelineLayout': timelineLayout,
 			}
 		} = this.props;
+		// Add the image block (first press on "Image") and select it so it can be edited right away.
+		const addMediaBlock = () => {
+			this.innerBlockTemplate(true);
+			setTimeout(() => {
+				const mediaBlockId = select('core/block-editor').getBlock(this.props.clientId).innerBlocks[0].clientId;
+				wp.data.dispatch('core/block-editor').selectBlock(mediaBlockId);
+			}, 50);
+		};
 		const StoryDetail = () => (
 			<div className="story-details">
-				{ mediaBlock ?
-				<Button isSmall isSecondary onClick={() => this.innerBlockTemplate(false)} 
-				style={{marginBottom: '10px',
-                        marginLeft: '9px',
-                        marginTop: '9px'}}>{__('Remove Media Block',"timeline-block")}</Button> :
-				<Button isSmall isSecondary 
-				onClick={
-					()=> 
-					{
-						this.innerBlockTemplate(true);
-						setTimeout(()=>{
-							const mediaBlock=select( 'core/block-editor' ).getBlock(this.props.clientId).innerBlocks[0].clientId;
-							wp.data.dispatch('core/block-editor').selectBlock(mediaBlock);
-						},50);
-					}
-					}
-					style={{marginBottom: '10px' , marginLeft: '9px', marginTop: '9px'}}>
-					{__('Add Media Block', 'timeline-block')}
-				</Button>
-				}
-				<div className="story-content">
+				<div className={`story-content${mediaBlock ? '' : ' is-empty'}`}>
+					<div className="ctlb-media-toolbar" role="toolbar" aria-label={__('Media type', 'timeline-block')}>
+						<Button
+							className={`ctlb-media-toolbar__btn${mediaBlock ? ' is-active' : ''}`}
+							label={__('Image', 'timeline-block')}
+							showTooltip
+							aria-pressed={!!mediaBlock}
+							onClick={() => !mediaBlock && addMediaBlock()}
+						>
+							<ToolbarIcon name="image" />
+						</Button>
+						<Button
+							className="ctlb-media-toolbar__btn ctlb-media-toolbar__btn--pro"
+							label={__('Video (Pro)', 'timeline-block')}
+							showTooltip
+							onClick={openProUpgrade}
+						>
+							<ToolbarIcon name="video" />
+						</Button>
+						<Button
+							className="ctlb-media-toolbar__btn ctlb-media-toolbar__btn--pro"
+							label={__('Gallery (Pro)', 'timeline-block')}
+							showTooltip
+							onClick={openProUpgrade}
+						>
+							<ToolbarIcon name="gallery" />
+						</Button>
+						{mediaBlock && (
+							<>
+								<span className="ctlb-media-toolbar__divider" aria-hidden="true"></span>
+								<Button
+									className="ctlb-media-toolbar__btn ctlb-media-toolbar__btn--remove"
+									label={__('Remove media', 'timeline-block')}
+									showTooltip
+									onClick={() => this.innerBlockTemplate(false)}
+								>
+									<ToolbarIcon name="trash" />
+								</Button>
+							</>
+						)}
+					</div>
 					<InnerBlocks
 						template={innerBlockTemplate}
 						allowedBlocks={['core/image', 'core/heading', 'core/paragraph', 'core/list','core/buttons']}
@@ -194,53 +243,19 @@ class Edit extends Component {
 
 		const content_control = (
 			<InspectorControls>
-				<div style={{ 'marginBottom': 15 + 'px','textAlign':'center' }}>
-				<Button
-					isSecondary
-					icon={'arrow-left-alt'}
-					onClick={() => {
-						const parentBlockId = select( 'core/block-editor' ).getBlockHierarchyRootClientId( this.props.clientId );
-						wp.data.dispatch('core/block-editor').selectBlock(parentBlockId);
-					}
-					}
-				>GO TO SETTINGS</Button>
+				<div className="cooltimeline-tab-settings ctlb-child-settings">
+					<TimelineSettingsLink clientId={this.props.clientId} />
+					<CardBody>
+						<div className="ctlb-style-element-card ctlb-general-card">
+							<StorySettingsPanel
+								collapsible={false}
+								attributes={this.props.attributes}
+								setAttributes={setAttributes}
+								clientId={this.props.clientId}
+							/>
+						</div>
+					</CardBody>
 				</div>
-				<PanelBody title={__("Story Settings","timeline-block")}>
-					<TextControl
-						label="Primary Label(Date/Steps)"
-						placeholder={ __( 'Date/Steps', 'timeline-block' ) }
-						value={t_date === 'ctl_date_undefined' ? '' : t_date} 
-						onChange={ ( value ) => {
-							const date='' === value ? 'ctl_date_undefined' : value;
-							setAttributes({t_date:date })
-						}}	
-						__nextHasNoMarginBottom={true}
-						__next40pxDefaultSize={ true }
-					/>
-					<hr className="timeline-block-editor__separator"></hr>
-					<div className="timeline-block-settings-labels">{__("Story Icon", "timeline-block")}</div>
-					<ButtonGroup className="cool-timeline-content-alignment-buttons">
-						<Button isSmall onClick={(e) => { setAttributes({ iconToggle: 'false' }) }} className={iconToggle == 'false' ? 'active' : ''}>DOT</Button>
-						<Button isSmall onClick={(e) => { setAttributes({ iconToggle: 'true' }) }} className={iconToggle == 'true' ? 'active' : ''}>Icon</Button>
-					</ButtonGroup>
-					{iconToggle == "true" ?
-						<Fragment>  <div className="timeline-block-iconpicker" >
-							<IconPicker icon={icon} onChange={v => setAttributes({ icon: v })}/>
-							</div>
-						</Fragment>
-						: null}
-					{timelineLayout == "vertical" && timelineDesign == "both-sided" && storyPositionHide ? //hide story position if alternating sided on
-						<Fragment>
-							<hr className="timeline-block-editor__separator"></hr>
-							<div className="timeline-block-settings-labels">{__("Story position", "timeline-block")}</div>
-							<ButtonGroup className="cool-timeline-content-alignment-buttons">
-								<Button isSmall onClick={(e) => { setAttributes({ blockPosition: 'left', block_position_active: true }) }} className={blockPosition == 'left' ? 'active' : ''}>Left</Button>
-								<Button isSmall onClick={(e) => { setAttributes({ blockPosition: 'right', block_position_active: true }) }} className={blockPosition == 'right' ? 'active' : ''}>Right</Button>
-							</ButtonGroup>
-						</Fragment>
-						: null
-					}
-				</PanelBody>
 			</InspectorControls>
 		);
 		const icon_div = <div className="timeline-block-icon">
@@ -286,7 +301,7 @@ class Edit extends Component {
 		);
 	}
 
-	componentDidUpdate(){
+	componentDidUpdate(prevProps){
 		const childBlocks=select("core/block-editor").getBlock(this.props.clientId)?.innerBlocks;
 		if(childBlocks){
 			const paragraphBlock=childBlocks.filter(block=>{ return "core/paragraph" === block.name })[0];

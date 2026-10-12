@@ -375,6 +375,10 @@
   margin-top: 18px;
 }
 
+.ctlb-new-design.cool-vertical-timeline-body .timeline-content .story-time {
+  margin-top: 34px;
+}
+
 .cool-vertical-timeline-body .ctl-row .ctl-6 {
   width: 50%;
   float: left;
@@ -417,6 +421,10 @@
 
 .cool-vertical-timeline-body.one-sided.right .timeline-content .timeline-block-detail {
   width: 70%;
+}
+
+.ctlb-new-design.cool-vertical-timeline-body.one-sided.right .timeline-content .timeline-block-detail {
+  padding:0 5px 0 0;
 }
 
 .cool-vertical-timeline-body.one-sided.right .timeline-content .timeline-block-time {
@@ -560,6 +568,9 @@
   font-size: var(--ctlb-icon-size);
   transform: translateY(-50%);
 }
+.ctlb-new-design.cool-vertical-timeline-body .timeline-content.icon-true .timeline-block-icon {
+  margin-top:46px;
+}
 
 .cool-vertical-timeline-body.ctlb-wrapper .timeline-content.icon-true .timeline-block-icon .iconpicker-item {
   font-size: var(--ctlb-icon-size) !important;
@@ -576,6 +587,11 @@
   top: 31px;
   font-size: 20px;
 }
+
+.ctlb-new-design.cool-vertical-timeline-body .timeline-content.icon-false .timeline-block-icon {
+  top: 42px;
+}
+
 
 .cool-vertical-timeline-body.both-sided .timeline-content.icon-false .timeline-block-icon{
   left: var(--ctlb-icon-box-size, 20px);
@@ -755,7 +771,7 @@ transform: translate(0%);
     margin-bottom: 0px;
   }
 
-  .cool-vertical-timeline-body .timeline-content.icon-true .timeline-block-icon {
+  .cool-vertical-timeline-body:not(.ctlb-new-design) .timeline-content.icon-true .timeline-block-icon {
     top: 71px;
     max-height: 40px;
     max-width: 40px;
@@ -763,6 +779,16 @@ transform: translate(0%);
     transform: translate(-50%, -50%) !important;
     margin-top: 21px !important;
   }
+  .ctlb-new-design.cool-vertical-timeline-body .timeline-content.icon-true .timeline-block-icon {
+    top: 71px;
+    max-height: 40px;
+    max-width: 40px;
+    left: -1px;
+    transform: translate(-50%, -50%) !important;
+    margin-top: 46px !important;
+    z-index:2;
+  }
+
 
   .cool-vertical-timeline-body.ctlb-wrapper .timeline-content.icon-true .timeline-block-icon{
     min-width: unset;
@@ -786,12 +812,25 @@ transform: translate(0%);
     margin-top: 21px !important;
     min-width: unset !important;
   }
+  .ctlb-new-design.cool-vertical-timeline-body.one-sided.right .timeline-content.icon-true .timeline-block-icon {
+    top: 81px !important;
+    left: auto !important;
+    right: 4px !important;
+    margin-left: 0 !important;
+    transform: unset !important;
+    margin-top: 21px !important;
+    min-width: unset !important;
+  }
+
 
   .cool-vertical-timeline-body.one-sided.left .timeline-content.icon-false .timeline-block-icon {
     top: 88px;
   }
   .cool-vertical-timeline-body.ctlb-wrapper.one-sided.left .timeline-content.icon-false .timeline-block-icon {
     top: 89px;
+  }
+  .ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper.one-sided.left .timeline-content.icon-false .timeline-block-icon {
+    top: 115px;
   }
   
   .cool-vertical-timeline-body.one-sided.right .timeline-content.icon-false .timeline-block-icon {
@@ -807,6 +846,9 @@ transform: translate(0%);
     min-width: unset !important;
     left: 9px !important;
     font-size: 20px;
+  }
+  .ctlb-new-design.cool-vertical-timeline-body.ctlb-new-design .timeline-content.icon-false .timeline-block-icon {
+    top: 115px;
   }
 
   .cool-vertical-timeline-body.one-sided.left .timeline-content.icon-false .timeline-block-icon svg {
@@ -848,6 +890,7 @@ transform: translate(0%);
   .cool-vertical-timeline-body.one-sided .ctl-6.timeline-block-time {
     margin-bottom: 20px;
   }
+ 
 
   .cool-vertical-timeline-body:before {
     margin: 13px;
@@ -929,6 +972,12 @@ transform: translate(0%);
     width: 100%;
     padding: 0 60px 0 0;
   }
+  .ctlb-new-design.cool-vertical-timeline-body.one-sided.right .timeline-content .timeline-block-detail,
+  .ctlb-new-design.cool-vertical-timeline-body.one-sided.right .timeline-content.icon-true .timeline-block-detail {
+    width: 100%;
+    padding: 0 72px 0 0;
+  }
+
 
   .cool-vertical-timeline-body.one-sided.right .timeline-content .timeline-block-time {
     width: 100%;
@@ -981,7 +1030,7 @@ transform: translate(0%);
     right: 0px !important;
   }
 
-  .cool-vertical-timeline-body:not(.one-sided) .timeline-content.icon-false .timeline-block-icon{
+  .cool-vertical-timeline-body:not(.one-sided,.ctlb-new-design) .timeline-content.icon-false .timeline-block-icon{
     left: 9px !important;
     transform: translateX(-100%) !important;
     top: 80px;
@@ -1000,3 +1049,109 @@ transform: translate(0%);
   }
   // Deprecated version responsive css end
 }
+
+// New design css start
+// Every rule is scoped to .ctlb-new-design (added only after migrate or on new installs),
+// so the legacy design above stays untouched for everyone else.
+
+// :where() keeps these defaults at the base selector's specificity, so per-block settings still win.
+.cool-vertical-timeline-body:where(.ctlb-new-design) {
+  --ctlb-content-alignment: left;
+  --ctlb-date-font-weight: 600;
+  --ctlb-head-font-weight: 700;
+  --ctlb-titile-bt-spacing: 8px;
+  --ctlb-sub-head-font-size: 17px;
+  --ctlb-sub-head-line-height: 30px;
+  --ctlb-sub-heading-color: #333;
+  --ctlb-line-color: #C7374B;
+  --ctlb-icon-bg: #C7374B;
+  --ctlb-story-border-color: #ccc;
+}
+
+.ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper::before {
+  background: var(--ctlb-line-color);
+  opacity: 1;
+  border-radius: var(--ctlb-middle-line-size);
+}
+
+.ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper .timeline-content .ctl-row .story-details {
+  padding: var(--ctlb-container-top-padding, 22px) var(--ctlb-container-right-padding, 22px) var(--ctlb-container-bottom-padding, 22px) var(--ctlb-container-left-padding, 22px);
+  background: #fff;
+  border: 1px solid var(--ctlb-story-border-color);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.1);
+  margin:0 0 0 4px;
+}
+
+// Arrow: rotated square instead of the legacy 15px border triangle. The half-fill gradient
+// covers the card border where the arrow joins the card.
+.ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper .timeline-content .ctl-row .story-details::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 30px;
+  width: 30px;
+  height: 30px;
+  margin: 0;
+  border: 0 solid var(--ctlb-story-border-color);
+  transform: rotate(45deg);
+  z-index: 2;
+}
+
+.ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper:is(.both-sided, .alternating-sided) .timeline-content .position-right .story-details::before,
+.ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper.one-sided.left .timeline-content .ctl-row .story-details::before {
+  left: -16px;
+  right: auto;
+  border-width: 0 0 1px 1px;
+  background: linear-gradient(to top right, #fff 52%, transparent 48%);
+}
+
+.ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper:is(.both-sided, .alternating-sided) .timeline-content .position-left .story-details::before,
+.ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper.one-sided.right .timeline-content .ctl-row .story-details::before {
+  left: auto;
+  right: -16px;
+  border-width: 1px 1px 0 0;
+  background: linear-gradient(to bottom left, #fff 52%, transparent 48%);
+}
+
+.ctlb-new-design.cool-vertical-timeline-body .story-details :where(.timeline-block_title, .ctlb-block-title) {
+  font-size: var(--ctlb-head-font-size, 20px);
+  line-height: var(--ctlb-head-line-height, 30px);
+}
+
+.ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper .timeline-content.icon-false .timeline-block-icon svg {
+  border-radius: 50%;
+}
+
+// Media radius follows the card radius at 75%, same as Timeline Block Pro.
+.ctlb-new-design.cool-vertical-timeline-body .story-details .story-image {
+  margin-bottom: 16px;
+}
+
+.ctlb-new-design.cool-vertical-timeline-body .story-details .story-image img,
+.ctlb-new-design.cool-vertical-timeline-body .story-content .wp-block-image img {
+  display: block;
+  width: 100%;
+  border-radius: 15px;
+}
+
+.ctlb-new-design.cool-vertical-timeline-body .story-content > :where(.wp-block-image, .wp-block-embed, .wp-block-video) {
+  margin-bottom: 16px;
+}
+
+@media (max-width: 767px) {
+
+  // Legacy mobile rules force the arrow transform with !important.
+  .ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper .timeline-content .ctl-row .story-details::before {
+    transform: rotate(45deg) !important;
+  }
+
+  // Mobile stacks every card to the right of the line, so left-side cards point left too.
+  .ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper:is(.both-sided, .alternating-sided) .timeline-content .position-left .story-details::before {
+    left: -16px;
+    right: auto;
+    border-width: 0 0 1px 1px;
+    background: linear-gradient(to top right, #fff 52%, transparent 48%);
+  }
+}
+// New design css end

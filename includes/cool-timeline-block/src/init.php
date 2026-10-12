@@ -6,39 +6,171 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-add_action( 'wp_head', 'cltb_timeline_block_load_post_assets' );
-function ctlb_get_all_blocks( $blocks ) {
-	$all_blocks = array();
-
-	foreach ( $blocks as $block ) {
-
-		$all_blocks[] = $block;
-
-		if ( ! empty( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) ) {
-			$all_blocks = array_merge(
-				$all_blocks,
-				ctlb_get_all_blocks( $block['innerBlocks'] )
-			);
-		}
-
-		// Resolve reusable blocks and synced patterns (core/block with ref).
-		if ( isset( $block['blockName'] ) && 'core/block' === $block['blockName'] && ! empty( $block['attrs']['ref'] ) ) {
-			$reusable_id = absint( $block['attrs']['ref'] );
-			if ( $reusable_id && 'wp_block' === get_post_type( $reusable_id ) ) {
-				$reusable_post = get_post( $reusable_id );
-				if ( $reusable_post && ! empty( $reusable_post->post_content ) ) {
-					$reusable_blocks = parse_blocks( $reusable_post->post_content );
-					$all_blocks      = array_merge(
-						$all_blocks,
-						ctlb_get_all_blocks( $reusable_blocks )
-					);
-				}
-			}
-		}
+/**
+ * Whether timelines should render with the new design.
+ *
+ * Old installs keep the legacy design until an admin opts in from the welcome notice.
+ *
+ * @return bool
+ */
+function ctlb_is_new_design() {
+	if ( 'yes' === get_option( 'ctlb_migrate_new_design' ) ) {
+		return true;
 	}
 
-	return $all_blocks;
+	if ( 'yes' === get_option( 'ctlb_keep_legacy_design' ) ) {
+		return false;
+	}
+
+	$initial_version = trim( (string) get_option( 'ctlb-initial-save-version', '' ) );
+	if ( '' === $initial_version ) {
+		return false;
+	}
+
+	$refresh_version = defined( 'CTLB_DESIGN_REFRESH_VERSION' ) ? CTLB_DESIGN_REFRESH_VERSION : '2.0.0';
+
+	return version_compare( $initial_version, $refresh_version, '>=' );
 }
+
+add_filter( 'render_block', 'ctlb_add_new_design_class', 10, 2 );
+/**
+ * Add the ctlb-new-design class to the timeline wrapper at render time, so saved post content never changes.
+ *
+ * @param string $block_content Rendered block HTML.
+ * @param array  $block         Parsed block.
+ * @return string
+ */
+function ctlb_add_new_design_class( $block_content, $block ) {
+	if ( ! isset( $block['blockName'] ) || 'cp-timeline/content-timeline-block' !== $block['blockName'] ) {
+		return $block_content;
+	}
+
+	if ( ! ctlb_is_new_design() ) {
+		return $block_content;
+	}
+
+	// Mirrors the editor's one-time "Reset all" of story padding/margin: until a post has been opened
+	// and saved after migrating (coreSpacingReset), drop that inline spacing at render time instead.
+	if ( empty( $block['attrs']['coreSpacingReset'] ) ) {
+		$block_content = ctlb_strip_legacy_story_spacing( $block_content );
+	}
+
+	if ( false !== strpos( $block_content, 'ctlb-new-design' ) ) {
+		return $block_content;
+	}
+
+	$patched = preg_replace(
+		'/(<div\b[^>]*\bclass="[^"]*\bctlb-wrapper\b)/',
+		'$1 ctlb-new-design',
+		$block_content,
+		1
+	);
+
+	return ( null === $patched ) ? $block_content : $patched;
+}
+
+/**
+ * Removes inline padding/margin from the headings and paragraphs of a timeline.
+ *
+ * Older timelines store spacing on every story's title and description block (style="padding-top:0px;..."),
+ * which the new design's own spacing must not be overridden by. Other inline styles (colour, font size, ...)
+ * are kept, and a style attribute left empty is dropped.
+ *
+ * @param string $html Rendered timeline block HTML.
+ * @return string
+ */
+function ctlb_strip_legacy_story_spacing( $html ) {
+	$stripped = preg_replace_callback(
+		'/<(h[1-6]|p)\b([^>]*?)\sstyle="([^"]*)"([^>]*)>/i',
+		function ( $matches ) {
+			$kept = array();
+			foreach ( explode( ';', $matches[3] ) as $declaration ) {
+				$declaration = trim( $declaration );
+				if ( '' === $declaration ) {
+					continue;
+				}
+				if ( preg_match( '/^(padding|margin)(-(top|right|bottom|left|block|inline)(-(start|end))?)?\s*:/i', $declaration ) ) {
+					continue;
+				}
+				$kept[] = $declaration;
+			}
+			$style = $kept ? ' style="' . implode( ';', $kept ) . '"' : '';
+			return '<' . $matches[1] . $matches[2] . $style . $matches[4] . '>';
+		},
+		$html
+	);
+
+	return ( null === $stripped ) ? $html : $stripped;
+}
+
+add_action( 'wp_head', 'cltb_timeline_block_load_post_assets' );
+
+function ctlb_get_all_blocks( $blocks, &$seen = array(), $depth = 0 ) {
+
+    // Prevent unbounded recursion.
+    if ( $depth > 10 || ! is_array( $blocks ) ) {
+        return array();
+    }
+
+    $all_blocks = array();
+
+    foreach ( $blocks as $block ) {
+
+        if ( ! is_array( $block ) ) {
+            continue;
+        }
+
+        $all_blocks[] = $block;
+
+        // Process nested blocks.
+        if ( ! empty( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) ) {
+            $all_blocks = array_merge(
+                $all_blocks,
+                ctlb_get_all_blocks(
+                    $block['innerBlocks'],
+                    $seen,
+                    $depth + 1
+                )
+            );
+        }
+
+        // Resolve reusable blocks and synced patterns.
+        if (
+            isset( $block['blockName'] ) &&
+            'core/block' === $block['blockName'] &&
+            ! empty( $block['attrs']['ref'] )
+        ) {
+            $reusable_id = absint( $block['attrs']['ref'] );
+
+            if (
+                $reusable_id &&
+                ! isset( $seen[ $reusable_id ] ) &&
+                'wp_block' === get_post_type( $reusable_id )
+            ) {
+                // Mark as visited before recursion to prevent circular references.
+                $seen[ $reusable_id ] = true;
+
+                $reusable_post = get_post( $reusable_id );
+
+                if ( $reusable_post && ! empty( $reusable_post->post_content ) ) {
+                    $reusable_blocks = parse_blocks( $reusable_post->post_content );
+
+                    $all_blocks = array_merge(
+                        $all_blocks,
+                        ctlb_get_all_blocks(
+                            $reusable_blocks,
+                            $seen,
+                            $depth + 1
+                        )
+                    );
+                }
+            }
+        }
+    }
+
+    return $all_blocks;
+}
+
 
 function cltb_timeline_block_load_post_assets() {// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 	global $post;
@@ -157,20 +289,44 @@ function ctlb_timeline_get_font_url( $font_set ) {
  * - editor_script → editor only
  */
 function cltb_cp_timeline_cgb_block_assets() { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+	$ctlb_block_dir  = Timeline_Block_Dir . 'includes/cool-timeline-block/';
+	$ctlb_asset_path = $ctlb_block_dir . 'dist/block.build.asset.php';
+	$ctlb_asset      = file_exists( $ctlb_asset_path ) ? include $ctlb_asset_path : array();
+	$ctlb_build_ver  = ! empty( $ctlb_asset['version'] ) ? $ctlb_asset['version'] : Timeline_Block_Version;
+	$ctlb_common_css = $ctlb_block_dir . 'assets/common-block-editor.css';
+	$ctlb_common_ver = file_exists( $ctlb_common_css ) ? (string) filemtime( $ctlb_common_css ) : Timeline_Block_Version;
+
 	// Frontend / shared block CSS — no editor/admin dependencies.
 	wp_register_style(
 		'cltb_cp_timeline-cgb-style',
 		Timeline_Block_Url . 'includes/cool-timeline-block/dist/style-index.css',
 		array(),
-		null // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+		$ctlb_build_ver
 	);
 
 	wp_register_script(
 		'cltb_cp_timeline-cgb-block-js',
 		Timeline_Block_Url . 'includes/cool-timeline-block/dist/block.build.js',
 		array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-block-editor' ),
-		null, // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+		$ctlb_build_ver,
 		true
+	);
+
+	wp_localize_script(
+		'cltb_cp_timeline-cgb-block-js',
+		'cgbGlobal',
+		array(
+			'isNewDesign' => ctlb_is_new_design(),
+		)
+	);
+
+	// Sidebar footer: the Pro plugin turns this on through the filter (no upgrade button, solid "View demos").
+	wp_localize_script(
+		'cltb_cp_timeline-cgb-block-js',
+		'ctlBlockData',
+		array(
+			'isPro' => (bool) apply_filters( 'ctlb_is_pro', false ),
+		)
 	);
 
 	// Editor-only CSS — loaded via register_block_type() editor_style (not block.json;
@@ -179,7 +335,7 @@ function cltb_cp_timeline_cgb_block_assets() { // phpcs:ignore WordPress.NamingC
 		'timeline-block-common-editor-css',
 		Timeline_Block_Url . 'includes/cool-timeline-block/assets/common-block-editor.css',
 		array( 'wp-edit-blocks' ),
-		null // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+		$ctlb_common_ver
 	);
 
 	// Built editor CSS from webpack.
@@ -187,7 +343,7 @@ function cltb_cp_timeline_cgb_block_assets() { // phpcs:ignore WordPress.NamingC
 		'cltb_cp_timeline-cgb-block-editor-css',
 		Timeline_Block_Url . 'includes/cool-timeline-block/dist/index.css',
 		array( 'wp-edit-blocks', 'timeline-block-common-editor-css' ),
-		null // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+		$ctlb_build_ver
 	);
 
 	if ( function_exists( 'register_block_type' ) ) {
