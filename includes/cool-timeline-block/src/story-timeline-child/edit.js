@@ -79,7 +79,10 @@ class Edit extends Component {
 			innerBlocks.forEach((block, index) => {
 				if(index > (currentIndex + 1)){
 					const blockpostion=index % 2 !== currentPostion ? currentBlockPostion : this.props.attributes.blockPosition;
-					block.attributes.blockPosition = blockpostion, block.attributes.storyPositionHide=!parentAttribute.OrientationCheckBox
+					dispatch('core/block-editor').updateBlockAttributes(block.clientId, {
+						blockPosition: blockpostion,
+						storyPositionHide: !parentAttribute.OrientationCheckBox,
+					});
 				}
 			});
 		}

@@ -97,11 +97,21 @@ class Edit extends Component {
 		}
 	}
 
-	onUpdateHeadingTag = (e) => {
-		this.props.setAttributes({headingTag: e});
-		const blocks = select("core/block-editor").getBlock(this.props.clientId).innerBlocks
-		blocks.forEach((block, index) => {block.attributes.headingTag=e});
-	};
+			
+		onUpdateHeadingTag = (e) => {
+			this.props.setAttributes({ headingTag: e });
+
+			const blocks = select("core/block-editor")
+				.getBlock(this.props.clientId)?.innerBlocks || [];
+
+			blocks.forEach((block) => {
+				dispatch("core/block-editor").updateBlockAttributes(
+					block.clientId,
+					{ headingTag: e }
+				);
+			});
+		};
+
 	getDocument(){
 		if(this.ref.current && this.ref.current.ownerDocument){
 		return this.ref.current.ownerDocument;
@@ -926,24 +936,6 @@ class Edit extends Component {
 			isPreview ? <img width='100%' src={ preview } alt=''/>:
 			<Fragment>
 				  <div>
-					  { timelineDesign == "vertical" ?
-			  <BlockControls group="block">
-				<ToolbarDropdownMenu
-					icon="layout"
-					label="Layout"
-					controls={ [
-						{
-							title: __('Both sides', 'timeline-block'),                  
-							onClick: () => setAttributes({timelinDesign:"both-sided"}) ,
-						},
-						{
-							title: __('One side', 'timeline-block'),
-							onClick: () => setAttributes({timelinDesign:"one-sided"}),
-						},
-					] }
-					/>
-			</BlockControls>
-				:null}
 			{ loadHeadGoogleFonts }
 			 {loadSubHeadGoogleFonts }
 			{settingTabs}
