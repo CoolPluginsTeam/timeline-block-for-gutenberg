@@ -58,9 +58,9 @@ Just search **‘Timeline Block‘** from the block editor **‘Add Block‘** s
 **Use of 3rd Party Services:** This plugin connects to the Cool Plugins feedback server only for optional usage data sharing and voluntary feedback submission (for example, during plugin deactivation). Data is transmitted solely after explicit user consent. No hidden tracking is performed, and no frontend visitor or site user data is collected.  For more details, please review our [Data Usage Policy](https://my.coolplugins.net/terms/usage-tracking/), [TOS](https://my.coolplugins.net/terms/), and [Privacy Policy](https://my.coolplugins.net/terms/privacy-policy/).
 
 == Screenshots ==
-1. Gutenberg Timeline Block Preview
-2. Gutenberg Timeline Edit Story settings
-3. Gutenberg Timeline Block Settings
+1. Gutenberg Timeline Block Settings
+2. Gutenberg Timeline Block Preview
+3. Gutenberg Timeline Edit Story settings
 
 == Installation ==
 
