@@ -109,7 +109,7 @@ const VisualOptionControl = ({
 							className={`ctlb-visual-option${isActive ? ' is-active' : ''}${option.pro ? ' is-pro' : ''}`}
 							onClick={() => {
 								if (option.pro) {
-									window.open(PRO_UPGRADE_URL, '_blank', 'noopener,noreferrer');
+									window.open(option.url || PRO_UPGRADE_URL, '_blank', 'noopener,noreferrer');
 									return;
 								}
 								if (option.value !== value) {

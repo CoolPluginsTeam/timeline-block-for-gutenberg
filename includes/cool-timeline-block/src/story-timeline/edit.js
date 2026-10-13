@@ -15,7 +15,15 @@ import { IconPicker } from "../component/Icons/index.js";
 // // Import Web font loader for google fonts.y
 import WebfontLoader from "../component/typography/fontloader.js";
 import VisualOptionControl, { LayoutIcons } from "../component/customComponents/VisualOptionControl.js";
-import { ProLock, ProBadge, ProOptionButton, openProUpgrade } from "../component/ProFeature.js";
+import {
+	ProLock,
+	ProBadge,
+	ProOptionButton,
+	openProUpgrade,
+	PRO_UPGRADE_STYLE_URL,
+	PRO_UPGRADE_ADVANCED_URL,
+	ProUpgradeContext,
+} from "../component/ProFeature.js";
 import StorySidePicker from "../component/sidePicker/StorySidePicker.js";
 import SidebarFooter from "./SidebarFooter.js";
 const { Component, Fragment, createRef } = wp.element
@@ -261,7 +269,9 @@ class Edit extends Component {
 				this.setState({ advancedPanel: willOpen ? panelId : null });
 			},
 		});
-		const general_setting=<CardBody className="ctlb-panel-stack">
+		const general_setting = (
+			<ProUpgradeContext.Provider value={PRO_UPGRADE_STYLE_URL}>
+				<CardBody className="ctlb-panel-stack">
 		<PanelBody title={panelTitle("heading", __("Heading", "timeline-block"))} {...stylePanelProps('heading')}>
 		<TypographyControl
 			label={ __( "Typography",'timeline-block' ) }
@@ -426,9 +436,12 @@ class Edit extends Component {
 		/>
 	</ProLock>
 		</PanelBody>
-</CardBody>
-		const advanced_setting =
-		<CardBody className="ctlb-panel-stack">
+				</CardBody>
+			</ProUpgradeContext.Provider>
+		);
+		const advanced_setting = (
+			<ProUpgradeContext.Provider value={PRO_UPGRADE_ADVANCED_URL}>
+				<CardBody className="ctlb-panel-stack">
 		<PanelBody title={panelTitle("align-wide", __("Center Line", "timeline-block"))} {...advancedPanelProps('center-line')}>
 			<div className="ctlb-pro-field-header">
 				<h2 className="ctlb-label-heading">{__("Line Filling", "timeline-block")}</h2>
@@ -776,7 +789,9 @@ class Edit extends Component {
 				<p className="ctlb-setting-description">{__("Please note: This change will only be reflected on the frontend.", "timeline-block")}</p>
 			</ProLock>
 		</PanelBody>
-		</CardBody>
+				</CardBody>
+			</ProUpgradeContext.Provider>
+		);
 		const footer_links = (
 			<SidebarFooter layout={timelineLayout} isPro={!!window.ctlBlockData?.isPro} />
 		);
@@ -820,8 +835,20 @@ class Edit extends Component {
 				onChange={handleLayoutChange}
 				options={[
 					{ value: "vertical", label: __("Vertical", "timeline-block"), icon: LayoutIcons.vertical },
-					{ value: "horizontal", label: __("Horizontal", "timeline-block"), icon: LayoutIcons.horizontal, pro: true },
-					{ value: "modern-vertical", label: __("Tabs", "timeline-block"), icon: LayoutIcons['modern-vertical'], pro: true },
+					{
+						value: "horizontal",
+						label: __("Horizontal", "timeline-block"),
+						icon: LayoutIcons.horizontal,
+						pro: true,
+						url: "https://cooltimeline.com/block/horizontal-default-timeline/?utm_source=tbg_plugin&utm_medium=inside&utm_campaign=demo&utm_content=block_editor_horizontal",
+					},
+					{
+						value: "modern-vertical",
+						label: __("Tabs", "timeline-block"),
+						icon: LayoutIcons['modern-vertical'],
+						pro: true,
+						url: "https://cooltimeline.com/block/vertical-tab-timeline/?utm_source=tbg_plugin&utm_medium=inside&utm_campaign=demo&utm_content=block_editor_tabs",
+					},
 				]}
 			/>
 			{timelineLayout == "vertical" ?
