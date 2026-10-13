@@ -58,10 +58,9 @@ Just search **‘Timeline Block‘** from the block editor **‘Add Block‘** s
 **Use of 3rd Party Services:** This plugin connects to the Cool Plugins feedback server only for optional usage data sharing and voluntary feedback submission (for example, during plugin deactivation). Data is transmitted solely after explicit user consent. No hidden tracking is performed, and no frontend visitor or site user data is collected.  For more details, please review our [Data Usage Policy](https://my.coolplugins.net/terms/usage-tracking/), [TOS](https://my.coolplugins.net/terms/), and [Privacy Policy](https://my.coolplugins.net/terms/privacy-policy/).
 
 == Screenshots ==
-1. Gutenberg Timeline Block Preview
-2. Gutenberg Timeline Edit Story settings
-3. Gutenberg Timeline Block Settings
-
+1. Two Sided Vertical Timeline
+2. One Sided Vertical Timeline
+3. Timeline Block Preview
 == Installation ==
 
 * From the WordPress dashboard, navigate to **Plugins > Add New**.
@@ -134,7 +133,8 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
-Upgrade to Version 1.8.0 to enjoy these new features, enhancements, and bug fixes. Your feedback is invaluable as we continue to refine and improve our plugins.
+Upgrade to Version 2.0.0 to enjoy these new features, enhancements, and bug fixes. Your feedback is invaluable as we continue to refine and improve our plugins.
+
 = Version 2.0.0 | 13 October 2026 =
 * **Major Design Enhancement:** Completely refreshed timeline design with modern styling, improved layouts, typography, spacing, cards, icons, images, and enhanced customization options.
 * **Responsive Design:** Optimized timeline layouts and readability across desktop, tablet, and mobile devices.

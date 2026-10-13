@@ -413,7 +413,7 @@ if ( ! class_exists( 'CoolTimelineBlock' ) ) {
 						'id'          => 'timeline-block',
 						'name'        => $name,
 						'plugin_file' => Timeline_Block_File,
-						'review_url'  => 'https://wordpress.org/plugins/timeline-block/',
+						'review_url'  => 'https://wordpress.org/support/plugin/timeline-block/reviews/#new-post',
 						'capability'  => 'activate_plugins',
 						'quiet_days'  => 1,
 						'own_screens' => array( 'timeline-addons_page_ctl-getting-started' ),
