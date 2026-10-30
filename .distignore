@@ -51,4 +51,7 @@ includes/cool-timeline-block/src/deprecated/
 includes/cool-timeline-block/src/story-timeline/
 includes/cool-timeline-block/src/story-timeline-child/
 includes/cool-timeline-block/src/*.css
+includes/cool-timeline-block/src/*.json
+includes/cool-timeline-block/src/*.js
+includes/cool-timeline-block/build-tools/
 .claude
