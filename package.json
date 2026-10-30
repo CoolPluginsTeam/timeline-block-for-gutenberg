@@ -1,0 +1,11 @@
+{
+  "name": "timeline-block-for-gutenberg",
+  "version": "1.2.2",
+  "description": "Timeline Block for Gutenberg",
+  "private": true,
+  "scripts": {
+    "build": "npm run build --prefix includes/cool-timeline-block",
+    "build:ctl": "npm run build:ctl --prefix includes/cool-timeline-block",
+    "start": "npm run start --prefix includes/cool-timeline-block"
+  }
+}

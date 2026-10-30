@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { IconPicker } from '../Icons/index.js';
 import StorySidePicker from '../sidePicker/StorySidePicker.js';
-import { ProLock, ProBadge, ProOptionButton } from '../ProFeature.js';
+import { ProLock, ProBadge, ProOptionButton, PRO_UPGRADE_STORY_URL, PRO_STORY_ICONS_DEMO_URL } from '../ProFeature.js';
 
 const { Button, ButtonGroup, TextControl, ToggleControl } = wp.components;
 const { useSelect } = wp.data;
@@ -110,8 +110,8 @@ const StorySettingsFields = ({ attributes, setAttributes, clientId }) => {
 					>
 						{__('Icon', 'timeline-block')}
 					</Button>
-					<ProOptionButton>{__('Image', 'timeline-block')}</ProOptionButton>
-					<ProOptionButton>{__('Text', 'timeline-block')}</ProOptionButton>
+					<ProOptionButton url={PRO_STORY_ICONS_DEMO_URL}>{__('Image', 'timeline-block')}</ProOptionButton>
+					<ProOptionButton url={PRO_STORY_ICONS_DEMO_URL}>{__('Text', 'timeline-block')}</ProOptionButton>
 				</ButtonGroup>
 			</div>
 			{['true', 'icon'].includes(attributes.iconToggle) ? (
@@ -124,7 +124,7 @@ const StorySettingsFields = ({ attributes, setAttributes, clientId }) => {
 				<span className="timeline-block-settings-labels">{__('Media type', 'timeline-block')}</span>
 				<ProBadge />
 			</div>
-			<ProLock hideBadge compact>
+			<ProLock hideBadge compact url={PRO_UPGRADE_STORY_URL}>
 				<ButtonGroup className="ctl_media_control ctlb-segmented">
 					<Button isSmall className="ctlb-segmented-btn is-active">
 						<span className="dashicons dashicons-format-image"></span>

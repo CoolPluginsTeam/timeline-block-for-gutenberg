@@ -4,7 +4,7 @@ const defaultConfig = parse.default;
 
 import path from 'path';
 import { fileURLToPath } from 'url';
-import sass from 'sass-embedded'; // optional but recommended
+import * as sass from 'sass-embedded';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -22,9 +22,8 @@ function patchSassLoaders(rules = []) {
           ...(typeof u === 'string' ? { loader: u } : u),
           options: {
             ...opts,
-            api: 'modern',               // ✅ valid value
-            implementation: sass,        // ✅ optional: use Sass Embedded
-            // sassOptions: { silenceDeprecations: ['legacy-js-api'] }, // ← only if you still see warnings
+            api: 'modern',
+            implementation: sass,
           },
         };
       }
@@ -35,15 +34,42 @@ function patchSassLoaders(rules = []) {
   });
 }
 
-export default {
-  ...defaultConfig,
-  module: {
-    ...(defaultConfig.module || {}),
-    rules: patchSassLoaders(defaultConfig.module?.rules || []),
-  },
-  output: {
-    ...(defaultConfig.output || {}),
-    filename: 'block.build.js',
-    path: path.resolve(__dirname, 'dist'),
-  },
+export default (env = {}, argv = {}) => {
+  const isCTL = Boolean(env && env.target === 'ctl') || process.env.BUILD_TARGET === 'ctl';
+
+  let rules = patchSassLoaders(defaultConfig.module?.rules || []);
+
+  if (isCTL) {
+    rules = [
+      {
+        test: /\.(jsx?|tsx?|s?css)$/,
+        enforce: 'pre',
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: path.resolve(__dirname, 'build-tools/ctl-slug-loader.cjs'),
+          },
+        ],
+      },
+      ...rules,
+    ];
+  }
+
+  return {
+    ...defaultConfig,
+    entry: {
+      index: path.resolve(__dirname, 'src/index.js'),
+    },
+    module: {
+      ...(defaultConfig.module || {}),
+      rules,
+    },
+    output: {
+      ...(defaultConfig.output || {}),
+      filename: isCTL ? 'index.js' : 'block.build.js',
+      path: isCTL
+        ? path.resolve(__dirname, '../../../cool-timeline/includes/cool-timeline-block/dist')
+        : path.resolve(__dirname, 'dist'),
+    },
+  };
 };

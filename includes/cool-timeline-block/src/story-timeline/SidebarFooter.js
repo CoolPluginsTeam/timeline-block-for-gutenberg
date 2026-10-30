@@ -4,22 +4,11 @@
  */
 import { __ } from '@wordpress/i18n';
 
-const DEMOS = {
-	vertical: 'https://cooltimeline.com/demo/timeline-block-pro/',
-	horizontal: 'https://coolplugins.net/demos/horizontal-timeline/',
-	tabs: 'https://coolplugins.net/demos/tabs-timeline/',
-};
+const DEMO_URL =
+	'https://cooltimeline.com/demo/timeline-block-pro/?utm_source=tbg_plugin&utm_medium=inside&utm_campaign=demo&utm_content=block_editor_footer';
 const REVIEW_URL = 'https://wordpress.org/support/plugin/timeline-block/reviews/#new-post';
-const UPGRADE_URL = 'https://cooltimeline.com/plugin/timeline-block-pro/';
-
-// The block stores the Tabs layout as "modern-vertical".
-const getKey = (layout) => {
-	const key = 'modern-vertical' === layout ? 'tabs' : layout;
-	return DEMOS[key] ? key : 'vertical';
-};
-
-const withUtm = (url, button, layout) =>
-	`${url}?utm_source=block-editor&utm_medium=sidebar-footer&utm_campaign=timeline&utm_content=${button}-${getKey(layout)}`;
+const UPGRADE_URL =
+	'https://cooltimeline.com/plugin/timeline-block-pro-for-gutenberg/?utm_source=tbg_plugin&utm_medium=inside&utm_campaign=get_pro&utm_content=block_editor_footer';
 
 // `external` is the same glyph as in @wordpress/icons (not bundled with this plugin); the crown is a plain path.
 const Icon = ({ size, d }) => (
@@ -36,10 +25,10 @@ const Link = ({ href, className, label, children }) => (
 	</a>
 );
 
-const SidebarFooter = ({ layout, isPro }) => (
+const SidebarFooter = ({ isPro }) => (
 	<div className="ctl-sidebar-footer">
 		<div className="ctl-sidebar-footer__row">
-			<Link href={withUtm(DEMOS[getKey(layout)], 'demos', layout)} className={isPro ? 'ctl-btn--solid' : 'ctl-btn--outline'}>
+			<Link href={DEMO_URL} className={isPro ? 'ctl-btn--solid' : 'ctl-btn--outline'}>
 				<Icon size={14} d={EXTERNAL} />
 				<span className="ctl-btn__label">{__('View demos', 'timeline-block')}</span>
 			</Link>
@@ -49,7 +38,7 @@ const SidebarFooter = ({ layout, isPro }) => (
 			</Link>
 		</div>
 		{!isPro && (
-			<Link href={withUtm(UPGRADE_URL, 'upgrade', layout)} className="ctl-btn--solid">
+			<Link href={UPGRADE_URL} className="ctl-btn--solid">
 				<Icon size={16} d={CROWN} />
 				<span className="ctl-btn__label">{__('Upgrade now', 'timeline-block')}</span>
 			</Link>

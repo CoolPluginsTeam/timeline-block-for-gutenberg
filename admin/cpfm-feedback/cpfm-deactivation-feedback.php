@@ -380,6 +380,8 @@ if ( ! class_exists( 'CPFM_Deactivation_Feedback' ) ) {
 			$env = CPFM_Environment::cpfm_environment();
 
 			$extra_details = isset( $env['extra_details'] ) && is_array( $env['extra_details'] ) ? $env['extra_details'] : array();
+            // Registration key this plugin used in cpfm_register() (e.g. 'twae').
+			$extra_details['plugin_id'] = sanitize_key( $id );
 
 			if ( ! empty( $cfg['onboarding_data'] ) ) {
 				$onboarding = get_option( (string) $cfg['onboarding_data'], array() );
