@@ -1,4 +1,4 @@
-.cool-vertical-timeline-body{
+.cool-vertical-timeline-body {
   --ctlb-content-alignment: '';
   --ctlb-date-fontsize: 18px;
   --ctlb-date-font-family: ;
@@ -24,23 +24,28 @@
   --ctlb-time-width: 100%;
 }
 
-.cool-vertical-timeline-body h1.timeline-block_title{
-  --ctlb-title-font-size: var(--ctlb-head-font-size,32px);
+.cool-vertical-timeline-body h1.timeline-block_title {
+  --ctlb-title-font-size: var(--ctlb-head-font-size, 32px);
 }
-.cool-vertical-timeline-body h2.timeline-block_title{
-  --ctlb-title-font-size: var(--ctlb-head-font-size,24px);
+
+.cool-vertical-timeline-body h2.timeline-block_title {
+  --ctlb-title-font-size: var(--ctlb-head-font-size, 24px);
 }
-.cool-vertical-timeline-body h3.timeline-block_title{
-  --ctlb-title-font-size: var(--ctlb-head-font-size,18.72px);
+
+.cool-vertical-timeline-body h3.timeline-block_title {
+  --ctlb-title-font-size: var(--ctlb-head-font-size, 18.72px);
 }
-.cool-vertical-timeline-body h4.timeline-block_title{
-  --ctlb-title-font-size: var(--ctlb-head-font-size,16px);
+
+.cool-vertical-timeline-body h4.timeline-block_title {
+  --ctlb-title-font-size: var(--ctlb-head-font-size, 16px);
 }
-.cool-vertical-timeline-body h5.timeline-block_title{
-  --ctlb-title-font-size: var(--ctlb-head-font-size,13.28px);
+
+.cool-vertical-timeline-body h5.timeline-block_title {
+  --ctlb-title-font-size: var(--ctlb-head-font-size, 13.28px);
 }
-.cool-vertical-timeline-body h6.timeline-block_title{
-  --ctlb-title-font-size: var(--ctlb-head-font-size,10.72px);
+
+.cool-vertical-timeline-body h6.timeline-block_title {
+  --ctlb-title-font-size: var(--ctlb-head-font-size, 10.72px);
 }
 
 .cool-vertical-timeline-body.one-sided.left:not(.ctlb-wrapper) {
@@ -257,7 +262,7 @@
 
 }
 
-.cool-vertical-timeline-body .timeline-content .story-details p:not(.timeline-block_desc,.ctlb-block-desc) {
+.cool-vertical-timeline-body .timeline-content .story-details p:not(.timeline-block_desc, .ctlb-block-desc) {
   font-size: 14px;
   margin: 0;
   font-weight: 400;
@@ -424,7 +429,7 @@
 }
 
 .ctlb-new-design.cool-vertical-timeline-body.one-sided.right .timeline-content .timeline-block-detail {
-  padding:0 5px 0 0;
+  padding: 0 5px 0 0;
 }
 
 .cool-vertical-timeline-body.one-sided.right .timeline-content .timeline-block-time {
@@ -506,11 +511,11 @@
   text-align: var(--ctlb-content-alignment);
 }
 
-.cool-vertical-timeline-body .story-details :where(.timeline-block_title, .ctlb-block-title)  {
+.cool-vertical-timeline-body .story-details :where(.timeline-block_title, .ctlb-block-title) {
   font-size: var(--ctlb-head-font-size);
   font-family: var(--ctlb-head-font-family);
   font-weight: var(--ctlb-head-font-weight);
-  line-height: var(--ctlb-head-line-height,calc(var(--ctlb-head-font-size) + 7px));
+  line-height: var(--ctlb-head-line-height, calc(var(--ctlb-head-font-size) + 7px));
   color: var(--ctlb-heading-color);
   margin: 2px 0px var(--ctlb-titile-bt-spacing) 0px;
 }
@@ -568,8 +573,9 @@
   font-size: var(--ctlb-icon-size);
   transform: translateY(-50%);
 }
+
 .ctlb-new-design.cool-vertical-timeline-body .timeline-content.icon-true .timeline-block-icon {
-  margin-top:46px;
+  margin-top: 46px;
 }
 
 .cool-vertical-timeline-body.ctlb-wrapper .timeline-content.icon-true .timeline-block-icon .iconpicker-item {
@@ -582,18 +588,18 @@
   height: var(--ctlb-icon-box-size, 20px);
   min-width: var(--ctlb-icon-box-size, 20px);
   left: var(--ctlb-icon-box-size, 21px);
-  transform: translate(-100%,-50%);
+  transform: translate(-100%, -50%);
   border: none;
   top: 31px;
   font-size: 20px;
 }
 
 .ctlb-new-design.cool-vertical-timeline-body .timeline-content.icon-false .timeline-block-icon {
-  top: 42px;
+  top: 40px;
 }
 
 
-.cool-vertical-timeline-body.both-sided .timeline-content.icon-false .timeline-block-icon{
+.cool-vertical-timeline-body.both-sided .timeline-content.icon-false .timeline-block-icon {
   left: var(--ctlb-icon-box-size, 20px);
 }
 
@@ -642,6 +648,7 @@
   transform: translateY(0%);
   margin-top: 13px;
 }
+
 .cool-vertical-timeline-body.both-sided:not(.ctlb-wrapper) .timeline-content.icon-true .timeline-block-icon {
   transform: translateY(0%);
   margin-top: 13px;
@@ -661,30 +668,31 @@
   margin-top: 15px;
 }
 
-.cool-vertical-timeline-body.one-sided.left:not(.ctlb-wrapper):before{
+.cool-vertical-timeline-body.one-sided.left:not(.ctlb-wrapper):before {
   left: calc(var(--ctlb-time-width) - var(--ctlb-middle-line-size) + var(--ctlb-icon-box-size, 33px) / 2 + 0px);
 }
 
-.cool-vertical-timeline-body:not(.ctlb-wrapper,.one-sided) .timeline-content.icon-false .timeline-block-icon{
+.cool-vertical-timeline-body:not(.ctlb-wrapper, .one-sided) .timeline-content.icon-false .timeline-block-icon {
   transform: unset !important;
   left: unset !important;
   top: 20px;
 }
-.cool-vertical-timeline-body.one-sided:not(.ctlb-wrapper) .timeline-content.icon-false .timeline-block-icon{
+
+.cool-vertical-timeline-body.one-sided:not(.ctlb-wrapper) .timeline-content.icon-false .timeline-block-icon {
   top: 20px;
 }
 
-.cool-vertical-timeline-body.one-sided.right:not(.ctlb-wrapper) .timeline-content.icon-false .timeline-block-icon{
+.cool-vertical-timeline-body.one-sided.right:not(.ctlb-wrapper) .timeline-content.icon-false .timeline-block-icon {
   transform: unset;
   left: -3px;
 }
 
-.cool-vertical-timeline-body.one-sided.left:not(.ctlb-wrapper) .timeline-content.icon-false .timeline-block-icon{
-left: 0px;
-transform: translate(0%);
+.cool-vertical-timeline-body.one-sided.left:not(.ctlb-wrapper) .timeline-content.icon-false .timeline-block-icon {
+  left: 0px;
+  transform: translate(0%);
 }
 
-.cool-vertical-timeline-body.one-sided.left:not(.ctlb-wrapper) .timeline-content .timeline-block-detail{
+.cool-vertical-timeline-body.one-sided.left:not(.ctlb-wrapper) .timeline-content .timeline-block-detail {
   width: calc(70% - 16px);
 }
 
@@ -693,7 +701,7 @@ transform: translate(0%);
   left: auto;
 }
 
-.cool-vertical-timeline-body .story-details h3:not(.timeline-block_title,.ctlb-block-title) {
+.cool-vertical-timeline-body .story-details h3:not(.timeline-block_title, .ctlb-block-title) {
   font-size: 18px;
   margin: 2px 0px 5px 0px;
   font-weight: 500;
@@ -702,14 +710,15 @@ transform: translate(0%);
 // Deprecated block css end
 
 // core block css start
-.cool-timeline-block .story-content figure div{
+.cool-timeline-block .story-content figure div {
   max-width: 100% !important;
 }
+
 // core blocks css end
 
 @media (max-width:767px) {
 
-  .cool-vertical-timeline-body .timeline-content .timeline-block-icon{
+  .cool-vertical-timeline-body .timeline-content .timeline-block-icon {
     position: absolute;
   }
 
@@ -717,12 +726,13 @@ transform: translate(0%);
     padding: 25px 15px;
     margin: 0 0 0 15px;
   }
+
   .cool-vertical-timeline-body.one-sided.right.ctlb-wrapper {
     margin: 0 auto;
   }
 
-  .cool-vertical-timeline-body.ctlb-wrapper .timeline-block-timeline.ctlb-wrapper{
-    margin-bottom: var(--ctlb-item-spacing,33px);
+  .cool-vertical-timeline-body.ctlb-wrapper .timeline-block-timeline.ctlb-wrapper {
+    margin-bottom: var(--ctlb-item-spacing, 33px);
   }
 
   .wp-block-cp-timeline-content-timeline.Cool-Content-Timeline .cool-vertical-timeline-body.both-sided,
@@ -760,7 +770,7 @@ transform: translate(0%);
     transform: initial !important;
   }
 
-  .cool-vertical-timeline-body.one-sided.right .timeline-content .story-details{
+  .cool-vertical-timeline-body.one-sided.right .timeline-content .story-details {
     width: 100% !important;
   }
 
@@ -779,6 +789,7 @@ transform: translate(0%);
     transform: translate(-50%, -50%) !important;
     margin-top: 21px !important;
   }
+
   .ctlb-new-design.cool-vertical-timeline-body .timeline-content.icon-true .timeline-block-icon {
     top: 71px;
     max-height: 40px;
@@ -786,11 +797,11 @@ transform: translate(0%);
     left: -1px;
     transform: translate(-50%, -50%) !important;
     margin-top: 46px !important;
-    z-index:2;
+    z-index: 2;
   }
 
 
-  .cool-vertical-timeline-body.ctlb-wrapper .timeline-content.icon-true .timeline-block-icon{
+  .cool-vertical-timeline-body.ctlb-wrapper .timeline-content.icon-true .timeline-block-icon {
     min-width: unset;
   }
 
@@ -812,6 +823,7 @@ transform: translate(0%);
     margin-top: 21px !important;
     min-width: unset !important;
   }
+
   .ctlb-new-design.cool-vertical-timeline-body.one-sided.right .timeline-content.icon-true .timeline-block-icon {
     top: 81px !important;
     left: auto !important;
@@ -826,13 +838,15 @@ transform: translate(0%);
   .cool-vertical-timeline-body.one-sided.left .timeline-content.icon-false .timeline-block-icon {
     top: 88px;
   }
+
   .cool-vertical-timeline-body.ctlb-wrapper.one-sided.left .timeline-content.icon-false .timeline-block-icon {
     top: 89px;
   }
+
   .ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper.one-sided.left .timeline-content.icon-false .timeline-block-icon {
     top: 115px;
   }
-  
+
   .cool-vertical-timeline-body.one-sided.right .timeline-content.icon-false .timeline-block-icon {
     top: 91px;
     left: auto !important;
@@ -847,6 +861,7 @@ transform: translate(0%);
     left: 9px !important;
     font-size: 20px;
   }
+
   .ctlb-new-design.cool-vertical-timeline-body.ctlb-new-design .timeline-content.icon-false .timeline-block-icon {
     top: 115px;
   }
@@ -865,8 +880,21 @@ transform: translate(0%);
     transform: unset !important;
   }
 
-  .cool-vertical-timeline-body .timeline-content:has(.story-time p:empty) .timeline-block-icon {
+  // When date is missing on mobile, the card starts at the top (no date height).
+  // Align icon-false (dot) with the card's arrow at top: 60px.
+  .cool-vertical-timeline-body .timeline-content.icon-false:is(:has(.ctl_timeFalse), :not(:has(.story-time)), :has(.story-time p:empty)) .timeline-block-icon,
+  .cool-vertical-timeline-body .timeline-content.icon-false .ctl-row.ctl_timeFalse .timeline-block-icon,
+  .ctlb-new-design.cool-vertical-timeline-body .timeline-content.icon-false:is(:has(.ctl_timeFalse), :not(:has(.story-time)), :has(.story-time p:empty)) .timeline-block-icon,
+  .ctlb-new-design.cool-vertical-timeline-body .timeline-content.icon-false .ctl-row.ctl_timeFalse .timeline-block-icon {
     top: 60px !important;
+  }
+
+  // Align icon-true (icon box) with the card's arrow at top: 16px (margin-top: 46px -> center at 62px).
+  .cool-vertical-timeline-body .timeline-content.icon-true:is(:has(.ctl_timeFalse), :not(:has(.story-time)), :has(.story-time p:empty)) .timeline-block-icon,
+  .cool-vertical-timeline-body .timeline-content.icon-true .ctl-row.ctl_timeFalse .timeline-block-icon,
+  .ctlb-new-design.cool-vertical-timeline-body .timeline-content.icon-true:is(:has(.ctl_timeFalse), :not(:has(.story-time)), :has(.story-time p:empty)) .timeline-block-icon,
+  .ctlb-new-design.cool-vertical-timeline-body .timeline-content.icon-true .ctl-row.ctl_timeFalse .timeline-block-icon {
+    top: 16px !important;
   }
 
   .cool-vertical-timeline-body.one-sided.right .timeline-content .timeline-block-icon {
@@ -890,7 +918,7 @@ transform: translate(0%);
   .cool-vertical-timeline-body.one-sided .ctl-6.timeline-block-time {
     margin-bottom: 20px;
   }
- 
+
 
   .cool-vertical-timeline-body:before {
     margin: 13px;
@@ -972,6 +1000,7 @@ transform: translate(0%);
     width: 100%;
     padding: 0 60px 0 0;
   }
+
   .ctlb-new-design.cool-vertical-timeline-body.one-sided.right .timeline-content .timeline-block-detail,
   .ctlb-new-design.cool-vertical-timeline-body.one-sided.right .timeline-content.icon-true .timeline-block-detail {
     width: 100%;
@@ -991,7 +1020,7 @@ transform: translate(0%);
   .story-details .swiper .swiper-slide img {
     height: 50vw !important;
   }
-  
+
   // Deprecated version responsive css start
 
   .cool-vertical-timeline-body:not(.ctlb-wrapper) .timeline-content.icon-false .timeline-block-icon svg {
@@ -1012,41 +1041,42 @@ transform: translate(0%);
     padding-right: 60px;
   }
 
-  .cool-vertical-timeline-body.one-sided.right:not(.ctlb-wrapper):before{
+  .cool-vertical-timeline-body.one-sided.right:not(.ctlb-wrapper):before {
     right: 26px !important;
   }
 
-  .cool-vertical-timeline-body.one-sided.left:not(.ctlb-wrapper):before{
+  .cool-vertical-timeline-body.one-sided.left:not(.ctlb-wrapper):before {
     transform: translateX(50%) !important;
   }
 
-  .cool-vertical-timeline-body:not(.ctlb-wrapper) .timeline-content.icon-true .timeline-block-icon{
+  .cool-vertical-timeline-body:not(.ctlb-wrapper) .timeline-content.icon-true .timeline-block-icon {
     width: 40px;
     height: 40px;
     min-width: unset !important;
   }
 
-  .cool-vertical-timeline-body.one-sided.right:not(.ctlb-wrapper) .timeline-content.icon-true .timeline-block-icon{
+  .cool-vertical-timeline-body.one-sided.right:not(.ctlb-wrapper) .timeline-content.icon-true .timeline-block-icon {
     right: 0px !important;
   }
 
-  .cool-vertical-timeline-body:not(.one-sided,.ctlb-new-design) .timeline-content.icon-false .timeline-block-icon{
+  .cool-vertical-timeline-body:not(.one-sided, .ctlb-new-design) .timeline-content.icon-false .timeline-block-icon {
     left: 9px !important;
     transform: translateX(-100%) !important;
     top: 80px;
   }
 
-  .cool-vertical-timeline-body.one-sided.left:not(.ctlb-wrapper) .timeline-content.icon-false .timeline-block-icon{
+  .cool-vertical-timeline-body.one-sided.left:not(.ctlb-wrapper) .timeline-content.icon-false .timeline-block-icon {
     transform: translateX(-100%);
   }
 
-  .cool-vertical-timeline-body.one-sided.right:not(.ctlb-wrapper) .timeline-content .timeline-block-detail{
+  .cool-vertical-timeline-body.one-sided.right:not(.ctlb-wrapper) .timeline-content .timeline-block-detail {
     width: 100%;
   }
 
-  .cool-vertical-timeline-body.one-sided.left:not(.ctlb-wrapper) .timeline-content.icon-false .timeline-block-icon{
+  .cool-vertical-timeline-body.one-sided.left:not(.ctlb-wrapper) .timeline-content.icon-false .timeline-block-icon {
     top: 80px;
   }
+
   // Deprecated version responsive css end
 }
 
@@ -1075,12 +1105,37 @@ transform: translate(0%);
 }
 
 .ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper .timeline-content .ctl-row .story-details {
+  min-height: 85px;
   padding: var(--ctlb-container-top-padding, 22px) var(--ctlb-container-right-padding, 22px) var(--ctlb-container-bottom-padding, 22px) var(--ctlb-container-left-padding, 22px);
   background: #fff;
   border: 1px solid var(--ctlb-story-border-color);
   border-radius: 20px;
   box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.1);
-  margin:0 0 0 4px;
+  margin: 0 0 0 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+// In Free, padding is strictly on .story-details. Zero out .story-content so Pro does not cause double padding in editor.
+.ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper .story-details .story-content {
+  padding: 0 !important;
+}
+
+.cool-vertical-timeline-body .story-details :where(.timeline-block_title, .ctlb-block-title):empty {
+  display: none;
+}
+
+.ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper .story-details {
+  .timeline-block_desc p,
+  .ctlb-block-desc {
+    margin-top: 0;
+    margin-bottom: var(--ctlb-desc-bt-spacing, 0px);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 }
 
 // Arrow: rotated square instead of the legacy 15px border triangle. The half-fill gradient
@@ -1089,9 +1144,9 @@ transform: translate(0%);
   content: "";
   display: block;
   position: absolute;
-  top: 30px;
-  width: 30px;
-  height: 30px;
+  top: 33px;
+  width: 26px;
+  height: 26px;
   margin: 0;
   border: 0 solid var(--ctlb-story-border-color);
   transform: rotate(45deg);
@@ -1100,7 +1155,7 @@ transform: translate(0%);
 
 .ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper:is(.both-sided, .alternating-sided) .timeline-content .position-right .story-details::before,
 .ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper.one-sided.left .timeline-content .ctl-row .story-details::before {
-  left: -16px;
+  left: -14px;
   right: auto;
   border-width: 0 0 1px 1px;
   background: linear-gradient(to top right, #fff 52%, transparent 48%);
@@ -1109,7 +1164,7 @@ transform: translate(0%);
 .ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper:is(.both-sided, .alternating-sided) .timeline-content .position-left .story-details::before,
 .ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper.one-sided.right .timeline-content .ctl-row .story-details::before {
   left: auto;
-  right: -16px;
+  right: -14px;
   border-width: 1px 1px 0 0;
   background: linear-gradient(to bottom left, #fff 52%, transparent 48%);
 }
@@ -1135,7 +1190,7 @@ transform: translate(0%);
   border-radius: 15px;
 }
 
-.ctlb-new-design.cool-vertical-timeline-body .story-content > :where(.wp-block-image, .wp-block-embed, .wp-block-video) {
+.ctlb-new-design.cool-vertical-timeline-body .story-content> :where(.wp-block-image, .wp-block-embed, .wp-block-video) {
   margin-bottom: 16px;
 }
 
@@ -1148,10 +1203,11 @@ transform: translate(0%);
 
   // Mobile stacks every card to the right of the line, so left-side cards point left too.
   .ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper:is(.both-sided, .alternating-sided) .timeline-content .position-left .story-details::before {
-    left: -16px;
+    left: -14px;
     right: auto;
     border-width: 0 0 1px 1px;
     background: linear-gradient(to top right, #fff 52%, transparent 48%);
   }
 }
+
 // New design css end
