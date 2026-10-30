@@ -136,11 +136,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 Upgrade to Version 2.0.0 to enjoy these new features, enhancements, and bug fixes. Your feedback is invaluable as we continue to refine and improve our plugins.
 
 = Version 2.0.1 | 30 October 2026 =
-
-* **Fixed**: Resolved story card arrow and timeline icon/dot vertical alignment in the new design.
-* **Fixed** Prevented story arrow from protruding outside the card on stories with short descriptions or removed titles.
+* **Fixed:** Resolved story card arrow and timeline icon/dot vertical alignment in the new design.
+* **Fixed:** Prevented story arrow from protruding outside the card on stories with short descriptions or removed titles.
 * **Improved:** Balanced vertical spacing above and below single-line story descriptions.
-* **Fixed** Corrected mobile icon/dot positioning on stories where the date field is empty.
+* **Fixed:** Corrected mobile icon/dot positioning on stories where the date field is empty.
 * **Compatibility:** Resolved editor-side padding conflict with Cool Timeline Pro on story content.
 
 = Version 2.0.0 | 13 October 2026 =
