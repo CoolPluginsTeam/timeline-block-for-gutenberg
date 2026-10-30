@@ -55,6 +55,11 @@
 $ctlb-brand: #0f766e;
 $ctlb-line: #e0e0e0;
 
+// In Free, padding is on .story-details; keep .story-content padding 0 so Pro does not cause double padding in editor
+.ctlb-new-design.cool-vertical-timeline-body.ctlb-wrapper .story-details .story-content {
+  padding: 0 !important;
+}
+
 .story-details .story-content {
   position: relative;
 
