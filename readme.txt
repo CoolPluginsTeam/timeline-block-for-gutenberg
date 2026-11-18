@@ -19,7 +19,7 @@ https://youtu.be/WsFekfIL-A8
 
 Just search **‘Timeline Block‘** from the block editor **‘Add Block‘** section and create a stunning timeline slider.
 
-**[View Demos](https://cooltimeline.com/demo/gutenberg-timeline-block?utm_source=tbg_plugin&utm_medium=readme&utm_campaign=demo&utm_content=view_demo)** | **[Watch Video Tutorials](https://cooltimeline.com/docs/timeline-block-pro/video-tutorials/free-plugin-video/?utm_source=tbg_plugin&utm_medium=readme&utm_campaign=docs&utm_content=video_tutorial)**
+[Check Free Version Demos](https://cooltimeline.com/demo/gutenberg-timeline-block/?utm_source=tbg_plugin&utm_medium=readme&utm_campaign=demo&utm_content=view_free_demos) | [Pro Demos](https://cooltimeline.com/demo/timeline-block-pro/?utm_source=tbg_plugin&utm_medium=readme&utm_campaign=demo&utm_content=view_pro_demos) | [Buy Pro](https://cooltimeline.com/plugin/timeline-block-pro-for-gutenberg/?utm_source=tbg_plugin&utm_medium=readme&utm_campaign=get_pro&utm_content=buy_pro#pricing)
 
 ### Key Features
 
@@ -46,8 +46,6 @@ Just search **‘Timeline Block‘** from the block editor **‘Add Block‘** s
 * **Multiple Timelines:**Easily create and display multiple timelines on one website, categorized by different layouts.
 * **Video, Images & Slider:** Seamlessly integrate images, videos (YouTube), and slideshows into your timelines.
 * **Dot, Icon, Image & Text:** Customize icons with options including dot, icon, image, and text for personalized timelines.
-
-**[Get Pro!](https://cooltimeline.com/plugin/timeline-block-pro-for-gutenberg/?utm_source=tbg_plugin&utm_medium=readme&utm_campaign=get_pro&utm_content=upgarde_to_pro)**
 
 ### Check Our Other Timeline Plugins
 * **Cool Timeline:** Display your company’s history, product roadmaps, personal stories, or key events using the built-in block or via simple shortcode. **[View Demo](https://cooltimeline.com/demo/cool-timeline-free/?utm_source=tbg_plugin&utm_medium=readme&utm_campaign=demo&utm_content=ctl_free_demo)**
