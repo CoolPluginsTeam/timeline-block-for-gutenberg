@@ -1,5 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import StorySettingsFields from './StorySettingsFields.js';
+import { PRO_UPGRADE_STORY_URL, ProUpgradeContext } from '../ProFeature.js';
 
 const { PanelBody } = wp.components;
 
@@ -19,18 +20,20 @@ const StorySettingsPanel = ({ collapsible = true, ...fieldProps }) => {
 	);
 
 	return (
-		<div id="ctlb-story-setting-panel">
-			{collapsible ? (
-				<PanelBody initialOpen={true} title={title}>
-					<StorySettingsFields {...fieldProps} />
-				</PanelBody>
-			) : (
-				<div className="ctlb-static-panel">
-					<div className="ctlb-static-panel-title">{title}</div>
-					<StorySettingsFields {...fieldProps} />
-				</div>
-			)}
-		</div>
+		<ProUpgradeContext.Provider value={PRO_UPGRADE_STORY_URL}>
+			<div id="ctlb-story-setting-panel">
+				{collapsible ? (
+					<PanelBody initialOpen={true} title={title}>
+						<StorySettingsFields {...fieldProps} />
+					</PanelBody>
+				) : (
+					<div className="ctlb-static-panel">
+						<div className="ctlb-static-panel-title">{title}</div>
+						<StorySettingsFields {...fieldProps} />
+					</div>
+				)}
+			</div>
+		</ProUpgradeContext.Provider>
 	);
 };
 

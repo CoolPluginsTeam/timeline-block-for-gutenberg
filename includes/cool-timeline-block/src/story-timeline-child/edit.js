@@ -1,6 +1,6 @@
 import { IconPickerItem } from "../component/Icons/index.js";
 import TimelineSettingsLink from './timeline-settings-link.js';
-import { openProUpgrade } from '../component/ProFeature.js';
+import { openProUpgrade, PRO_UPGRADE_STORY_URL, PRO_STORY_MEDIA_DEMO_URL } from '../component/ProFeature.js';
 import StorySettingsPanel from '../component/storySettings/StorySettingsPanel.js';
 const { Component, Fragment } = wp.element;
 import { __ } from '@wordpress/i18n';
@@ -195,7 +195,7 @@ class Edit extends Component {
 							className="ctlb-media-toolbar__btn ctlb-media-toolbar__btn--pro"
 							label={__('Video (Pro)', 'timeline-block')}
 							showTooltip
-							onClick={openProUpgrade}
+							onClick={() => openProUpgrade(PRO_STORY_MEDIA_DEMO_URL)}
 						>
 							<ToolbarIcon name="video" />
 						</Button>
@@ -203,7 +203,7 @@ class Edit extends Component {
 							className="ctlb-media-toolbar__btn ctlb-media-toolbar__btn--pro"
 							label={__('Gallery (Pro)', 'timeline-block')}
 							showTooltip
-							onClick={openProUpgrade}
+							onClick={() => openProUpgrade(PRO_STORY_MEDIA_DEMO_URL)}
 						>
 							<ToolbarIcon name="gallery" />
 						</Button>
